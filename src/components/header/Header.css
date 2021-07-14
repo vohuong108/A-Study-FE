@@ -1,0 +1,40 @@
+.header {
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%);
+}
+.header-container {
+    padding: 0 1.6rem;
+}
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo {
+    padding-right: 1.2rem;
+}
+
+.header-logo a {
+    display: block;
+}
+
+.logo-img {
+    width: 72px;
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-btn {
+    margin-left: 1.2rem !important;
+}

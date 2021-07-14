@@ -1,0 +1,36 @@
+.header-cart {
+    color: #3c3b37;
+    height: 72px;
+    padding: 0 1.2rem;
+}
+
+.cart-wrap {
+    height: 100%;
+    position: relative;
+    display: flex;
+}
+.cart-wrap:hover {
+    color: #0f7c90;
+}
+
+.cart-wrap__pop {
+    display: none;
+    position: absolute;
+    top: 100%;
+    padding-top: 5px;
+}
+
+.pop-act {
+    display: block;
+}
+
+.cart-pop {
+    min-height: 140px;
+    border: 1px solid #dcdacb;
+    border-radius: 3px;
+}
+
+.cart-icon {
+    margin-top: auto;
+    margin-bottom: auto;
+}
