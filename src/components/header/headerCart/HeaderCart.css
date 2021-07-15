@@ -17,6 +17,7 @@
     display: none;
     position: absolute;
     top: 100%;
+    right: 0;
     padding-top: 5px;
 }
 
@@ -25,12 +26,38 @@
 }
 
 .cart-pop {
-    min-height: 140px;
+    min-height: 90px;
+    min-width: 288px;
     border: 1px solid #dcdacb;
     border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%);
 }
 
 .cart-icon {
     margin-top: auto;
     margin-bottom: auto;
+}
+
+.pop-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.pop-container span {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: #73726c;
+    font-weight: 400;
+    line-height: 1.4;
+    font-size: 16px;
+}
+
+.pop-container a {
+    text-decoration: none;
+    color: #0f7c90;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.02rem;
+    font-size: 14px;
 }
