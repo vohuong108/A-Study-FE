@@ -1,9 +1,17 @@
 .header {
-    background-color: #FFFFFF;
     box-shadow: 0 2px 4px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%);
+    position: relative;
+    height: 72px;
+    
 }
 .header-container {
     padding: 0 1.6rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #FFFFFF;
 }
 .header-row {
     display: flex;
