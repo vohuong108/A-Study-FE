@@ -2,9 +2,6 @@ import React, { useState } from 'react'
 import './Categories.css'
 
 
-const data = {
-
-}
 const Categories = () => {
     const [isHover, setHover] = useState(false);
 
