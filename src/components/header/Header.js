@@ -1,10 +1,13 @@
 import React from 'react'
 import Logo from '../../assets/logo.png'
-import Button from '@material-ui/core/Button'
+import { Button } from 'antd';
+import 'antd/dist/antd.css';
 import Categories from './category/Categories.js'
 import Search from './Search/Search.js'
 import './Header.css'
 import HeaderCart from './headerCart/HeaderCart';
+import UserAvatar from './avatar/UserAvatar';
+import NotifyBell from './notify/NotifyBell';
 
 const Header = () => {
     return (
@@ -22,11 +25,17 @@ const Header = () => {
                     <Search />
                     <div className="header-right">
                         <HeaderCart />
-                        <div className="header-right__btn">
-                            <Button className="header-btn" variant="outlined" color="secondary">Login</Button>
-                            <Button className="header-btn" variant="contained" color="primary">Sign Up</Button>
+                        {false 
+                            ? <div className="header-right__btn">
+                                <Button href="/login" className="header-btn" danger >Login</Button>
+                                <Button href="/sigup" className="header-btn" type="primary">Sign Up</Button>
 
-                        </div>
+                            </div>
+                            : <div className="header-right__user">
+                                <NotifyBell />
+                                <UserAvatar />
+                            </div>
+                        }
 
                     </div>
                 </div>

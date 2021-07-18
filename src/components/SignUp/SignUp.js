@@ -1,5 +1,5 @@
 import React from 'react'
-import './SignUp.css'
+import './SignUp.scss'
 import loginBanner from '../../assets/loginBanner.png'
 import MailIcon from '@material-ui/icons/Mail'
 import LockIcon from '@material-ui/icons/Lock'

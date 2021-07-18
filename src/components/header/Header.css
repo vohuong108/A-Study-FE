@@ -40,7 +40,10 @@
 
 .header-right {
     display: flex;
-    align-items: center;
+}
+
+.header-right__user {
+    display: flex;
 }
 
 .header-btn {
