@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import setAuthorizationHeader from '../../utils/setAuthorizationHeader'
-import axios from 'axios'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setToken } from '../../../utils/common'
+import { useHistory } from "react-router-dom"
+import { getUser } from "../../../stores/reducers/userSlice"
+import { unwrapResult } from '@reduxjs/toolkit'
+
 import './Login.scss'
-import loginBanner from '../../assets/loginBanner.png'
-import MailIcon from '@material-ui/icons/Mail'
-import LockIcon from '@material-ui/icons/Lock'
-import { setUserSession } from '../../utils/common.js'
-import { useHistory } from "react-router-dom";
+import loginBanner from '../../../assets/loginBanner.png'
+import { LockFilled, MailFilled} from '@ant-design/icons'
+import 'antd/dist/antd.css';
 
 
 const Login = (props) => {
@@ -15,16 +17,14 @@ const Login = (props) => {
         email: '',
         password: ''
     })
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        const url = 'http://192.168.0.190:3000/login/';
         const requestOptions = {
             method: 'post',
-            url: url,
+            url: 'http://192.168.0.190:3000/login/',
             data: {
                 username: 'user_1',
                 password: '12345678'
@@ -32,16 +32,16 @@ const Login = (props) => {
             
         }
 
-        setUserSession("token", null);
-        history.push('/course');
-        // try {
-        //     const response = await axios(requestOptions);
-        //     setLoading(false);
-        //     setUserSession(response.data.access_token, null);
-        //     props.history.push('/course');
-        // } catch (e) {
+        try {
+            const resultAction = await dispatch(getUser(requestOptions))
+            const result = unwrapResult(resultAction);
+            setToken("token_12345");
+            history.push('/course');
 
-        // }
+        } catch (error) {
+
+        }
+        
     }
 
     return (
@@ -60,7 +60,7 @@ const Login = (props) => {
                                 <form onSubmit={(e) => handleSubmit(e)}>
                                     <label>Email</label>
                                     <div className="input-wrap">
-                                        <MailIcon className="input-icon" />
+                                        <MailFilled className="input-icon" />
                                         <input 
                                             name="email" 
                                             type="email"
@@ -72,7 +72,7 @@ const Login = (props) => {
                                     </div>
                                     <label>Password</label>
                                     <div className="input-wrap">
-                                        <LockIcon className="input-icon" />
+                                        <LockFilled className="input-icon" />
                                         <input 
                                             name="password" 
                                             type="password"
@@ -87,7 +87,7 @@ const Login = (props) => {
                                     </div>
                                 </form>
                                 <a href="">Forgot your password?</a>
-                                <p>Don't have an account? <a href="">Sign up</a></p>
+                                <p>Don't have an account? <a href="/signup">Sign up</a></p>
                             </div>
                         </div>
 

@@ -35,7 +35,10 @@
     font-weight: bold;
     padding: 0px;
     width: 238px;
-    height: 72px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .achieve-row h2 {
     font-weight: 600;

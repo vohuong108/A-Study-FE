@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './HeaderCart.css'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import 'antd/dist/antd.css';
+import { ShoppingCartOutlined } from '@ant-design/icons'
 
 const HeaderCart = () => {
     const [isHover, setHover] = useState(false);
@@ -12,7 +13,7 @@ const HeaderCart = () => {
                 onMouseMove={() => isHover === false ? setHover(true) : ''} 
                 onMouseLeave={() => setHover(false)}
             >
-                <ShoppingCartIcon className="cart-icon"/>
+                <ShoppingCartOutlined className="cart-icon"/>
                 <div className={`cart-wrap__pop ${isHover ? 'pop-act' : ''}`}>
                     <div className="cart-pop">
                         <div className="pop-container">

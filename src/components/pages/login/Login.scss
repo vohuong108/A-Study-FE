@@ -1,11 +1,11 @@
-.signup {
+.login {
     background-color: #F0F3F5;
 
-    .signup-row {
+    .login-row {
         justify-content: center;
         padding: 50px 0;
     }
-    .signup-wrap {
+    .login-wrap {
         width: 960px;
         background: #fff;
         border-radius: 10px;
@@ -13,7 +13,7 @@
         box-shadow: 0 0 12px 0 #afafaf;
     }
 
-    .signup-wrap h1 {
+    .login-wrap h1 {
         text-align: left;
         font-weight: bold;
         padding: 30px;
@@ -21,7 +21,7 @@
         line-height: 1.2;
     }
 
-    .signup-inner {
+    .login-inner {
         display: flex;
         justify-content: space-around;
     }
@@ -60,8 +60,9 @@
     }
 
     .input-icon {
-        color: #666;
+        color: rgb(163, 156, 156);
         margin-left: 15px;
+        font-size: 1rem;
     }
 
     input {
@@ -73,6 +74,11 @@
         line-height: 1.5;
         margin: 0 15px;
         width: 100%;
+    }
+
+    input:-internal-autofill-previewed,
+    input:-internal-autofill-selected {
+        transition: background-color 10000s ease-in-out 0s !important;
     }
 
     a {
@@ -107,29 +113,10 @@
         text-transform: uppercase;
         font-weight: 600;
         transition: all 0.5s;
-        background-color: transparent !important;
     }
 
     .submit-btn:hover {
         color: #23282c;
-    }
-
-    .form-license {
-        display: flex;
-        margin-top: 15px;
-    }
-
-    .form-license p {
-        line-height: 1.43;
-        text-align: left;
-        font-weight: 400;
-        font-size: 15px;
-        color: #1c1d1f;
-    }
-
-    .checkbox-btn {
-        height: fit-content;
-        margin-top: -9px !important;
     }
 
 }

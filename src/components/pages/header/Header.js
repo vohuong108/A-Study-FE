@@ -1,10 +1,10 @@
 import React from 'react'
-import Logo from '../../assets/logo.png'
-import { Button } from 'antd';
+import './Header.css'
 import 'antd/dist/antd.css';
+import Logo from '../../../assets/logo.png'
+import { Button } from 'antd';
 import Categories from './category/Categories.js'
 import Search from './Search/Search.js'
-import './Header.css'
 import HeaderCart from './headerCart/HeaderCart';
 import UserAvatar from './avatar/UserAvatar';
 import NotifyBell from './notify/NotifyBell';

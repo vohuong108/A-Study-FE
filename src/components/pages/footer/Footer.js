@@ -1,12 +1,15 @@
 import React from 'react'
 import './Footer.css'
-import FacebookIcon from '@material-ui/icons/Facebook'
-import LinkedInIcon from '@material-ui/icons/LinkedIn'
-import TwitterIcon from '@material-ui/icons/Twitter'
-import YouTubeIcon from '@material-ui/icons/YouTube'
-import InstagramIcon from '@material-ui/icons/Instagram'
-import appleStore from '../../assets/appleStore.svg'
-import googlePlayStore from '../../assets/googlePlayStore.png'
+import 'antd/dist/antd.css'
+import appleStore from '../../../assets/appleStore.svg'
+import googlePlayStore from '../../../assets/googlePlayStore.png'
+import { 
+    FacebookFilled, 
+    LinkedinFilled, 
+    TwitterSquareFilled, 
+    YoutubeFilled, 
+    InstagramFilled } from '@ant-design/icons'
+
 
 const Footer = () => {
     return (
@@ -60,11 +63,11 @@ const Footer = () => {
                         </div>
                         <div className="col-3">
                             <div className="social">
-                                <FacebookIcon />
-                                <LinkedInIcon />
-                                <TwitterIcon />
-                                <YouTubeIcon />
-                                <InstagramIcon />
+                                <FacebookFilled style={{fontSize: '2rem'}} />
+                                <LinkedinFilled style={{fontSize: '2rem'}} />
+                                <TwitterSquareFilled style={{fontSize: '2rem'}} />
+                                <YoutubeFilled style={{fontSize: '2rem'}} />
+                                <InstagramFilled style={{fontSize: '2rem'}} />
                             </div>
                         </div>
                     </div>

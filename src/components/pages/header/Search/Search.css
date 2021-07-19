@@ -13,9 +13,9 @@
 
 .search-icon {
     padding-left: 10px;
+    padding-right: 10px;
     color: #73726c;
-    width: 30px !important;
-    height: 30px !important;
+    font-size: 1rem;
 }
 
 .search-wrap input {

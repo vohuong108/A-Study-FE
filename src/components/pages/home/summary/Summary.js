@@ -1,11 +1,11 @@
 import React from 'react'
 import './Summary.css'
-import Button from '@material-ui/core/Button'
-import banner from '../../assets/banner.png'
-import achieve1 from '../../assets/achieve1.png'
-import achieve2 from '../../assets/achieve2.png'
-import achieve3 from '../../assets/achieve3.png'
-import achieve4 from '../../assets/achieve4.png'
+import { Button } from 'antd'
+import banner from '../../../../assets/banner.png'
+import achieve1 from '../../../../assets/achieve1.png'
+import achieve2 from '../../../../assets/achieve2.png'
+import achieve3 from '../../../../assets/achieve3.png'
+import achieve4 from '../../../../assets/achieve4.png'
 
 
 const Summary = () => {
@@ -20,7 +20,7 @@ const Summary = () => {
                                 <p>Build skills with courses, certificates, and degress online from world-class universities and companies</p>
                             </div>
                             <div className="banner-left__bottom">
-                                <Button className="banner-btn" variant="contained" color="primary">Join for Free</Button>
+                                <Button className="banner-btn" href="./login" type="primary">Join for Free</Button>
                             </div>
                         </div>
                     </div>
