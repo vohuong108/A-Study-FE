@@ -5,8 +5,6 @@ import './Categories.css'
 const Categories = () => {
     const [isHover, setHover] = useState(false);
 
-    console.log("re-render")
-
     return (
         <div 
             className="categories" 

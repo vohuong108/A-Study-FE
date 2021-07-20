@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../../utils/common'
+import { setToken } from '../../../utils/localStorageHandler'
+import { setAuthHeader } from '../../../utils/setAuthHeader'
 import { useHistory } from "react-router-dom"
-import { getUser } from "../../../stores/reducers/userSlice"
+import { login, getUserByToken } from "../../../features/authentication/userSlice"
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import './Login.scss'
@@ -22,24 +23,27 @@ const Login = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        const requestOptions = {
-            method: 'post',
-            url: 'http://192.168.0.190:3000/login/',
-            data: {
-                username: 'user_1',
-                password: '12345678'
-            }
-            
+        const requestData = {
+            // email: formData.email,
+            // password: formData.password
+            username: 'user_1',
+            password: '12345678'
         }
-
+            
         try {
-            const resultAction = await dispatch(getUser(requestOptions))
-            const result = unwrapResult(resultAction);
-            setToken("token_12345");
-            history.push('/course');
+            const access_token = await dispatch(login(requestData))
+            const un_access_token = unwrapResult(access_token);
+            setToken(un_access_token);
+            console.log("unwrapResult in login", un_access_token)
+            
+            // setAuthHeader(un_access_token);
+            const profile = await dispatch(getUserByToken(un_access_token))
+            const un_profile = unwrapResult(profile);
+            console.log("unwrapResult in profile", un_profile)
+            history.push('/dashbroad');
 
         } catch (error) {
-
+            console.error("error in login: ", error)
         }
         
     }

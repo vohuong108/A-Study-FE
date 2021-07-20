@@ -1,21 +1,8 @@
 import React from 'react'
 import './ProgressCourse.css'
-import { withStyles } from '@material-ui/core/styles';
-import LinearProgress from '@material-ui/core/LinearProgress'
+import 'antd/dist/antd.css';
+import { Progress } from 'antd';
 
-const LinearProgressCourse = withStyles((theme) => ({
-    root: {
-      height: 15,
-      borderRadius: 5,
-    },
-    colorPrimary: {
-      backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
-    },
-    bar: {
-      borderRadius: 5,
-      backgroundColor: '#36d1dc',
-    },
-  }))(LinearProgress);
 
 const ProgressCourse = () => {
     return (
@@ -37,7 +24,14 @@ const ProgressCourse = () => {
                         </div>
                         <div className="progress-info">
                             <p>Progress</p>
-                            <LinearProgressCourse variant="determinate" value={30}/>
+                            <Progress
+                                strokeColor={{
+                                    '0%': '#108ee9',
+                                    '100%': '#87d068',
+                                }}
+                                strokeWidth={10}
+                                percent={30}
+                            />
                         </div>
                     </div>
                     <div className="progress-course-btn">

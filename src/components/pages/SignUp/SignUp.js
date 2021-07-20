@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setToken } from '../../../utils/common'
+import { setToken } from '../../../utils/localStorageHandler'
 import { useHistory } from "react-router-dom"
-import { addUser } from "../../../stores/reducers/userSlice"
+import { registing } from "../../../features/authentication/userSlice"
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import './SignUp.scss'
@@ -26,23 +26,21 @@ const SignUp = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const requestOptions = {
-            method: 'post',
-            url: 'http://192.168.0.190:3000/signup/',
+        const requestData = {
             data: {
-                username: 'user_1',
-                email: 'example@gmail.com',
-                password: '12345678',
+                username: formData.fullName,
+                email: formData.email,
+                password: formData.password,
                 checkbox: true
             }
             
         }
 
         try {
-            const resultAction = await dispatch(addUser(requestOptions))
+            const resultAction = await dispatch(registing(requestData))
             const result = unwrapResult(resultAction);
-            setToken("token_12345");
-            history.push('/course');
+
+            history.push('/login');
 
         } catch (error) {
 

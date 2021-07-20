@@ -1,0 +1,94 @@
+.overview {
+    background-color: #FFFFFF !important;
+    .title-course {
+        margin-bottom: 2rem;
+        color: #1f1f1f;
+        font-family: OpenSans,Arial,sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 30px;
+        border-radius: 5px 5px 0 0;
+        background-color: #f0f3f5;
+        text-align: left;
+        padding: .75rem 1.25rem;
+    }
+
+    .collapse-wrap .panel-wrap {
+        text-align: left;
+    }
+
+    .week-content {
+        display: flex;
+        margin: 1.5rem 0;
+
+        .left {
+            flex: 0 0 40%;
+            border-right: 1px solid #dcdacb;
+            text-align: center;
+            font-size: 1rem;
+            line-height: 1.5rem;
+            font-family: "Source Sans Pro",Arial,sans-serif;
+            font-weight: 400;
+            color: #525252;
+
+            .left-item {
+                height: 3rem;
+                margin-right: 1rem;
+
+                a {
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                &:hover {
+                    background-color: #f0f0f0;
+                }
+            }
+        }
+
+        .right {
+            flex: 0 0 60%;
+
+            .right-content {
+                margin-left: 1rem;
+                height: 100%;
+
+                table {
+                    width: 100%;
+                    height: 100%;
+
+                    tr:nth-child(1):hover{
+                        background-color: #FFFFFF;
+                    }
+
+                    tr:hover {
+                        background-color: #f0f0f0;
+                    }
+
+                }
+
+                .require {
+                    display: flex;
+                    height: 100%;
+                    align-items: center;
+
+                    .check {
+                        margin-right: .5rem;
+                        
+                    }
+
+                    .require-content {
+                        color: rgb(31, 31, 31);
+                        font-family: "Source Sans Pro", Arial, sans-serif;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        line-height: 1.5rem;
+                    }
+                }
+            }
+        }
+    }
+}

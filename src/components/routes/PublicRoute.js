@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
-import { getToken } from '../../utils/common.js'
+import { getToken } from '../../utils/localStorageHandler'
 
 const PublicRoute = ({ component: Component, ...rest}) => {
     return (
@@ -8,7 +8,7 @@ const PublicRoute = ({ component: Component, ...rest}) => {
             {...rest}
             render={(props) => !getToken() 
                 ? <Component {...props} /> 
-                : <Redirect to={{ pathname: '/course' }} />}
+                : <Redirect to={{ pathname: '/dashbroad' }} />}
         />
     )
 }

@@ -1,15 +1,41 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Header.css'
 import 'antd/dist/antd.css';
+import { useSelector, useDispatch } from 'react-redux'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { selectUser, getUserByToken } from '../../../features/authentication/userSlice'
+import { getToken } from '../../../utils/localStorageHandler'
 import Logo from '../../../assets/logo.png'
 import { Button } from 'antd';
-import Categories from './category/Categories.js'
-import Search from './Search/Search.js'
+import Categories from './category/Categories'
+import Search from './Search/Search'
 import HeaderCart from './headerCart/HeaderCart';
 import UserAvatar from './avatar/UserAvatar';
 import NotifyBell from './notify/NotifyBell';
+import { Link } from 'react-router-dom'
 
 const Header = () => {
+    const user = useSelector(selectUser);
+    const dispatch = useDispatch();
+    console.log('userObj: ', user)
+
+    useEffect(() => {
+        console.log('run in effect header')
+        const getUser = async () => {
+            console.log('run in asyn header')
+
+            const resultAction = await dispatch(getUserByToken(getToken()))
+            const result = unwrapResult(resultAction);
+
+            console.log('unwrap result in header: ', result);
+        }
+
+        if(!user && getToken()) {
+            getUser()
+        }
+        
+    }, [])
+
     return (
         <header className="header">
             <div className="header-container">
@@ -25,15 +51,14 @@ const Header = () => {
                     <Search />
                     <div className="header-right">
                         <HeaderCart />
-                        {false 
+                        {!user 
                             ? <div className="header-right__btn">
                                 <Button href="/login" className="header-btn" danger >Login</Button>
-                                <Button href="/sigup" className="header-btn" type="primary">Sign Up</Button>
-
+                                <Button href="/signup" className="header-btn" type="primary">Sign Up</Button>
                             </div>
                             : <div className="header-right__user">
                                 <NotifyBell />
-                                <UserAvatar />
+                                <UserAvatar avtURL={user.avatarURL} />
                             </div>
                         }
 

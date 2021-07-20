@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 
 import { Layout, Menu, Breadcrumb } from 'antd';
 import { UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
+import Overview from './overview/Overview';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
@@ -17,10 +18,10 @@ const Course = () => {
                     <Layout>
                         <Sider width={280} className="course-left">
                             <Menu
-                            mode="inline"
-                            defaultSelectedKeys={['overview']}
-                            defaultOpenKeys={['sub1']}
-                            style={{ height: '100%', borderRight: 0, fontSize: '16px'}}
+                                mode="inline"
+                                defaultSelectedKeys={['overview']}
+                                defaultOpenKeys={['sub1']}
+                                style={{ height: '100%', borderRight: 0, fontSize: '16px', backgroundColor: '#F0F3F5'}}
                             >
                                 <Menu.Item className="menu_item" key="overview">Overview</Menu.Item>
                                 <Menu.Item className="menu_item" key="week1">Week 1</Menu.Item>
@@ -34,7 +35,10 @@ const Course = () => {
                                 <Menu.Item className="menu_item" key="week9">Week 9</Menu.Item>
                             </Menu>
                         </Sider>
+                        
+                        <Overview />
                     </Layout>
+                    
                 </div>
             </div>
         </div>

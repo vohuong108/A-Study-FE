@@ -1,0 +1,68 @@
+.profile {
+    .profile-container {
+        margin: 1.25rem 1.875rem;
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+
+    .user-card {
+        background: linear-gradient(90deg,#48b1bf,#06beb6);
+        border-radius: 0.625rem;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 0 12px 0 #b3afaf;
+    }
+
+    .user-card-info {
+        display: flex;
+
+        .user-avt {
+            border: .25rem solid #2bcddd;
+        }
+
+        .user-content {
+            text-align: left;
+            margin-left: .5rem;
+            color: #FFFFFF !important;
+            font-weight: 500;
+            line-height: 1.2;
+    
+            h3 {
+                color: #FFFFFF;
+                font-size: 1.5rem;
+            }
+    
+            p {
+                font-size: 1.09375rem;
+                margin-bottom: .5rem;
+            }
+        }
+    }
+
+    .user-chart {
+        border-radius: 0.625rem;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 12px 0 #b3afaf;
+
+        .chart-title {
+            background: linear-gradient(90deg,#48b1bf,#06beb6);
+            padding: .75rem 1.25rem;
+            border-top-left-radius: 0.625rem;
+            border-top-right-radius: 0.625rem;
+            color: #FFFFFF;
+            font-weight: 600;
+            line-height: 1.5;
+            font-size: 1.2rem;
+        }
+    
+        .chart-wrap {
+            padding: 1.25rem;
+        }
+    }
+
+}
+

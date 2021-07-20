@@ -46,6 +46,11 @@
     display: flex;
 }
 
+.header-right__btn {
+    display: flex;
+    align-items: center;
+}
+
 .header-btn {
     margin-left: 1.2rem !important;
 }
