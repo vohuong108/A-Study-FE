@@ -1,14 +1,46 @@
 import React from 'react'
 import 'antd/dist/antd.css';
 import './Overview.scss'
-import { CheckCircleFilled } from '@ant-design/icons'
+
+import OverviewWeek from './OverviewWeek';
 import { Layout, Collapse  } from 'antd';
-const { Header, Content, Sider } = Layout;
 const { Panel } = Collapse;
+const { Content } = Layout;
+
 const Overview = () => {
-    const callback = () => {}
-    const title = 'Linear Regression'
-    const text = 'abc'
+    const data = {
+        weeks: [
+            {
+                name: "week 1",
+                title: "Linear Regression",
+                quiz: {
+                    time: "15 min",
+                    grade: '100%',
+                    due: 'Jul 12 1:59 PM +07'
+                }
+            }, {
+                name: "week 2",
+                title: "Classification",
+                quiz: {
+                    time: "15 min",
+                    grade: '100%',
+                    due: 'Jul 12 1:59 PM +07'
+                }
+            }, {
+                name: "week 3",
+                title: "Clustering and Similarity",
+                quiz: {
+                    time: "15 min",
+                    grade: '100%',
+                    due: 'Jul 12 1:59 PM +07'
+                }
+            }
+        ]
+    }
+
+    const arr = data.weeks.map((dataWeek, index) => <OverviewWeek dataWeek={dataWeek} index={index} />);
+    
+
     return (
         <Layout className="overview" style={{ backgroundColor: '#FFFFFF' }}>
             <Content
@@ -21,67 +53,12 @@ const Overview = () => {
                 }}
             >
                 <h3 className="title-course" >Machine Learning Foundations: A Case Study Approach</h3>
-                <Collapse defaultActiveKey={['1']} onChange={callback} className="collapse-wrap">
-                    <Panel header="Week 1" key="1" className="panel-wrap">
-                        <h3>{title}</h3>
-                        <div className="week-content">
-                            <div className="left">
-                                <div className="left-item"><a>Videos</a></div>
-                                <div className="left-item"><a>Readings</a></div>
-                            </div>
-                            <div className="right">
-                                <div className="right-content">
-                                    <table>
-                                        <tr>
-                                            <th>REQUIRED</th>
-                                            <th>GRADE</th>
-                                            <th>DUE</th>
-                                        </tr>
-                                        <tr>
-                                            <td className="require">
-                                                <div className="check">
-                                                    <CheckCircleFilled 
-                                                        style={{
-                                                            fontSize: '1.5rem', 
-                                                            color: 'rgb(31, 131, 84)'
-                                                        }}
-                                                    />
-                                                </div>
-                                                <div className="require-content">
-                                                    <span>Quiz</span><br/>
-                                                    <span>15 min</span>
-
-                                                </div>
-                                            </td>
-                                            <td>100%</td>
-                                            <td>
-                                                <span>Jul 12</span><br/>
-                                                <span>1:59 PM +07</span>
-                                            </td>
-
-                                            
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </Panel>
-                    <Panel header="Week 2" key="2" className="panel-wrap">
-                        <p>{text}</p>
-                    </Panel>
-                    <Panel header="Week 3" key="3" className="panel-wrap">
-                        <p>{text}</p>
-                    </Panel>
-                    <Panel header="Week 4" key="4" className="panel-wrap">
-                        <p>{text}</p>
-                    </Panel>
-                    <Panel header="Week 5" key="5" className="panel-wrap">
-                        <p>{text}</p>
-                    </Panel>
-                    <Panel header="Week 6" key="6" className="panel-wrap">
-                        <p>{text}</p>
-                    </Panel>
-                    
+                <Collapse defaultActiveKey={['0']} className="collapse-wrap">
+                    {data.weeks.map((dataWeek, index) => (
+                        <Panel header={dataWeek.name} key={index} className="panel-wrap">
+                            <OverviewWeek dataWeek={dataWeek} index={index} />
+                        </Panel>
+                    ))}
                 </Collapse>
 
             </Content>
@@ -91,3 +68,5 @@ const Overview = () => {
 }
 
 export default Overview
+
+

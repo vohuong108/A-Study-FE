@@ -15,6 +15,8 @@ import {
 } from "react-router-dom";
 
 import Course from './components/pages/course/Course'
+import SignupConfirm from './SignupConfirm'
+import Overview from './components/pages/course/overview/Overview'
 
 function App() {
   return (
@@ -22,16 +24,17 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          <Route exact path="/" component={Course} />
+          <Route path="/course/:id" component={Course} />
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
           <PrivateRoute exact path="/dashbroad" component={UserDash} />
+          <Route exact path="/" component={Footer} />
         </Switch>
 
-        <Footer />
       </div>
     </BrowserRouter>
   );
 }
 
 export default App;
+

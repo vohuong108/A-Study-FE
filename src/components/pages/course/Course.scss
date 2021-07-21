@@ -1,6 +1,12 @@
 .course {
+    .course-layout {
+        height: calc(100vh - 72px);
+    }
+
     .course-left{
-        background-color: #F0F3F5;
+        background-color: #F0F3F5; 
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .menu_item {
