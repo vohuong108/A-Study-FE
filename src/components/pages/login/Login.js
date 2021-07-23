@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '../../../utils/localStorageHandler'
-import { setAuthHeader } from '../../../utils/setAuthHeader'
 import { useHistory } from "react-router-dom"
-import { login, getUserByToken } from "../../../features/authentication/userSlice"
+import { login, getUserByToken } from "../../../features/authentication/asyncThunkAction"
 import { unwrapResult } from '@reduxjs/toolkit'
 
 import './Login.scss'
 import loginBanner from '../../../assets/loginBanner.png'
 import { LockFilled, MailFilled} from '@ant-design/icons'
+import { Spin } from 'antd';
 import 'antd/dist/antd.css';
 
 
@@ -19,6 +19,7 @@ const Login = (props) => {
         password: ''
     })
     const dispatch = useDispatch();
+    const loading = useSelector(state => state.user.loading);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -52,49 +53,55 @@ const Login = (props) => {
         <div className="login">
             <div className="container">
                 <div className="row login-row">
+                
                     <div className="login-wrap">
-                        <h1>AStudy - Learn without limits</h1>
-                        <div className="login-inner">
-                            <div className="inner-left">
-                                <img src={loginBanner} alt=""/>
-                                <p>Online teaching and learning support system</p>
-                            </div>
-                            <div className="inner-right">
-                                <h3>LOG IN</h3>
-                                <form onSubmit={(e) => handleSubmit(e)}>
-                                    <label>Email</label>
-                                    <div className="input-wrap">
-                                        <MailFilled className="input-icon" />
-                                        <input 
-                                            name="email" 
-                                            type="email"
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({...formData, email: e.target.value})}
-                                            placeholder="name@email.com" 
-                                            required 
-                                        />
-                                    </div>
-                                    <label>Password</label>
-                                    <div className="input-wrap">
-                                        <LockFilled className="input-icon" />
-                                        <input 
-                                            name="password" 
-                                            type="password"
-                                            value={formData.password}
-                                            onChange={(e) => setFormData({...formData, password: e.target.value})}
-                                            placeholder="Enter your password" 
-                                            required 
-                                        />
-                                    </div>
-                                    <div className="form-btn">
-                                        <input className="submit-btn" type="submit" value="Log In"></input>
-                                    </div>
-                                </form>
-                                <a href="">Forgot your password?</a>
-                                <p>Don't have an account? <a href="/signup">Sign up</a></p>
-                            </div>
-                        </div>
+                        <Spin tip="Loading..." spinning={loading}>
+                            <h1>AStudy - Learn without limits</h1>
+                            <div className="login-inner">
+                                <div className="inner-left">
+                                    <img src={loginBanner} alt=""/>
+                                    <p>Online teaching and learning support system</p>
+                                </div>
+                                <div className="inner-right">
+                                    <h3>LOG IN</h3>
+                                    <form onSubmit={(e) => handleSubmit(e)}>
+                                        <label>Email</label>
+                                        <div className="input-wrap">
+                                            <MailFilled className="input-icon" />
+                                            <input 
+                                                name="email" 
+                                                type="email"
+                                                value={formData.email}
+                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                                placeholder="name@email.com" 
+                                                required 
+                                            />
+                                        </div>
+                                        <label>Password</label>
+                                        <div className="input-wrap">
+                                            <LockFilled className="input-icon" />
+                                            <input 
+                                                name="password" 
+                                                type="password"
+                                                value={formData.password}
+                                                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                                placeholder="Enter your password" 
+                                                required 
+                                            />
+                                        </div>
 
+                                        <div className="form-btn">
+                                            <input className="submit-btn" type="submit" value="Log In"></input>
+                                        </div>
+                                        
+                                            
+                                        
+                                    </form>
+                                    <a href="">Forgot your password?</a>
+                                    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+                                </div>
+                            </div>
+                        </Spin>
                     </div>
                 </div>
             </div>

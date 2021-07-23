@@ -1,10 +1,11 @@
 .categories {
     letter-spacing: -.02rem;
     padding: 0 1.2rem;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1.4;
-    color: #3c3b37;
+    color: hsla(0,0%,100%,.8);
     height: 72px;
+    font-size: 1rem;
 }
 
 .ctg-wrap {
@@ -14,7 +15,8 @@
     align-items: center;
 }
 .ctg-wrap:hover {
-    color: #0f7c90;
+    color: #FFFFFF;
+    cursor: pointer;
 }
 
 .ctg-wrap__pop {

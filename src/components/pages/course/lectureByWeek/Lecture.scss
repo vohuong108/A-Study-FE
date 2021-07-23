@@ -1,77 +1,104 @@
 .lecture {
-    width: 100%;
-    height: 100%;
-    background-color: #FFFFFF;
-    overflow-y: scroll;
-
-    .lecture-container {
-        margin: 0 8rem;
-        padding: 2rem 0;
+    .lecture-layout {
+        height: calc(100vh - 72px);
     }
 
-    .lecture-header {
-        text-align: left;
-        margin-bottom: 1rem;
-        h1 {
-            font-family: Open Sans;
-            font-weight: 700;
-            color: #1f1f1f;
-            font-size: 34px;
-            line-height: 46px;
-            margin-bottom: 6px;
+    .lecture-layout-menu-toggle {
+        background-color: #c0e0e0;
+    }
+    .trigger {
+        padding-left: .5rem;
+        padding-right: .5rem;
+        font-size: 1.2rem;
+    }
+
+    .icon {
+        font-size: 1.2rem;  
+    }
+
+    .item-title {
+        margin-bottom: 0;
+    }
+
+    .lecture-menu {
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .lecture-menu-item {
+        height: auto;
+        white-space: normal;
+        line-height: 1.5;
+        font-size: 0.75rem;
+        color: #1d1c1c;
+
+        &:hover {
+            background-color: #dddddd;
+            color: #1d1c1c;
         }
     }
 
-    .lecture-content-wrap {
-        border: 1px solid #dcdacb;
-        padding: 1.5rem;
+    .lecture-sidebar {
+        flex: 0 0 15rem !important;
+        width: 15rem !important;
+        min-width: 15rem !important;
+        max-width: 15rem !important;
+    }
 
-        .lecture-subtopic {
-            border-bottom: 1px solid #dcdacb;
-            margin-bottom: 2.5rem;
+    .lecture-sidebar-collapsed {
+        flex: 0 0 0 !important;
+        width: 0 !important;
+        min-width: 0 !important;
+        max-width: 0 !important;
+    }
 
-            h3 {
-                font-family: Open Sans,Arial,sans-serif;
-                font-weight: 700;
-                color: #1f1f1f;
-                font-size: 20px;
-                line-height: 24px;
-                margin-bottom: 24px;
-                text-align: left;
-            }
-
-            .subtopic-wrap {
-                list-style-type: none;
-                padding-left: 0;
-
-                li a {
-                    display: flex;
-                    align-items: center;
-                    height: 3rem;
-                    color: #1F1F1F;
-
-                    .subtopic-icon {
-                        font-size: 1.375rem;
-                        margin-left: 1rem;
-                        margin-right: 1rem;
-                    }
-
-                    p {
-                        margin-bottom: 0;
-                        font-family: OpenSans-Bold,OpenSans,Arial,sans-serif;
-                        font-size: 1rem;
-                        line-height: 1.5rem;
-                    }
-
-                    &:hover {
-                        background-color: #ededed;
-                    }
-                }
-            }
-
-            &:last-child {
-                border-bottom: none;
-            }
+    a {
+        color: #1d1c1c;
+        &:hover {
+            color: #1d1c1c;
         }
     }
+
+    .lecture-layout-wrap-content {
+        background-color: #FFFFFF;
+        overflow-y: auto;
+    }
+
+    .lecture-title {
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1.875rem;
+        margin: 0 0 1.25rem 0;
+        padding: 1rem .5rem;
+        color: rgb(255, 255, 255);
+        font-family: OpenSans-Light,OpenSans,Arial,sans-serif;
+        background: linear-gradient(to right, rgb(72, 177, 191), rgb(6, 190, 182));
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+    }
+
+    .lecture-content {
+        padding-right: 10% !important;
+        padding-left: 10% !important;
+    }
+
+    .player-wrapper {
+        position: relative;
+        padding-top: 56.25%;
+        margin-bottom: 2rem;
+    }
+
+    .react-player {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .pedal {
+        height: 1px;
+    }
+    
 }

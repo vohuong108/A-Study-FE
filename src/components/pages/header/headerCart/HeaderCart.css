@@ -1,5 +1,5 @@
 .header-cart {
-    color: #3c3b37;
+    color: hsla(0,0%,100%,.8);
     height: 72px;
     padding: 0 1.2rem;
 }
@@ -10,7 +10,7 @@
     display: flex;
 }
 .cart-wrap:hover {
-    color: #0f7c90;
+    color: #FFFFFF;
 }
 
 .cart-wrap__pop {

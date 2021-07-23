@@ -3,7 +3,8 @@ import './Header.css'
 import 'antd/dist/antd.css';
 import { useSelector, useDispatch } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
-import { selectUser, getUserByToken } from '../../../features/authentication/userSlice'
+import { selectUser } from '../../../features/authentication/userSlice'
+import { getUserByToken } from '../../../features/authentication/asyncThunkAction'
 import { getToken } from '../../../utils/localStorageHandler'
 import Logo from '../../../assets/logo.png'
 import { Button } from 'antd';
@@ -53,8 +54,12 @@ const Header = () => {
                         <HeaderCart />
                         {!user 
                             ? <div className="header-right__btn">
-                                <Button href="/login" className="header-btn" danger >Login</Button>
-                                <Button href="/signup" className="header-btn" type="primary">Sign Up</Button>
+                                <Link to="/login">
+                                    <Button className="header-btn" danger >Login</Button>
+                                </Link>
+                                <Link to="/signup">
+                                    <Button className="header-btn" type="primary">Sign Up</Button>
+                                </Link>
                             </div>
                             : <div className="header-right__user">
                                 <NotifyBell />

@@ -1,151 +1,92 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Lecture.scss'
-import 'antd/dist/antd.css';
-import { CheckCircleFilled, PlayCircleOutlined, ReadOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom';
+import 'antd/dist/antd.css'
+import ReactPlayer from 'react-player'
+import { Layout, Menu } from 'antd'
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  PlayCircleOutlined,
+  ReadOutlined,
+} from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 
-const topicItem = ({ iconComponent, data }) => {
-
-
-}
+const { Header, Sider, Content } = Layout;
 
 const Lecture = () => {
+    const [collapsed, setCollapsed] = useState(false)
+
+
+
     return (
         <div className="lecture">
-            <div className="lecture-container">
-                <div className="lecture-row">
-                    <div className="lecture-header">
-                        <h1>Week1</h1>
-                        <p>Machine Learning Foundations: A Case Study Approach</p>
-                    </div>
-                    <div className="lecture-content-wrap">
-                        <div className="lecture-subtopic">
-                            <h3>Why you should learn machine learning with us</h3>
-                            <ul className="subtopic-wrap">
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Important Update regarding the Machine Learning Specialization
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Slides presented in this module
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Who we are
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Machine learning is changing the world
-                                        </p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="lecture-subtopic">
-                            <h3>Why you should learn machine learning with us</h3>
-                            <ul className="subtopic-wrap">
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Important Update regarding the Machine Learning Specialization
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Slides presented in this module
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Who we are
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Machine learning is changing the world
-                                        </p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                        <div className="lecture-subtopic">
-                            <h3>Why you should learn machine learning with us</h3>
-                            <ul className="subtopic-wrap">
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Important Update regarding the Machine Learning Specialization
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <ReadOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Reading: </strong>
-                                            Slides presented in this module
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Who we are
-                                        </p>
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link to={"/"}>
-                                        <PlayCircleOutlined className="subtopic-icon" />
-                                        <p>
-                                            <strong>Video: </strong>
-                                            Machine learning is changing the world
-                                        </p>
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+            <Layout className="lecture-layout">
+                <Sider 
+                    className={`lecture-sidebar ${collapsed ? 'lecture-sidebar-collapsed' : ''}`}
+                    trigger={null} 
+                    collapsible 
+                    collapsed={collapsed}
+                >
+                    <Menu className="lecture-menu" mode="inline" defaultSelectedKeys={['1']}>
+                        <Menu.Item className="lecture-menu-item" key="1" icon={<ReadOutlined className="icon"/>}>
+                            <Link to={'/course/welcome'}>
+                                <p className="item-title">
+                                    <strong>Reading: </strong> 
+                                    Important Update regarding the Machine Learning Specialization
+                                </p>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item className="lecture-menu-item" key="2" icon={<PlayCircleOutlined className="icon"/>}>
+                            <Link to={'/course/welcome'}>
+                                <p className="item-title">
+                                    <strong>Reading: </strong> 
+                                    Important Update regarding the Machine Learning Specialization
+                                </p>
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item className="lecture-menu-item" key="3" icon={<ReadOutlined className="icon"/>}>
+                            <Link to={'/course/welcome'}>
+                                <p className="item-title">
+                                    <strong>Reading: </strong> 
+                                    Important Update regarding the Machine Learning Specialization
+                                </p>
+                            </Link>
+                        </Menu.Item>
+                    </Menu>
+                </Sider>
+                <div className="lecture-layout-menu-toggle">
+                    {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                        className: 'trigger',
+                        onClick: () => {setCollapsed(!collapsed)}
+                    })}
                 </div>
-            </div>
-            
+                <Layout className="lecture-layout-wrap-content">
+                    <Content 
+                        className="lecture-content"
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            minHeight: 280,
+                        }}
+                    >
+                        <h1 className="lecture-title">
+                            Document retrieval: A case study in clustering and measuring similarity
+                        </h1>
+
+                        <div className="player-wrapper">
+                            <ReactPlayer 
+                                className="react-player" 
+                                controls={true} 
+                                url='https://www.youtube.com/watch?v=YDzv0GC1SfI' 
+                                width='100%'
+                                height='100%'
+                            />
+                        </div>
+                        <div className="pedal"></div>
+
+                    </Content>
+                </Layout>
+            </Layout>
         </div>
     )
 }

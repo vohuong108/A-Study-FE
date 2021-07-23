@@ -1,39 +1,14 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import userApi from '../../api/userApi'
-
-export const login = createAsyncThunk(
-    'user/login',
-    async (requestData) => {
-        console.log("requestData in asyn thunk login: ", requestData);
-        const res = await userApi.userLogin(requestData);
-        return res.data.access_token;
-    }
-)
-
-export const registing = createAsyncThunk(
-    'user/registing',
-    async (requestData) => {
-        console.log("requestData in asyn thunk registing: ", requestData);
-        const userData = await userApi.userRegisting(requestData)
-        console.log("res in registing:", userData);
-        return userData;
-    }
-)
-
-export const getUserByToken = createAsyncThunk(
-    'user/getUser',
-    async (requestData) => {
-        const userData = await userApi.getUser(requestData)
-        console.log("userData responese in get thunk: ", userData);
-        return userData;
-    }
-)
+import { createSlice } from "@reduxjs/toolkit"
+import { login, registing, getUserByToken } from './asyncThunkAction'
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         userObj: null,
         loading: false,
+        loggedIn: false,
+        registed: true,
+        verifyAcc: false,
         error: ''
     },
     reducers: {
@@ -42,6 +17,16 @@ const userSlice = createSlice({
         }
     },
     extraReducers: {
+        [login.pending]: (state) => {
+            state.loading = true;
+        },
+        [login.rejected]: (state, action) => {
+            state.error = action.error;
+        },
+        [login.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.userObj = action.payload.data;
+        },
         [getUserByToken.pending]: (state) => {
             state.loading = true;
         },
@@ -51,6 +36,17 @@ const userSlice = createSlice({
         [getUserByToken.fulfilled]: (state, action) => {
             state.loading = false;
             state.userObj = action.payload.data;
+            state.loggedIn = true;
+        },
+        [registing.pending]: (state) => {
+            state.loading = true;
+        },
+        [registing.rejected]: (state, action) => {
+            state.error = action.error;
+        },
+        [registing.fulfilled]: (state, action) => {
+            state.loading = false;
+            if(action.payload.message === "Register successful") state.registed = true;
         }
     }
 });

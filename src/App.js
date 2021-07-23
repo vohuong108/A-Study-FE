@@ -7,28 +7,39 @@ import UserDash from './components/pages/user/userDash/UserDash'
 import Profile from './components/pages/user/profile/Profile'
 import PrivateRoute from './components/routes/PrivateRoute'
 import PublicRoute from './components/routes/PublicRoute'
-import SignUp from './components/pages/SignUp/SignUp'
+import SignUp from './components/pages/signup/SignUp'
 import {
   BrowserRouter,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom";
 
 import Course from './components/pages/course/Course'
 import SignupConfirm from './SignupConfirm'
 import Overview from './components/pages/course/overview/Overview'
-
+import Lecture from './components/pages/course/lectureByWeek/Lecture'
+import React from 'react'
 function App() {
+
+
+
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
         <Switch>
-          <Route path="/course/:id" component={Course} />
+          <Route path="/course">
+            <Course />
+          </Route>
+          <Route path="/lecture">
+            <Lecture />
+          </Route>
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
           <PrivateRoute exact path="/dashbroad" component={UserDash} />
-          <Route exact path="/" component={Footer} />
+          <DisplayFooter exact path="/" component={Home} />
+        
         </Switch>
 
       </div>
@@ -38,3 +49,12 @@ function App() {
 
 export default App;
 
+const DisplayFooter = ({ component: Component, ...rest}) => {
+  return (
+    <Route 
+      {...rest}
+      render={() => <React.Fragment><Component /><Footer /></React.Fragment>}
+    />
+
+  )
+}

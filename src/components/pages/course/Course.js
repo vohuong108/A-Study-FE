@@ -2,8 +2,8 @@ import React from 'react'
 import './Course.scss'
 import 'antd/dist/antd.css';
 
-import Lecture from './lectureByWeek/Lecture'
-import { Route, Link } from 'react-router-dom';
+import Supplement from './supplement/Supplement'
+import { Route, Link, useLocation } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
 import Overview from './overview/Overview';
 const { Sider } = Layout;
@@ -13,13 +13,22 @@ const data = {
 }
 
 const Course = () => {
+    let location = useLocation();
+
+    const getKey = (path) => {
+        let arr = path.split('/');
+
+        if(arr[arr.length - 1] === 'welcome') return 'overview';
+        else return `week${arr[arr.length - 1]}`
+    }
+
     return (
         <div className="course">
             <Layout className="course-layout">
                 <Sider className="course-left">
                     <Menu
                         mode="inline"
-                        defaultSelectedKeys={['overview']}
+                        defaultSelectedKeys={[getKey(location.pathname)]}
                         style={{ height: '100%', borderRight: 0, fontSize: '16px', backgroundColor: '#F0F3F5'}}
                     >
                         <Menu.Item className="menu_item" key="overview">
@@ -36,12 +45,12 @@ const Course = () => {
                     </Menu>
                 </Sider>
 
-                <Route path="/course/welcome" >
+                <Route exact path="/course/welcome" >
                     <Overview />
                 </Route>
                 {data.weeks.map(id => (
                     <Route key={id} path={`/course/week/${id}`} >
-                        <Lecture />
+                        <Supplement />
                     </Route>
                 ))}
             </Layout>
