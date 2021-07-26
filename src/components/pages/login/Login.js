@@ -4,6 +4,7 @@ import { setToken } from '../../../utils/localStorageHandler'
 import { useHistory } from "react-router-dom"
 import { login, getUserByToken } from "../../../features/authentication/asyncThunkAction"
 import { unwrapResult } from '@reduxjs/toolkit'
+import { useForm } from "react-hook-form"
 
 import './Login.scss'
 import loginBanner from '../../../assets/loginBanner.png'
@@ -13,20 +14,17 @@ import 'antd/dist/antd.css';
 
 
 const Login = (props) => {
+    const { register, handleSubmit } = useForm();
     let history = useHistory();
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    })
+    
     const dispatch = useDispatch();
     const loading = useSelector(state => state.user.loading);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        
+    const onSubmit = async (data) => {
+
         const requestData = {
-            // email: formData.email,
-            // password: formData.password
+            // email: data.email,
+            // password: data.password
             username: 'user_1',
             password: '12345678'
         }
@@ -64,16 +62,16 @@ const Login = (props) => {
                                 </div>
                                 <div className="inner-right">
                                     <h3>LOG IN</h3>
-                                    <form onSubmit={(e) => handleSubmit(e)}>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
                                         <label>Email</label>
                                         <div className="input-wrap">
                                             <MailFilled className="input-icon" />
-                                            <input 
+                                            <input
+                                                id="email"
                                                 name="email" 
                                                 type="email"
-                                                value={formData.email}
-                                                onChange={(e) => setFormData({...formData, email: e.target.value})}
                                                 placeholder="name@email.com" 
+                                                {...register("email")}
                                                 required 
                                             />
                                         </div>
@@ -83,9 +81,8 @@ const Login = (props) => {
                                             <input 
                                                 name="password" 
                                                 type="password"
-                                                value={formData.password}
-                                                onChange={(e) => setFormData({...formData, password: e.target.value})}
                                                 placeholder="Enter your password" 
+                                                {...register("password")}
                                                 required 
                                             />
                                         </div>

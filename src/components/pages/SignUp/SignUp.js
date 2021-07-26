@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from "react-router-dom"
 import { registing } from "../../../features/authentication/asyncThunkAction"
 import { unwrapResult } from '@reduxjs/toolkit'
+import { useForm } from "react-hook-form"
 
 import './SignUp.scss'
 import { Checkbox } from 'antd';
@@ -13,25 +14,17 @@ import loginBanner from '../../../assets/loginBanner.png'
 
 
 const SignUp = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        checkbox: false,
-    })
-
     const dispatch = useDispatch();
     const registed = useSelector(state => state.user.registed);
     let history = useHistory();
+    const { register, handleSubmit } = useForm();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
+    const onSubmit = async (data) => {
         const requestData = {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-                checkbox: true
+            username: data.username,
+            email: data.email,
+            password: data.password,
+            checkbox: data.checkbox,
         }
 
         try {
@@ -68,15 +61,15 @@ const SignUp = () => {
                             </div>
                             <div className="inner-right">
                                 <h3>SIGN UP</h3>
-                                <form onSubmit={(e) => handleSubmit(e)}>
+                                <form onSubmit={(e) => handleSubmit(onSubmit)}>
                                     <label>Username</label>
                                     <div className="input-wrap">
                                         <UserOutlined className="input-icon" />
                                         <input 
+                                            id="username"
                                             type="text"
-                                            value={formData.username}
-                                            onChange={(e) => setFormData({...formData, username: e.target.value})} 
                                             placeholder="Cristiano Ronado" 
+                                            {...register("username")}
                                             required 
                                         />
                                     </div>
@@ -84,10 +77,10 @@ const SignUp = () => {
                                     <div className="input-wrap">
                                         <MailFilled className="input-icon" />
                                         <input 
+                                            id="email"
                                             type="email" 
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({...formData, email: e.target.value})}
                                             placeholder="cr7@gmail.com" 
+                                            {...register("email")}
                                             required 
                                         />
                                     </div>
@@ -95,18 +88,20 @@ const SignUp = () => {
                                     <div className="input-wrap">
                                         <LockFilled className="input-icon" />
                                         <input 
+                                            id="password"
                                             type="password"
-                                            onChange={(e) => setFormData({...formData, password: e.target.value})}
                                             placeholder="Enter your password" 
-                                            required 
                                             pattern=".{8,}" 
                                             title="8 characters minimum"
+                                            {...register("password")}
+                                            required 
                                         />
                                     </div>
                                     <div className="form-license">
                                         <Checkbox 
+                                            id="checkbox"
                                             className="checkbox-btn" 
-                                            onChange={(e) => setFormData({...formData, checkbox: e.target.checked})}
+                                            {...register("checkbox")}
                                         />
                                         <p>Yes! I want to get the most out of AStudy by receiving emails with exclusive deals, personal recommendations and learning tips!</p>
                                     </div>

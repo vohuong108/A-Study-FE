@@ -27,7 +27,8 @@
     }
 
     .inner-left {
-        width: min-content;
+        width: 100%;
+        flex: auto;
 
         p {
             color: #73818f;
@@ -37,10 +38,15 @@
             font-weight: 500;
             line-height: 1.2;
         }
+
+        img {
+            width: 100%;
+        }
     }
 
     .inner-right {
         flex: 0 0 40%;
+        margin-left: 1rem;
         
         form label {
             text-align: left;
@@ -72,11 +78,6 @@
         }
     }
 
-
-    
-
-    
-
     input {
         background-color: transparent;
         outline: none;
@@ -86,6 +87,11 @@
         line-height: 1.5;
         margin: 0 15px;
         width: 100%;
+    }
+
+    input:-internal-autofill-previewed,
+    input:-internal-autofill-selected {
+        transition: background-color 10000s ease-in-out 0s !important;
     }
 
     a {
@@ -147,4 +153,73 @@
 .ant-message-custom-content {
     display: flex;
     align-items: center;
+}
+
+// xs: '480px',
+//   sm: '576px',
+//   md: '768px',
+//   lg: '992px',
+//   xl: '1200px',
+//   xxl: '1600px',
+
+
+@media only screen and (max-width: 480px) {
+    .signup .signup-wrap {
+        width: 90%;
+    }
+
+    .signup-inner {
+        flex-wrap: wrap;
+    }
+
+    .signup .inner-right {
+        flex: 0 0 100%;
+    }
+
+    .signup .inner-left p {
+        font-size: 14px;
+    }
+
+    .signup .form-license p {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 576px) {
+    .signup .signup-wrap {
+        width: 90%;
+    }
+
+    .signup .inner-right {
+        flex: 0 0 60%;
+    }
+
+    .signup .inner-left p {
+        font-size: 14px;
+    }
+
+    .signup .form-license p {
+        font-size: 12px;
+    }
+}
+
+@media only screen and (min-width: 577px) and (max-width: 768px) {
+    .signup .signup-wrap {
+        width: 560px;
+    }
+
+    .signup .inner-right {
+        flex: 0 0 50%;
+    }
+}
+
+@media only screen and (min-width: 769px) and (max-width: 992px) {
+    .signup .signup-wrap {
+        width: 760px;
+    }
+    
+}
+
+@media only screen and (min-width: 993px) and (max-width: 1200px) {
+    
 }

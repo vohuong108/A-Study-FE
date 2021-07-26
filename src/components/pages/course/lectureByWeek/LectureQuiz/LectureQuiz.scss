@@ -1,0 +1,85 @@
+.lecture-quiz {
+    text-align: left;
+    h1 {
+        
+    }
+
+    .lecture-quiz-info-submit {
+        margin-bottom: 1rem;
+
+        p {
+            margin-bottom: 0.3125rem;
+        }
+    }
+
+    table .column-state {
+        p {
+            margin-bottom: 0;
+            color: #212529;
+            &:nth-child(1) {
+                color: #212529;
+                font-weight: 700;
+            }
+
+        }
+    }
+
+    table thead {
+        background: linear-gradient(to right, rgb(72, 177, 191), rgb(6, 190, 182)) !important;
+    }
+
+    table tbody {
+        background-color: rgba(0,0,0,.05);
+        cursor: pointer;
+    }
+
+    table thead th {
+        background-color: transparent;
+        color: #fff;
+        font-size: 1rem;
+    }
+
+    table a {
+        color: #007493;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .lecture-quiz-pre-submit {
+
+        .quiz-pre-submit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.875rem;
+
+            h3 {
+                text-align: left;
+                font-size: 1.75rem;
+                font-weight: 200;
+                line-height: 1.2;
+                color: #58585b;
+                font-family: CiscoSans, Arial, sans-serif;
+                margin-bottom: 0;
+            }
+
+            a {
+                line-height: 1.2;
+                color: #007493;
+            }
+            
+        }
+    }
+
+    .lecture-quiz-grade {
+        text-align: left;
+        font-size: 1.75rem;
+        font-weight: 200;
+        line-height: 1.2;
+        color: #58585b;
+        font-family: CiscoSans, Arial, sans-serif;
+        margin-top: 2rem;
+    }
+}

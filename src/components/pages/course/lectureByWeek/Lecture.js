@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Lecture.scss'
 import 'antd/dist/antd.css'
-import ReactPlayer from 'react-player'
+
 import { Layout, Menu } from 'antd'
 import {
   MenuUnfoldOutlined,
@@ -10,8 +10,11 @@ import {
   ReadOutlined,
 } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import LectureVideo from './LectureVideo/LectureVideo'
+import LectureReading from './LectureReading/LectureReading'
+import LectureQuiz from './LectureQuiz/LectureQuiz'
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 const Lecture = () => {
     const [collapsed, setCollapsed] = useState(false)
@@ -69,19 +72,7 @@ const Lecture = () => {
                             minHeight: 280,
                         }}
                     >
-                        <h1 className="lecture-title">
-                            Document retrieval: A case study in clustering and measuring similarity
-                        </h1>
-
-                        <div className="player-wrapper">
-                            <ReactPlayer 
-                                className="react-player" 
-                                controls={true} 
-                                url='https://www.youtube.com/watch?v=YDzv0GC1SfI' 
-                                width='100%'
-                                height='100%'
-                            />
-                        </div>
+                        <LectureQuiz />
                         <div className="pedal"></div>
 
                     </Content>
