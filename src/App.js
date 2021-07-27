@@ -1,3 +1,4 @@
+import React from 'react'
 import './App.css'
 import Footer from './components/pages/footer/Footer'
 import Header from './components/pages/header/Header'
@@ -19,7 +20,9 @@ import Course from './components/pages/course/Course'
 import SignupConfirm from './SignupConfirm'
 import Overview from './components/pages/course/overview/Overview'
 import Lecture from './components/pages/course/lectureByWeek/Lecture'
-import React from 'react'
+import Submit from './components/pages/quiz/submit/Submit'
+
+
 function App() {
 
 
@@ -32,12 +35,15 @@ function App() {
           <Route path="/course">
             <Course />
           </Route>
+          <Route path="/submit">
+            <Submit />
+          </Route>
           <Route path="/lecture">
             <Lecture />
           </Route>
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
-          <PrivateRoute exact path="/dashbroad" component={UserDash} />
+          <PublicRoute exact path="/dashbroad" component={UserDash} />
           <DisplayFooter exact path="/" component={Home} />
         
         </Switch>

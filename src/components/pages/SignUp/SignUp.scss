@@ -41,12 +41,22 @@
 
         img {
             width: 100%;
+            max-width: fit-content;
         }
     }
 
     .inner-right {
         flex: 0 0 40%;
         margin-left: 1rem;
+
+        h3 {
+            color: rgb(31, 31, 31);
+            font-size: 34px;
+            line-height: 42px;
+            text-align: center;
+            font-weight: 400;
+            margin-bottom: 40px;
+        }
         
         form label {
             text-align: left;
@@ -67,15 +77,7 @@
                 font-size: 1rem;
             }
         }
-
-        h3 {
-            color: rgb(31, 31, 31);
-            font-size: 34px;
-            line-height: 42px;
-            text-align: center;
-            font-weight: 400;
-            margin-bottom: 40px;
-        }
+        
     }
 
     input {
@@ -99,8 +101,6 @@
         color: #2A73CC;
     }
 
-    
-
     .form-btn {
         cursor: pointer;
         border-radius: 25px;
@@ -122,10 +122,10 @@
         font-weight: 600;
         transition: all 0.5s;
         background-color: transparent !important;
-    }
 
-    .submit-btn:hover {
-        color: #23282c;
+        &:hover {
+            color: #23282c;
+        }
     }
 
     .form-license {

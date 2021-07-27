@@ -1,0 +1,47 @@
+.submit-layout {
+    height: calc(100% - 72px);
+    h1 {
+        padding: 15px;
+        margin-bottom: 0;
+        font-size: 2.1875rem;
+        text-align: left;
+    }
+
+    .submit-layout-list-degree {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .quiz-card {
+        background-color: rgb(255, 255, 255);
+        border-radius: 0.75rem;
+        box-shadow: 0 0 12px 0 hsla(0, 0%, 48%, 0.45);
+        overflow: hidden;
+        p {
+            text-align: left;
+            color: rgb(35, 40, 44);
+            font-weight: 500;
+        }
+
+        .ant-card-head {
+            background: linear-gradient(90deg,#48b1bf,#06beb6);
+            color: #FFFFFF;
+            font-weight: 600;
+        }
+    }
+
+    .quiz-table {
+        border-radius: 0.75rem;
+        box-shadow: 0 0 12px 0 hsla(0, 0%, 48%, 0.45);
+        overflow: hidden;
+        .ant-table-title {
+            background: linear-gradient(90deg,#48b1bf,#06beb6);
+            color: #FFFFFF;
+            font-weight: 600;
+            text-align: left;
+        }
+
+
+    }
+}
