@@ -1,45 +1,70 @@
-.nav-card {
-    border: 1px solid #36d1dc;
-    text-align: left;
+@import "../../../../App.scss";
 
-    .nav-title {
-        font-size: 1rem;
-        font-weight: 500;
+.quiz-nav-wrapper {
+    height: 100%;
+    @include Responsive(xl) {
+        position: relative;
     }
 
-    .nav-countdown {
-        margin-bottom: 0.5rem;
-        
-        .ant-statistic-content-value {
-            font-family: monospace;
-        }
-    }
+    .nav-card {
+        border: 1px solid #36d1dc;
+        text-align: left;
 
-    .nav-card-holder {
-        .nav-card-grid {
-            box-shadow: none;
-            border: 1px solid #017cad;
-            border-radius: 5px;
-            overflow: hidden;
+        @include Responsive(xl) {
+            position: sticky;
+            top: 100px;
         }
-        .q-holder {
-            display: block;
-            height: 60%;
-            width: 100%;
-            text-align: center;
-            border: 0;
+    
+        .nav-title {
+            font-size: 1rem;
+            font-weight: 500;
         }
-        .mark {
-            display: none;
-            height: 40%;
-            width: 100%;
-            border: 0;
-            padding: 0;
-            background-color: #017cad;
+    
+        .nav-countdown {
+            margin-bottom: 0.5rem;
+            
+            .ant-statistic-content-value {
+                font-family: monospace;
+            }
         }
-
-        .mark-act {
-            display: block;
+    
+        .nav-card-holder {
+            .ant-card-body {
+                margin: 0;
+            }
+            .nav-card-grid {
+                box-shadow: none;
+                overflow: hidden;
+                position: relative;
+            }
+            .q-holder {
+                display: block;
+                text-align: center;
+                border: 1px solid #017cad;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-radius: 5px;
+            }
+            .mark {
+                display: none;
+                border: 0;
+                padding: 0;
+                background-color: #017cad;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+    
+            .mark-act {
+                display: block;
+            }
         }
     }
 }

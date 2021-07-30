@@ -8,7 +8,7 @@ const QuizItem = ({ data, control, setMarks, review }) => {
     return (
         <>
         {data && 
-            <div className="quiz-item">
+            <div id={`quiz-item-${data.id}`} className="quiz-item">
                 <Row>
                     <Col xs={24} sm={24} xl={4}>
                         <Card className="card-frag">
