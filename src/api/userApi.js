@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://583911db0736.ap.ngrok.io'
+const baseUrl = 'https://7a7369d626c6.ap.ngrok.io'
 const userApi = {
     userLogin: async (data) => {
         const url = `${baseUrl}/login`
@@ -22,7 +22,17 @@ const userApi = {
             }
         });
         return response.data;
-    }
+    },
+    getUserCourses: async (access_token) => {
+        const url = `${baseUrl}/courses`
+        // const url = ' http://localhost:3001/user'
+        const response = await axios.get(url, {
+            headers: {
+                "Authorization": `Bearer ${access_token}`
+            }
+        });
+        return response.data;
+    },
 }
 
 export default userApi;

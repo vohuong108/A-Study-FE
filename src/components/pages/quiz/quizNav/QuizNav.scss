@@ -1,0 +1,45 @@
+.nav-card {
+    border: 1px solid #36d1dc;
+    text-align: left;
+
+    .nav-title {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .nav-countdown {
+        margin-bottom: 0.5rem;
+        
+        .ant-statistic-content-value {
+            font-family: monospace;
+        }
+    }
+
+    .nav-card-holder {
+        .nav-card-grid {
+            box-shadow: none;
+            border: 1px solid #017cad;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .q-holder {
+            display: block;
+            height: 60%;
+            width: 100%;
+            text-align: center;
+            border: 0;
+        }
+        .mark {
+            display: none;
+            height: 40%;
+            width: 100%;
+            border: 0;
+            padding: 0;
+            background-color: #017cad;
+        }
+
+        .mark-act {
+            display: block;
+        }
+    }
+}
