@@ -33,6 +33,16 @@ const userApi = {
         });
         return response.data;
     },
+    getCourseByID: async (access_token, id) => {
+        const url = `${baseUrl}/course/${id}`
+        // const url = ' http://localhost:3001/user'
+        const response = await axios.post(url, {
+            headers: {
+                "Authorization": `Bearer ${access_token}`
+            }
+        });
+        return response.data;
+    }
 }
 
 export default userApi;

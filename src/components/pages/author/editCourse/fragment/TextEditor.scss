@@ -1,0 +1,64 @@
+#form-text-editor {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+
+    .read-title {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:center;
+        margin-bottom: 1rem;
+        background: linear-gradient(to right, #48b1bf, #06beb6);
+        padding: 0.5rem;
+        width: 100%;
+
+        p {
+            margin-bottom: 0;
+            margin-right: 0.625rem;
+            font-size: 1.2rem;
+            padding: 0.3125rem 0.4375rem;
+            color: #fff;
+        }
+
+        input[type="text"] {
+            outline: none;
+            border-radius: 10px;
+            flex: 0 0 50%;
+            padding: 0.3125rem 1rem;
+            border: none;
+            align-items: stretch;
+            box-shadow: 0 2px 5px 1px rgba(64, 60, 67, 0.16);
+        }
+    }
+
+    .editor-wrapper {
+        flex: 0 0 72%;
+        max-height: 72%;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        
+        .editor {
+            background-color: #fff;
+        }
+
+        .toolbar {
+            background: linear-gradient(90deg,#48b1bf,#06beb6);
+        }
+
+    }
+
+    .t-editor-save {
+        flex: 0 0 5%; 
+        width: 100px;
+    }
+
+    .status-switch {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        align-self: flex-start;
+    }
+}

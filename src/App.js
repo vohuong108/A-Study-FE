@@ -23,7 +23,8 @@ import Lecture from './components/pages/course/lectureByWeek/Lecture'
 import Submit from './components/pages/quiz/submit/Submit'
 import Quiz from './components/pages/quiz/Quiz'
 import Review from './components/pages/quiz/review/Review'
-
+import AuthorDash from './components/pages/author/authorDash/AuthorDash'
+import EditCourse from './components/pages/author/editCourse/EditCourse'
 
 function App() {
 
@@ -49,9 +50,15 @@ function App() {
           <Route path="/review">
             <Review />
           </Route>
+          <Route path="/author">
+            <AuthorDash />
+          </Route>
+          <Route path="/edit">
+            <EditCourse />
+          </Route>
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
-          <PrivateRoute exact path="/dashbroad" component={UserDash} />
+          <PublicRoute exact path="/dashbroad" component={UserDash} />
           <DisplayFooter exact path="/" component={Home} />
         
         </Switch>

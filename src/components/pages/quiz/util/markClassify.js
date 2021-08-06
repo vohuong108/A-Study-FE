@@ -1,7 +1,7 @@
 const markClassify = (questionData) => {
     let marks = questionData.reduce((acc, question) => {
-        if(question.type === 'one' && question.userChoice 
-            || question.type === 'many' && question.userChoices) {
+        if((question.type === 'one' && question.userChoice) 
+            || (question.type === 'many' && question.userChoices)) {
             acc[question.id] = true;
         }
         else {

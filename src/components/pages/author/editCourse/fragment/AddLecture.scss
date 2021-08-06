@@ -1,0 +1,19 @@
+.title-draw {
+    display: flex;
+    align-items: center;
+
+    p {
+        margin-bottom: 0;
+        margin-right: 10px;
+        font-size: 24px;
+    }
+}
+
+.ant-drawer-wrapper-body {
+    background-color: #f1f5f8;
+
+    .ant-drawer-body {
+        padding: 0;
+    }
+    
+}

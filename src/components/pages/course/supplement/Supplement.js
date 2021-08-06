@@ -2,8 +2,8 @@ import React from 'react'
 import './Supplement.scss'
 import 'antd/dist/antd.css';
 import { CheckCircleFilled, PlayCircleOutlined, ReadOutlined } from '@ant-design/icons'
+import { Button } from 'antd';
 import { Link } from 'react-router-dom';
-
 const topicItem = ({ iconComponent, data }) => {
 
 
@@ -143,6 +143,9 @@ const Supplement = () => {
                             </ul>
                         </div>
                     </div>
+                    <Link to="#">
+                        <Button shape="round">Go to edit</Button>
+                    </Link>
                 </div>
             </div>
             

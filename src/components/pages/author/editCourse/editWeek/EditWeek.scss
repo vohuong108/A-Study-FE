@@ -1,0 +1,48 @@
+.row-dragging {
+    background: #fafafa;
+    border: 1px solid #ccc;
+  }
+  
+  .row-dragging td {
+    padding: 16px;
+  }
+  
+  .row-dragging .drag-visible {
+    visibility: visible;
+  }
+
+.edit-week {
+  .edit-table {
+    border: 1px solid #22c2d8;
+
+    .tb-btn {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      border-radius: 5px;
+
+      span {
+        display: block;
+      }
+
+      &.edit-btn {
+        color: #2787bf;
+        font-weight: 500;
+      }
+
+      &.del-btn {
+        color: #f85252;
+      }
+    }
+  }
+
+  .edit-week-btn {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .btn-wrap {
+      margin: 1rem;
+    }
+  }
+}

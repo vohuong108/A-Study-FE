@@ -72,7 +72,7 @@ const Lecture = () => {
                             minHeight: 280,
                         }}
                     >
-                        <LectureQuiz />
+                        <LectureReading />
                         <div className="pedal"></div>
 
                     </Content>

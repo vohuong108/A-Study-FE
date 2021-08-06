@@ -1,0 +1,19 @@
+.edit-week-name {
+    margin-bottom: 0.5rem;
+    
+    .e-row {
+        align-items: center;
+
+        .ewn-btn {
+            display: none;
+        }
+
+        .ewn-btn-act {
+            display: inline-block;
+        }
+    }
+    input {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+}

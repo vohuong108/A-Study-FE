@@ -1,0 +1,28 @@
+.edit {
+    height: calc(100vh - 72px);
+
+    .edit-layout {
+        height: 100%;
+
+        .e-layout-content {
+            padding: 1.5rem;
+
+            .collapse-wrap {
+                margin-bottom: 20px;
+
+                .panel-wrap {
+
+                    .ant-collapse-header{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: linear-gradient(90deg,#48b1bf,#06beb6);
+                        color: #fff;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+    
+}

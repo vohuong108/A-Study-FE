@@ -39,7 +39,7 @@ const Course = () => {
                             <Menu.Item className="menu_item" key={`week${id}`}>
                                 <Link to={`/course/week/${id}`}>
                                     {`Week ${id}`}
-                                </Link>
+                                </Link>  
                             </Menu.Item>
                         ))}
                     </Menu>
@@ -59,3 +59,4 @@ const Course = () => {
 }
 
 export default Course
+

@@ -1,0 +1,97 @@
+.progress-course {
+    margin-top: 30px;
+    padding: 18px;
+    box-shadow: 0px 1px 4px rgba(240, 195, 195, 0.24);
+    border: 1px solid #EAEAEA;
+
+    .progress-course-poster {
+        a {
+            display: block;
+        }
+    }
+
+    .course-info {
+        
+        .course-desc {
+            display: flex;
+            justify-content: space-between;
+            h3 {
+                font-size: 1.25rem;
+                line-height: 1.875rem;
+                font-weight: normal;
+                font-family: OpenSans-Light, OpenSans, Arial, sans-serif;
+                color: #1F1F1F;
+                margin-bottom: 0;
+            }
+    
+            p {
+                color: #6E767F;
+                font-size: .9rem;
+                margin-bottom: 10px;
+            }
+    
+            .course-statistic {
+                .ant-statistic-content {
+                    display: flex;
+                    align-items: center;
+    
+                    .anticon {
+                        display: block;
+                        color: #00b8ff;
+                    }
+                }
+            }
+        }
+    
+        .progress-info {
+            p {
+                margin-bottom: 0;
+                text-align: left;
+                font-size: 12PX;
+                color: #1F1F1F;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .progress-course-btn {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        a {
+            display: inline-block;
+            &:last-child {
+                margin-top: 10px;
+            }
+        }
+        .pc-btn {
+            color: #FFF;
+            font-size: .8rem;
+            min-height: 36px;
+            line-height: 1rem;
+            font-weight: 500;
+        }
+
+        .edit-btn {
+            background-color:#2ac8cc;
+            border: 1px solid #2ac8cc;
+
+            &:hover {
+                background-color: #19b8ba;
+            }
+        }
+
+        .resume-btn {
+            background-color: rgb(42, 115, 204);
+            border: 1px solid rgb(42, 115, 204);
+
+            &:hover {
+                background-color: rgb(1, 86, 184);
+            }
+        }
+    }
+
+}

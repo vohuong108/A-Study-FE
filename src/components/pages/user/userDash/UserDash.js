@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './UserDash.css'
-import ProgressCourse from './progressCourse/ProgressCourse.js'
+import ProgressCourse from '../../course/progressCourse/ProgressCourse'
 import { getToken } from '../../../../utils/localStorageHandler'
 import { getUserCourse } from '../../../../features/course/courseAction'
 import { useDispatch, useSelector } from 'react-redux'
@@ -35,9 +35,12 @@ const UserDash = () => {
             <div className="container">
                 <div className="row userDash-row">
                     <div className="title">My Courses</div>
-                    {courses ? courses.map(course => {
+                    {/* {courses ? courses.map(course => {
                         <ProgressCourse key={course._id} data={course}/>
-                    }) : ''}
+                    }) : ''} */}
+
+                    {/*get permision from store so don't need author dash*/}
+                    <ProgressCourse permission={'student'}/>
 
                 </div>
             </div>            

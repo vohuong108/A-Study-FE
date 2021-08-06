@@ -11,6 +11,10 @@
 
     .menu_item {
         padding-left: 40px !important;
+
+        a {
+            display: block;
+        }
     }
 
     .menu_item:hover {
