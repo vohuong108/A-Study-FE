@@ -1,0 +1,42 @@
+.userDash {
+    
+    .userDash-row {
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    
+    .title {
+        color: #1f1f1f;
+        font-family: OpenSans,Arial,sans-serif;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 30px;
+        border-radius: 5px 5px 0 0;
+        background-color: #f0f3f5;
+        text-align: left;
+        padding: .75rem 1.25rem;
+    }
+    
+    .dash-add {
+        .btn-new-course {
+            margin-top: 2rem;
+            background-color: #2ac8cc;
+            color: #fff;
+            font-weight: 500;
+            border-color: #2ac8cc;
+
+            &:hover {
+                background-color: #19b8ba;
+                border-color: #19b8ba;
+            }
+        }
+
+    }
+}
+
+.title-add-course {
+    text-align: center;
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+}

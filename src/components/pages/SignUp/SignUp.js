@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { registing } from "../../../features/authentication/asyncThunkAction"
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useForm } from "react-hook-form"
@@ -109,7 +109,10 @@ const SignUp = () => {
                                         <input className="submit-btn" type="submit" value="Sign Up"></input>
                                     </div>
                                 </form>
-                                <p>Already have an account? <a href="/login">Log In</a></p>
+                                <p>
+                                    Already have an account?&nbsp;
+                                    <Link to="/login">Log In</Link>
+                                </p>
                             </div>
                         </div>
 

@@ -1,65 +1,61 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import 'antd/dist/antd.css'
+import { CheckCircleFilled, PlayCircleOutlined, ReadOutlined, ContainerOutlined } from '@ant-design/icons'
 
-import 'antd/dist/antd.css';
-import { CheckCircleFilled, PlayCircleOutlined, ReadOutlined } from '@ant-design/icons'
-
-const OverviewWeek = ({ dataWeek, index }) => {
-
-    const seprateDatetime = (datetime) => {
-        let arr = datetime.split(' ');
-
-        console.log(arr);
-
-    }
+const OverviewWeek = ({ dataWeek, idCourse }) => {
 
     return (
         <>
-            <h3>{dataWeek.title}</h3>
+            <h3>{dataWeek.weekTitle}</h3>
             <div className="week-content">
                 <div className="left">
                     <div className="left-item">
-                        <a>
+                        <Link to={`/learn/${idCourse}/week/${dataWeek.idWeek}/v/`}>
                             <PlayCircleOutlined className="icon"/>
                             <p>Videos</p>
-                        </a>
+                        </Link>
                     </div>
                     <div className="left-item">
-                        <a>
+                        <Link to={`/learn/${idCourse}/week/${dataWeek.idWeek}/r/`}>
                             <ReadOutlined className="icon"/>
                             <p>Readings</p>
-                        </a>
+                        </Link>
                     </div>
                 </div>
                 <div className="right">
                     <div className="right-content">
                         <table>
-                            <tr>
-                                <th>REQUIRED</th>
-                                <th>GRADE</th>
-                                <th>DUE</th>
-                            </tr>
-                            <tr>
-                                <td className="require">
-                                    <div className="check">
-                                        <CheckCircleFilled 
-                                            style={{
-                                                fontSize: '1.5rem', 
-                                                color: 'rgb(31, 131, 84)'
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="require-content">
-                                        <span>Quiz</span><br/>
-                                        <span>{dataWeek.quiz.time}</span>
+                            <thead>
+                                <tr>
+                                    <th>REQUIRED</th>
+                                    <th>GRADE</th>
+                                    <th>DUE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="require">
+                                        <Link to={`/learn/${idCourse}/week/${dataWeek.idWeek}/q/`}>
+                                            <div className="check">
+                                                {dataWeek?.quiz?.passed === "true" 
+                                                    ?<CheckCircleFilled style={{fontSize: '1.5rem', color: 'rgb(31, 131, 84)'}} />
+                                                    :<ContainerOutlined style={{fontSize: '1.5rem', color: '#000'}}/>
+                                                }
+                                            </div>
+                                            <div className="require-content">
+                                                <span>Quiz</span><br/>
+                                                <span>{`${dataWeek.quiz.time} min`}</span>
 
-                                    </div>
-                                </td>
-                                <td>{dataWeek.quiz.grade}</td>
-                                <td>
-                                    <span>Jul 12</span><br/>
-                                    <span>1:59 PM +07</span>
-                                </td>
-                            </tr>
+                                            </div>
+                                        </Link>
+                                    </td>
+                                    <td>{dataWeek.quiz.grade}</td>
+                                    <td>
+                                        <span>{dataWeek.quiz.due}</span>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

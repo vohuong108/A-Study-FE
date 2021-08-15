@@ -7,13 +7,14 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './AddLecture.scss'
 
 const AddLecture = () => {
-    console.log('re-render in add lecture')
     const [visible, setVisible] = useState(false);
     const [type, setType] = useState('reading');
+    console.log('re-render in add-lecture: ', type);
+
 
     return (
         <div className="add-lecture">
-            <Button className="edit-btn-save" shape="round" type="primary" onClick={() => setVisible(true)}>
+            <Button className="edit-btn-save btn-add-content" shape="round" onClick={() => setVisible(true)}>
                 New Content
             </Button>
             <Drawer
@@ -21,7 +22,7 @@ const AddLecture = () => {
                 height="90%"
                 title={<div className="title-draw">
                     <p>Create a new lecture</p>
-                    <Select className="option-type" defaultValue="reading" style={{ width: 120 }} onSelect={(key) => setType(key)} >
+                    <Select className="option-type" defaultValue={type} style={{ width: 120 }} onSelect={(key) => setType(key)} >
                         <Select.Option value="video">Video</Select.Option>
                         <Select.Option value="reading">Reading</Select.Option>
                         <Select.Option value="quiz">Quiz</Select.Option>
@@ -29,10 +30,12 @@ const AddLecture = () => {
                 </div>}
                 visible={visible}
                 onClose={() => setVisible(false)}
+                forceRender={true}
+                destroyOnClose={true}
             >
-            {type === 'reading' && <TextEditor />}
-            {type === 'video' && <VideoEditor/>}
-            {type === 'quiz' && <QuizEditor />}
+            {type === 'reading' && <TextEditor setVisible={setVisible} />}
+            {type === 'video' && <VideoEditor setVisible={setVisible} />}
+            {type === 'quiz' && <QuizEditor setVisible={setVisible} />}
             </Drawer>
         </div>
     );

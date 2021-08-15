@@ -5,6 +5,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         userObj: null,
+        access_token: null,
         loading: false,
         loggedIn: false,
         registed: false,
@@ -14,6 +15,7 @@ const userSlice = createSlice({
     reducers: {
         logOut: (state) => {
             state.userObj = null;
+            state.loggedIn = false;
         }
     },
     extraReducers: {
@@ -24,8 +26,9 @@ const userSlice = createSlice({
             state.error = action.error;
         },
         [login.fulfilled]: (state, action) => {
+            state.access_token = action.payload.access_token;
             state.loading = false;
-            state.userObj = action.payload.data;
+            state.loggedIn = true;
         },
         [getUserByToken.pending]: (state) => {
             state.loading = true;
@@ -34,8 +37,8 @@ const userSlice = createSlice({
             state.error = action.error;
         },
         [getUserByToken.fulfilled]: (state, action) => {
+            state.userObj = action.payload.profile;
             state.loading = false;
-            state.userObj = action.payload.data;
             state.loggedIn = true;
         },
         [registing.pending]: (state) => {

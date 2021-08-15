@@ -8,7 +8,7 @@ import QuizEditor from './QuizEditor'
 
 const EditLecture = ({ data }) => {
     const [visible, setVisible] = useState(false);
-
+    console.log('re-render in edit lecture')
     return (
         <div className="edit-lecture">
             <Button className="tb-btn edit-btn" onClick={() => setVisible(true)} ><EditFilled />Edit</Button>
@@ -22,9 +22,9 @@ const EditLecture = ({ data }) => {
                 visible={visible}
                 onClose={() => setVisible(false)}
             >
-            {data && data.type === 'reading' && <TextEditor action='EDIT' />}
-            {data && data.type === 'video' && <VideoEditor action='EDIT' />}
-            {data && data.type === 'quiz' && <QuizEditor action='EDIT' />}
+            {data && data.type === 'reading' && <TextEditor action={{type: 'EDIT', data: data}} />}
+            {data && data.type === 'video' && <VideoEditor action={{type: 'EDIT', data: data}} />}
+            {data && data.type === 'quiz' && <QuizEditor action={{type: 'EDIT', data: data}} />}
             </Drawer>
         </div>
     )

@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react'
-import './UserDash.css'
+import './UserDash.scss'
 import ProgressCourse from '../../course/progressCourse/ProgressCourse'
 import { getToken } from '../../../../utils/localStorageHandler'
-import { getUserCourse } from '../../../../features/course/courseAction'
+import { getCourses } from '../../../../features/course/coursesAction'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectCourses } from '../../../../features/course/courseSlice'
 import { unwrapResult } from '@reduxjs/toolkit'
+import { Button, Drawer, Select } from 'antd'
+import { useForm, Controller } from "react-hook-form"
 
 const UserDash = () => {
     const dispatch = useDispatch();
-    const courses = useSelector(selectCourses);
-
+    const courses = useSelector(stateStore => stateStore.userCourses.courses);
+    const user = useSelector(state => state.user.userObj);
+    
     useEffect(() => {
-        const getCourses = async () => {
+        const getUserCourses = async () => {
             try {
                 let access_token = getToken();
-                const courses = await dispatch(getUserCourse(access_token))
+                const courses = await dispatch(getCourses(access_token))
                 const un_courses = unwrapResult(courses);
-                
-                console.log("unwrapResult in dash", un_courses)
                 
             } catch (error) {
                 console.error("error in login: ", error)
@@ -26,7 +26,7 @@ const UserDash = () => {
 
         }
 
-        getCourses();
+        getUserCourses();
 
     }, [])
 
@@ -35,15 +35,64 @@ const UserDash = () => {
             <div className="container">
                 <div className="row userDash-row">
                     <div className="title">My Courses</div>
-                    {/* {courses ? courses.map(course => {
-                        <ProgressCourse key={course._id} data={course}/>
-                    }) : ''} */}
+                    {courses?.map(course => 
+                        <ProgressCourse key={course.courseId} data={course} permission={user?.permission}/>
+                    )}
+                    
 
                     {/*get permision from store so don't need author dash*/}
-                    <ProgressCourse permission={'student'}/>
-
+                    {/* <ProgressCourse /> */}
+                    <AddNewCourse />
                 </div>
             </div>            
+        </div>
+    )
+}
+
+
+const AddNewCourse = () => {
+    const [visible, setVisible] = useState(false);
+    const { control, handleSubmit, register, setValue } = useForm();
+
+    const onSubmit = (data) => {
+        console.log(data);
+    }
+    return(
+        <div className="dash-add">
+            <Button shape="round" className="btn-new-course" onClick={() => setVisible(true)}>New Course</Button>
+            <Drawer
+                placement='top'
+                height="50%"
+                title={<p className="title-add-course">Create a new course</p>}
+                visible={visible}
+                onClose={() => setVisible(false)}
+                forceRender={true}
+                destroyOnClose={true}
+            >
+                <form onSubmit={() => handleSubmit(onSubmit)}>
+                    <div>
+                        <label>Course Name</label>
+                        <input {...register("course_name")} required type="text" placeholder="Please type course name"/>
+                    </div>
+                    <Select className="option-type" defaultValue={"video"} style={{ width: 120 }} >
+                        <Select.Option value="video">Video</Select.Option>
+                        <Select.Option value="reading">Reading</Select.Option>
+                        <Select.Option value="quiz">Quiz</Select.Option>
+                        <Select.Option value="video">Video</Select.Option>
+                        <Select.Option value="reading">Reading</Select.Option>
+                        <Select.Option value="quiz">Quiz</Select.Option>
+                        <Select.Option value="video">Video</Select.Option>
+                        <Select.Option value="reading">Reading</Select.Option>
+                        <Select.Option value="quiz">Quiz</Select.Option>
+                        <Select.Option value="video">Video</Select.Option>
+                        <Select.Option value="reading">Reading</Select.Option>
+                        <Select.Option value="quiz">Quiz</Select.Option>
+                        <Select.Option value="video">Video</Select.Option>
+                        <Select.Option value="reading">Reading</Select.Option>
+                        <Select.Option value="quiz">Quiz</Select.Option>
+                    </Select>
+                </form>
+            </Drawer>
         </div>
     )
 }

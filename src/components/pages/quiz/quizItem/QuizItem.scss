@@ -4,6 +4,10 @@
     display: flex;
     margin-bottom: 1rem;
 
+    .quiz-item-row {
+        width: 100%;
+    }
+
     .card-frag {
         background-color: transparent;
         text-align: center;
@@ -16,7 +20,7 @@
             height: 100%;
         }
         @include Responsive(xl) { 
-            height: 50%;
+            height: 60%;
         }
 
         .ant-card-body {
@@ -39,6 +43,7 @@
     .card-question {
         border-radius: 1rem;
         text-align: left;
+
         @include Responsive(xs) { 
             margin-left: 0;
             margin-top: 1rem;
@@ -62,7 +67,29 @@
 
             .ant-card-head-title {
                 white-space: normal;
+                
+                &:first-letter {
+                    text-transform: capitalize;
+                }
             }
+        }
+
+        .select-type {
+            font-weight: 500;
+        }
+        .ant-space-item {
+            display: flex;
+            align-items: center;
+            align-content: center;
+
+            .select-choice {
+                margin-right: 5px;
+            }
+
+            .label-choice::first-letter {
+                text-transform: capitalize;
+            }
+
         }
     }
 }

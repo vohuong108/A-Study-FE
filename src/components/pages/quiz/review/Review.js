@@ -1,117 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Review.scss'
 import QuizItem from '../quizItem/QuizItem'
 import QuizNav from '../quizNav/QuizNav'
-import markClassify from '../util/markClassify'
 import { Layout, Divider, Row, Col, Button, Descriptions } from 'antd'
-const { Content } = Layout;
+import { useParams } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectSub } from '../../../../features/submit/submitSlice'
+import { buildSubmitNav } from '../../../../features/submit/submitSlice'
 
-const data = {
-    name: 'Recomendation Systems Quiz',
-    timeStart: "Wednesday, 12 May 2021, 10:21 AM",
-    timeFinish: "Wednesday, 12 May 2021, 10:44 AM",
-    state: 'Finished',
-    grade: 100,
-    questions: [
-        { 
-            id: 1, 
-            type: 'one',
-            title: "Click Capture/Forward six times. All clients should have received a reply. Note that only one PDU can cross a wire in each direction at any given time. What is this called?",
-            point: 5,
-            choices: [
-                {
-                    idChoice: 'A', 
-                    value: "They are stored in the switch."
-                }, {
-                    idChoice: 'B', 
-                    value: "They are lost."
-                }, {
-                    idChoice: 'C', 
-                    value: "They are discarded."
-                }, {
-                    idChoice: 'D', 
-                    value: "They represent different devices."
-                }
-            ],
-            userChoice: 'A',
-            isCorrect: true
-        }, {
-            id: 2, 
-            type: 'many',
-            title: "All clients should have received a reply. Note that only one PDU can cross a wire in each direction at any given time. What is this called?",
-            point: 3,
-            choices: [
-                {
-                    idChoice: 'A', 
-                    value: "They are stored in the switch."
-                }, {
-                    idChoice: 'B', 
-                    value: "They are lost."
-                }, {
-                    idChoice: 'C', 
-                    value: "They are discarded."
-                }, {
-                    idChoice: 'D', 
-                    value: "They represent different devices."
-                }
-            ],
-            userChoices: ['A', 'C'],
-            isCorrect: false
-        }, {
-            id: 3, 
-            type: 'many',
-            title: "All clients should have received a reply. Note that only one PDU can cross a wire in each direction at any given time. What is this called?",
-            point: 3,
-            choices: [
-                {
-                    idChoice: 'A', 
-                    value: "They are stored in the switch."
-                }, {
-                    idChoice: 'B', 
-                    value: "They are lost."
-                }, {
-                    idChoice: 'C', 
-                    value: "They are discarded."
-                }, {
-                    idChoice: 'D', 
-                    value: "They represent different devices."
-                }
-            ],
-            userChoices: ['A', 'C'],
-            isCorrect: false
-        }, {
-            id: 4, 
-            type: 'many',
-            title: "All clients should have received a reply. Note that only one PDU can cross a wire in each direction at any given time. What is this called?",
-            point: 3,
-            choices: [
-                {
-                    idChoice: 'A', 
-                    value: "They are stored in the switch."
-                }, {
-                    idChoice: 'B', 
-                    value: "They are lost."
-                }, {
-                    idChoice: 'C', 
-                    value: "They are discarded."
-                }, {
-                    idChoice: 'D', 
-                    value: "They represent different devices."
-                }
-            ],
-            userChoices: ['A', 'C'],
-            isCorrect: false
-        }
-    ]
+const Review = ({ name, history }) => {
+    const { idSub } = useParams();
+    const submission = useSelector(state => selectSub(state, idSub))
+    const submitNav = useSelector(state => state.submit.submitNav);
+    const dispatch = useDispatch();
 
-}
+    const convertTime = (str) => {
+        let date = new Date(str);
+        let convertedDate = date.toGMTString();
+        return convertedDate;
+    }
 
-const Review = () => {
-    const marks = markClassify(data.questions);
+    useEffect(() => {
+        dispatch(buildSubmitNav({ idSub: idSub }));
+    }, [submission])
+
     return (
         <Layout className="review">
-            <Content style={{ padding: '50px 50px' }}>
-                <h2>{data.name}</h2>
+            <Layout.Content style={{ padding: '50px 50px' }}>
+                <h2>{name}</h2>
                 <Divider />
                 <Layout className="review-wrap">
                     <Row>
@@ -125,18 +41,18 @@ const Review = () => {
                             column={1} 
                             size={'small'}
                         >
-                            <Descriptions.Item label="Started on">{data.timeStart}</Descriptions.Item>
-                            <Descriptions.Item label="State">{data.state}</Descriptions.Item>
-                            <Descriptions.Item label="Completed On">{data.timeFinish}</Descriptions.Item>
-                            <Descriptions.Item label="Grade">{data.grade}</Descriptions.Item>
+                            <Descriptions.Item label="Started on">{convertTime(submission?.startTime)}</Descriptions.Item>
+                            <Descriptions.Item label="State" style={{textTransform: 'capitalize'}}>{submission?.state}</Descriptions.Item>
+                            <Descriptions.Item label="Completed On">{convertTime(submission?.finishTime)}</Descriptions.Item>
+                            <Descriptions.Item label="Grade">{submission?.score}</Descriptions.Item>
                         </Descriptions>
-                        {data.questions.map(obj => (
-                            <QuizItem review data={obj}/>
+                        {submission?.content.map(question => (
+                            <QuizItem key={question.idQuestion} review data={question}/>
                         ))}
                             
                         </Col>
                         <Col className="review-nav" xs={24} sm={24} xl={6} style={{ padding: '15px'}}>
-                            <QuizNav review marks={marks}/>                            
+                            <QuizNav review navData={submitNav}/>                            
                         </Col>
                         <Button 
                             className="review-btn" 
@@ -145,12 +61,13 @@ const Review = () => {
                             htmlType="submit" 
                             form="review-form"
                             size={'large'}
+                            onClick={() => history.goBack()}
                         >
                             Finish Review
                         </Button>
                     </Row>
                 </Layout>
-            </Content>
+            </Layout.Content>
         </Layout>
     )
 }

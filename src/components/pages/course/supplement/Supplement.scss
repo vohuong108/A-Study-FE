@@ -28,7 +28,7 @@
 
         .supplement-subtopic {
             border-bottom: 1px solid #dcdacb;
-            margin-bottom: 2.5rem;
+            // margin-bottom: 2.5rem;
 
             h3 {
                 font-family: Open Sans,Arial,sans-serif;
@@ -61,6 +61,10 @@
                         font-family: OpenSans-Bold,OpenSans,Arial,sans-serif;
                         font-size: 1rem;
                         line-height: 1.5rem;
+
+                        strong {
+                            text-transform: capitalize;
+                        }
                     }
 
                     &:hover {
@@ -72,6 +76,19 @@
             &:last-child {
                 border-bottom: none;
             }
+        }
+    }
+
+    .s-to-edit {
+        margin-top: 2rem;
+        background-color: #2ac8cc;
+        border-color: #2ac8cc;
+        color: #fff;
+        font-weight: 500;
+        line-height: 1rem;
+
+        &:hover {
+            border-width: 0.3125rem;
         }
     }
 }

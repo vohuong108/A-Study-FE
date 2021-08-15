@@ -1,49 +1,38 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import 'antd/dist/antd.css';
 import './Overview.scss'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { getCourseOverview } from '../../../../features/course/currentCourse/courseAction'
+import { getToken } from '../../../../utils/localStorageHandler'
 import OverviewWeek from './OverviewWeek';
 import { Layout, Collapse  } from 'antd';
-const { Panel } = Collapse;
-const { Content } = Layout;
+import { useParams } from 'react-router-dom'
 
 const Overview = () => {
-    const data = {
-        weeks: [
-            {
-                name: "week 1",
-                title: "Linear Regression",
-                quiz: {
-                    time: "15 min",
-                    grade: '100%',
-                    due: 'Jul 12 1:59 PM +07'
-                }
-            }, {
-                name: "week 2",
-                title: "Classification",
-                quiz: {
-                    time: "15 min",
-                    grade: '100%',
-                    due: 'Jul 12 1:59 PM +07'
-                }
-            }, {
-                name: "week 3",
-                title: "Clustering and Similarity",
-                quiz: {
-                    time: "15 min",
-                    grade: '100%',
-                    due: 'Jul 12 1:59 PM +07'
-                }
-            }
-        ]
-    }
-
-    const arr = data.weeks.map((dataWeek, index) => <OverviewWeek dataWeek={dataWeek} index={index} />);
+    const { id } = useParams();
+    const user = useSelector(state => state.user.userObj);
+    const dispatch = useDispatch();
+    const overview = useSelector(state => state.currentCourse.overview);
     
+    useEffect(() => {
+        let token = getToken();
 
+        let getOverview = async (data) => {
+            let result = await dispatch(getCourseOverview(data))
+        }
+
+        if(user && token) {
+            let data = {
+                access_token: token,
+                idCourse: id
+            }
+
+            getOverview(data);
+        }
+    }, [user, id])
     return (
         <Layout className="overview" style={{ backgroundColor: '#FFFFFF' }}>
-            <Content
+            <Layout.Content
                 style={{
                     padding: 24,
                     marginLeft: 'auto',
@@ -52,16 +41,16 @@ const Overview = () => {
                     width: '80%'
                 }}
             >
-                <h3 className="title-course" >Machine Learning Foundations: A Case Study Approach</h3>
-                <Collapse defaultActiveKey={['0']} className="collapse-wrap">
-                    {data.weeks.map((dataWeek, index) => (
-                        <Panel header={dataWeek.name} key={index} className="panel-wrap">
-                            <OverviewWeek dataWeek={dataWeek} index={index} />
-                        </Panel>
+                <h3 className="title-course" >{overview?.name}</h3>
+                <Collapse defaultActiveKey={['1']} className="collapse-wrap">
+                    {overview && overview.weeks.map((dataWeek) => (
+                        <Collapse.Panel header={`Week ${dataWeek.idWeek}`} key={dataWeek.idWeek} className="panel-wrap">
+                            <OverviewWeek dataWeek={dataWeek} idCourse={id} />
+                        </Collapse.Panel>
                     ))}
                 </Collapse>
-
-            </Content>
+                <div className="pendal"></div>
+            </Layout.Content>
         </Layout>
        
     )

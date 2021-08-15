@@ -35,30 +35,18 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          <Route path="/course">
-            <Course />
-          </Route>
-          <Route path="/submit">
-            <Submit />
-          </Route>
-          <Route path="/lecture">
-            <Lecture />
-          </Route>
-          <Route path="/quiz">
-            <Quiz />
-          </Route>
-          <Route path="/review">
-            <Review />
-          </Route>
+          
           <Route path="/author">
             <AuthorDash />
           </Route>
-          <Route path="/edit">
-            <EditCourse />
-          </Route>
+          <PrivateRoute path="/quiz/:idQuiz" component={Quiz} />
+          <PrivateRoute path="/submit/:idQuiz" component={Submit} />
+          <PrivateRoute path="/learn/:idCourse/week/:idWeek" component={Lecture} />
+          <PrivateRoute path="/edit/:id" component={EditCourse} />
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
-          <PublicRoute exact path="/dashbroad" component={UserDash} />
+          <PrivateRoute exact path="/dashbroad" component={UserDash} />
+          <PrivateRoute path="/course/:id" component={Course} />
           <DisplayFooter exact path="/" component={Home} />
         
         </Switch>
@@ -68,14 +56,15 @@ function App() {
   );
 }
 
-export default App;
 
 const DisplayFooter = ({ component: Component, ...rest}) => {
   return (
     <Route 
-      {...rest}
-      render={() => <React.Fragment><Component /><Footer /></React.Fragment>}
+    {...rest}
+    render={() => <React.Fragment><Component /><Footer /></React.Fragment>}
     />
-
+    
   )
 }
+  
+export default App;

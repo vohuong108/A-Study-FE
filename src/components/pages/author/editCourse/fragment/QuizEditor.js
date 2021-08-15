@@ -1,138 +1,70 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { DownCircleFilled, PlusOutlined, RightCircleFilled } from '@ant-design/icons'
 import { Input, InputNumber, Checkbox, Button, DatePicker, TimePicker, Tag, Switch } from 'antd';
-import { useForm, Controller } from "react-hook-form"
+import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { EditWeekContext } from '../editWeek/EditWeek'
+import { DeleteFilled } from '@ant-design/icons';
 import './QuizEditor.scss'
+import moment from 'moment'
 
-
-const QuizEditor = () => {
-    const [data, setData] = useState([]);
-    const [due, setDue] = useState({time: null, date: null});
-    console.log('re-render in quiz editor: ', due);
+const QuizEditor = ({ action, setVisible }) => {
+    const { control, handleSubmit, register, formState: { errors }, setValue } = useForm();
     const weekContext = useContext(EditWeekContext);
-    const { control, handleSubmit, register } = useForm();
-
-
-
-    const handleAddQuestion = () => {
-        let cloneData = [...data];
-
-        cloneData.push({
-        id: cloneData.length,
-        question: '',
-        point: 1,
-        choices: []
-        });
-
-        setData(cloneData);
-    }
-
-    const handleAddChoice = (idQuestion) => {
-        let cloneData = [...data];
-        for (let i = 0; i < cloneData.length; i++) {
-            if (cloneData[i].id === idQuestion) {
-                let lastKey = 64;
     
-                if (cloneData[i].choices.length !== 0) {
-                    lastKey = cloneData[i].choices[cloneData[i].choices.length - 1].key.charCodeAt(0);
-                }
+    const { fields, append, remove } = useFieldArray(
+        {
+            control,
+            name: "content",
+            keyName: "id"
+        }
+    );
     
-                cloneData[i].choices.push({
-                    key: String.fromCharCode(lastKey + 1),
-                    choice: '',
-                    answer: '',
-                })
-                setData(cloneData);
-                break;
-            }
+    const onSubmit = data => {
+        console.log("form: ", data)
+
+        let newQuiz = {
+            idLecture: action?.type === 'EDIT' ? action.data.idLecture : weekContext.weekData.lectures.length,
+            type: 'quiz',
+            name: data.quiz_name,
+            status: data.status,
+            dueDate: data.due_date,
+            time: data.working_time,
+            content: data.content,
         }
-    }
 
-    const handleChangeQuestion = (idQuestion, value) => {
-        let cloneData = [...data];
+        if(action && action.type === 'EDIT') {
+            let deepCloneWeekData = JSON.parse(JSON.stringify(weekContext.weekData));
 
-        for(let i = 0; i < cloneData.length; i++) {
-            if(cloneData[i].id === idQuestion) {
-                cloneData[i].question = value;
-                setData(cloneData);
-                break;
-            }
-        }
-    }
+            const index = deepCloneWeekData.lectures.findIndex((item) => action.data.idLecture === item.idLecture)
 
-    const handleChangePoint = (idQuestion, value) => {
-        let cloneData = [...data];
+            if(index > -1) deepCloneWeekData.lectures[index] = newQuiz;
 
-        for(let i = 0; i < cloneData.length; i++) {
-            if(cloneData[i].id === idQuestion) {
-                cloneData[i].point = value;
-                setData(cloneData);
-                break;
-            }
-        }
-    }
+            weekContext.setWeekData({...deepCloneWeekData});
 
-    const handleChoicesChange = (idQuestion, key, value) => {
-        console.log('in choices')
-        let cloneData = [...data];
-        for(let i = 0; i < cloneData.length; i++) {
-            if(cloneData[i].id === idQuestion) {
-                let choices = cloneData[i].choices;
-
-                for(let j = 0; j < choices.length; j++) {
-                    if (choices[j].key === key) {
-                        cloneData[i].choices[j].choice = value;
-
-                        setData(cloneData);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    const handleAnswerChange = (idQuestion, key, value) => {
-        let cloneData = [...data];
-        for(let i = 0; i < cloneData.length; i++) {
-            if(cloneData[i].id === idQuestion) {
-                let choices = cloneData[i].choices;
-
-                for(let j = 0; j < choices.length; j++) {
-                    if (choices[j].key === key) {
-                        cloneData[i].choices[j].answer = value;
-
-                        setData(cloneData);
-                        break;
-                    }
-                }
-                break;
-            }
-        }
-    }
-
-    const handleChangeWorkingTime = (time, handleController) => {
-        if (time) {
-            let hour = time.hour();
-            let min = time.minute();
-            let sec = time.second();
-
-            handleController(60*60*60*hour + 60*min + sec);
-        }
-    }
-
-    const handleChangeDueDate = (date) => {
-        if (date) {
-            setDue({
-                ...due,
-                date: date.toDate(),
+        } else {
+            weekContext.setWeekData({
+                ...weekContext.weekData, 
+                lectures: [...weekContext.weekData.lectures, newQuiz]
+        
             })
+            setVisible(false);
         }
+
     }
+
+    useEffect(() => {
+        if(action?.type === 'EDIT') {
+            console.log("action props: ", action)
+            setValue('quiz_name', action.data.name);
+            setValue('working_time', moment(action.data.time));
+            setValue('due_date', moment(action.data.dueDate));
+            setValue('status', action.data.status);
+            setValue('content', action.data.content);
+        }
+    }, [action])
 
   return (
-      <form id="form-quiz" className="quiz-editor" >
+      <form id="form-quiz" className="quiz-editor" onSubmit={handleSubmit(onSubmit)}>
         <div className="quiz-title">
             <p>Lecture Title : </p>
             <input type="text" {...register("quiz_name")} required></input>
@@ -145,13 +77,22 @@ const QuizEditor = () => {
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => 
-                        <TimePicker onChange={(time) => handleChangeWorkingTime(time, field.onChange)}/>
+                        <TimePicker value={field.value} onChange={(time) => field.onChange(time)}/>
                     }
                 />
+                {errors.working_time?.type === 'required' && <p className="err-msg">Working time is required</p>}
             </div>
             <div className="due due-date">
                 <Tag color="#f50" className="due-label">Due Date: </Tag>
-                <DatePicker showTime onChange={(date) => handleChangeDueDate(date)}/>
+                <Controller
+                    name="due_date"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => 
+                        <DatePicker value={field.value} showTime onChange={(date) => field.onChange(date)}/>
+                    }
+                />
+                {errors.due_date?.type === 'required' && <p className="err-msg">Due date is required</p>}
             </div>
         </div> 
         <Controller
@@ -163,7 +104,8 @@ const QuizEditor = () => {
                 <Switch 
                     className="status-switch"
                     checkedChildren="publish" 
-                    unCheckedChildren="private" 
+                    unCheckedChildren="private"
+                    checked={field.value === "publish"} 
                     onChange={(checked) => checked ? field.onChange('publish') : field.onChange('private')}
                 />
             }
@@ -174,19 +116,23 @@ const QuizEditor = () => {
                     <th></th>
                     <th>Question</th>
                     <th>Point</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
             <tbody className="quiz-table-tbody">
-                {data.map(obj => (
+                {fields.map((item, index) => (
                     <ExpandedRow 
-                        key = {obj.id}
-                        data = {obj}
-                        handle = {{handleAddChoice, handleChoicesChange, handleAnswerChange, handleChangeQuestion, handleChangePoint}}
+                        key = {item.id}
+                        data = {item}
+                        index = {index}
+                        control={control}
+                        handle={{remove}}
+                        errors={errors}
                     />
                 ))}
             </tbody>
         </table>
-        <div className="add-question" onClick={() => handleAddQuestion()}>
+        <div className="add-question" onClick={() => append({idQuestion: fields.length, point: 1, question: '', choices: []})}>
             <PlusOutlined className="icon-add"/> 
             New Question
         </div>
@@ -197,49 +143,111 @@ const QuizEditor = () => {
   );
 }
 
-const ExpandedRow = ({ data, handle }) => {
-    const [clicked, setClicked] = useState(false);
+const ExpandedRow = ({ index, control, errors, handle }) => {
+    const [clicked, setClicked] = useState(true);
+
+    console.log('re-render in expanded row: ');
 
     return (
-        <React.Fragment>
-        <tr>
-            <td onClick={() => setClicked(!clicked)}>
-                {clicked ? <RightCircleFilled className="quiz-icon"/> : <DownCircleFilled className="quiz-icon"/>}
+        <>
+            <tr>
+                <td onClick={() => setClicked(!clicked)}>
+                    {clicked ? <RightCircleFilled className="quiz-icon"/> : <DownCircleFilled className="quiz-icon"/>}
                 </td>
-            <td>
-                <Input placeholder="Type Question" value={data.question} onChange={(e) => handle.handleChangeQuestion(data.id, e.target.value)} />
-            </td>
-            <td>
-                <InputNumber min={1} max={10} value={data.point} onChange={(value) => handle.handleChangePoint(data.id, value)} />
-            </td>
-        </tr>
-        <tr>
-            <td className={`td-wrap-table-choices ${clicked ? 'wrap-act' : ''}`} colspan="3">
+                <td>
+                    <Controller
+                        name={`content.${index}.question`}
+                        control={control}
+                        rules={{ required: true }} 
+                        render={({ field }) => 
+                            <Input placeholder="Type Question" value={field.value} onChange={(e) => field.onChange(e.target.value)} />
+                        }
+                    />
+                    {errors?.content?.[index]?.question?.type === 'required' && <p className="err-msg">Question is required</p>}
+                </td>
+                <td>
+                    <Controller
+                        name={`content.${index}.point`}
+                        control={control}
+                        rules={{ required: true }} 
+                        render={({ field }) => 
+                            <InputNumber min={1} max={10} value={field.value} onChange={(value) => field.onChange(value)} />
+                        }
+                    />
+                </td>
+                <td>
+                    <Button type="primary" danger onClick={() => handle.remove(index)}>Del</Button>
+                </td>
+            </tr>
+            <tr>
+                <ExpandedChoice control={control} errors={errors} indexRow={index} clicked={clicked}/>
+            </tr>
+        
+        </>
+    );
+};
+
+const ExpandedChoice = ({ control, errors, indexRow, clicked }) => {
+    const { fields, append, remove } = useFieldArray(
+        {
+            control,
+            name: `content.${indexRow}.choices`,
+            keyName: "idChoice"
+        }
+    );
+
+    return (
+        <>
+            <td className={`td-wrap-table-choices ${clicked && 'wrap-act'}`} colSpan="4">
             <table className="table-choices">
                 <thead>
                     <tr>
                         <th>Choice</th>
                         <th>Answer</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.choices && data.choices.map(opt => (
-                        <tr key={opt.key}>
+                    {fields.map((field, index) => 
+                        <tr key={field.idChoice}>
                             <td>
-                                <Input placeholder="Type Question" value={opt.choice} onChange={(e) => handle.handleChoicesChange(data.id, opt.key, e.target.value)}/>
+                                <Controller
+                                    name={`content.${indexRow}.choices.${index}.choice`}
+                                    control={control}
+                                    rules={{ required: true }} 
+                                    render={({ field }) => 
+                                        <Input placeholder="Type Question" value={field.value} onChange={(e) => field.onChange(e.target.value)}/>
+                                    }
+                                />
+                                {errors?.content?.[indexRow]?.choices?.[index]?.choice?.type === 'required' && <p className="err-msg">Choice is required</p>}
                             </td>
-                            <td><Checkbox className="checkbox-ans" onChange={(e) => handle.handleAnswerChange(data.id, opt.key, e.target.checked)}/></td>
+                            <td>
+                                <Controller
+                                    name={`content.${indexRow}.choices.${index}.answer`}
+                                    control={control}
+                                    render={({ field }) => 
+                                        <Checkbox className="checkbox-ans" checked={field.value} onChange={(e) => field.onChange(e.target.checked)}/>
+                                    }
+                                />
+                            </td>
+                            <td>
+                                <DeleteFilled className="del-choice" onClick={() => remove(index)}/>
+                            </td>
                         </tr>
+                    )}
 
-                    ))}
+                    
                 </tbody>
             </table>
-            <div className="add-choice" onClick={() => handle.handleAddChoice(data.id)}>New Choice</div>
-
+            <div className="add-choice" onClick={() =>  append({idChoice: fields.length, choice: '', answer: false})}>New Choice</div>
+            
             </td>
-        </tr>
-        </React.Fragment>
-    );
-};
+        </>
+    )
+}
+
+
+
+
 
 export default QuizEditor 

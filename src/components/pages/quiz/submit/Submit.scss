@@ -5,6 +5,7 @@
         margin-bottom: 0;
         font-size: 2.1875rem;
         text-align: left;
+        text-transform: capitalize;
     }
 
     .submit-layout-list-degree {
@@ -35,6 +36,7 @@
         border-radius: 0.75rem;
         box-shadow: 0 0 12px 0 hsla(0, 0%, 48%, 0.45);
         overflow: hidden;
+
         .ant-table-title {
             background: linear-gradient(90deg,#48b1bf,#06beb6);
             color: #FFFFFF;
@@ -42,6 +44,14 @@
             text-align: left;
         }
 
+        tbody {
+
+            .submit-table-state {
+                text-transform: capitalize;
+                color: #212529;
+                font-weight: 700;
+            }
+        }
 
     }
 }

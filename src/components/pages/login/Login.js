@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '../../../utils/localStorageHandler'
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import { login, getUserByToken } from "../../../features/authentication/asyncThunkAction"
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useForm } from "react-hook-form"
@@ -13,33 +13,34 @@ import { Spin } from 'antd';
 import 'antd/dist/antd.css';
 
 
-const Login = (props) => {
+const Login = ({ history, location }) => {
     const { register, handleSubmit } = useForm();
-    let history = useHistory();
     
     const dispatch = useDispatch();
     const loading = useSelector(state => state.user.loading);
+    const loggedIn = useSelector(state => state.user.loggedIn);
 
     const onSubmit = async (data) => {
 
         const requestData = {
-            // email: data.email,
-            // password: data.password
-            username: 'user_1',
-            password: '12345678'
+            email: data.email,
+            password: data.password,
+
         }
             
         try {
-            const access_token = await dispatch(login(requestData))
-            const un_access_token = unwrapResult(access_token);
-            setToken(un_access_token);
-            console.log("unwrapResult in login", un_access_token)
+            const login_res = await dispatch(login(requestData))
+            const un_login_res = unwrapResult(login_res);
+            setToken(un_login_res.access_token);
+            console.log("unwrapResult in login", un_login_res.access_token);
             
             // setAuthHeader(un_access_token);
-            const profile = await dispatch(getUserByToken(un_access_token))
+            const profile = await dispatch(getUserByToken(un_login_res.access_token))
             const un_profile = unwrapResult(profile);
-            console.log("unwrapResult in profile", un_profile)
-            history.push('/dashbroad');
+            // console.log("unwrapResult in profile", un_profile)
+
+            if(location.state) history.push(location.state.from.pathname)
+            else history.push('/dashbroad');
 
         } catch (error) {
             console.error("error in login: ", error)
@@ -94,8 +95,16 @@ const Login = (props) => {
                                             
                                         
                                     </form>
-                                    <a href="">Forgot your password?</a>
-                                    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+                                    <Link to="/help">
+                                        Forgot your password?
+                                    </Link>
+                                    
+                                    <p>
+                                        Don't have an account?&nbsp; 
+                                        <Link to="/signup">
+                                            Sign up
+                                        </Link>
+                                    </p>
                                 </div>
                             </div>
                         </Spin>

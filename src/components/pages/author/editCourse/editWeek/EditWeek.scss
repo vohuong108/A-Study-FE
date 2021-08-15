@@ -43,6 +43,20 @@
 
     .btn-wrap {
       margin: 1rem;
+
+      .edit-btn-save {
+        font-weight: 500;
+        
+      }
+
+      .btn-add-content {
+        background-color: #1c3faa;
+        color: #fff;
+
+        &:hover {
+          background-color: #3c5ec7;
+        }
+      }
     }
   }
 }

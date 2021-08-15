@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { EditorState } from 'draft-js'
+import { EditorState, ContentState, convertFromHTML } from 'draft-js'
 import { Editor } from 'react-draft-wysiwyg'
 import { Button, Switch } from 'antd'
 import { useForm, Controller } from "react-hook-form"
@@ -8,28 +8,54 @@ import draftToHtml from 'draftjs-to-html'
 import { EditWeekContext } from '../editWeek/EditWeek'
 import './TextEditor.scss'
 
-const TextEditor = ({ action }) => {
-    const { control, handleSubmit, register } = useForm();
+const TextEditor = ({ action, setVisible }) => {
+    const { control, handleSubmit, register, setValue } = useForm();
     const weekContext = useContext(EditWeekContext);
 
     const onSubmit = data => {
         let readingContent = draftToHtml(convertToRaw(data.editor.getCurrentContent()));
+
         let newRead = {
-            idLecture: weekContext.weekData.lectures.length,
+            idLecture: action?.type === 'EDIT' ? action.data.idLecture : weekContext.weekData.lectures.length,
             content: readingContent,
             type: 'reading',
             name: data.read_name,
             status: data.status,
             
         }
-        console.log(readingContent);
-        weekContext.setWeekData({
-            ...weekContext.weekData,
-            lectures: [...weekContext.weekData.lectures, newRead]
-        })
+
+        if(action && action.type === 'EDIT') {
+            let deepCloneWeekData = JSON.parse(JSON.stringify(weekContext.weekData));
+
+            const index = deepCloneWeekData.lectures.findIndex((item) => action.data.idLecture === item.idLecture)
+
+            if(index > -1) deepCloneWeekData.lectures[index] = newRead;
+
+            weekContext.setWeekData({...deepCloneWeekData});
+
+        } else {
+            weekContext.setWeekData({
+                ...weekContext.weekData, 
+                lectures: [...weekContext.weekData.lectures, newRead]
+        
+            })
+            setVisible(false);
+        }
+
+        
     }
 
-    console.log('weekContext: ', weekContext)
+    useEffect(() => {
+        if(action?.type === 'EDIT') {
+            const editorState = EditorState.createWithContent(
+                ContentState.createFromBlockArray(convertFromHTML(action.data.content))
+            );
+
+            setValue('read_name', action.data.name);
+            setValue('editor', editorState);
+            setValue('status', action.data.status);
+        }
+    }, [action])
 
     return (
         <form id="form-text-editor" onSubmit={handleSubmit(onSubmit)}>
@@ -63,6 +89,7 @@ const TextEditor = ({ action }) => {
                         className="status-switch"
                         checkedChildren="publish" 
                         unCheckedChildren="private" 
+                        checked={field.value === "publish"}
                         onChange={(checked) => checked ? field.onChange('publish') : field.onChange('private')}
                     />
                 }

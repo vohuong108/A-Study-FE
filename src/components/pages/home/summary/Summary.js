@@ -1,6 +1,7 @@
 import React from 'react'
 import './Summary.css'
 import { Button } from 'antd'
+import { Link } from 'react-router-dom'
 import banner from '../../../../assets/banner.png'
 import achieve1 from '../../../../assets/achieve1.png'
 import achieve2 from '../../../../assets/achieve2.png'
@@ -20,7 +21,9 @@ const Summary = () => {
                                 <p>Build skills with courses, certificates, and degress online from world-class universities and companies</p>
                             </div>
                             <div className="banner-left__bottom">
-                                <Button className="banner-btn" href="./login" type="primary">Join for Free</Button>
+                                <Link to="/login">
+                                    <Button className="banner-btn" type="primary">Join for Free</Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

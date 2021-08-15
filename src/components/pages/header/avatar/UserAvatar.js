@@ -4,7 +4,7 @@ import { logOut } from '../../../../features/authentication/userSlice'
 import { removeToken } from '../../../../utils/localStorageHandler'
 import { Avatar, Image } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import { useHistory } from "react-router-dom"
+import { useHistory, Link } from "react-router-dom"
 import 'antd/dist/antd.css'
 import './UserAvatar.scss'
 
@@ -51,7 +51,7 @@ const UserAvatar = ({ avtURL }) => {
                         </a>
                         <ul className="list-menu">
                             <li>
-                                <a>My Learning</a>
+                                <Link to="/dashbroad">My Courses</Link>
                             </li>
                             <li>
                                 <a>My Cart</a>

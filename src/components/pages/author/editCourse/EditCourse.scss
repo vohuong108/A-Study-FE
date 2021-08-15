@@ -3,9 +3,24 @@
 
     .edit-layout {
         height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
 
         .e-layout-content {
             padding: 1.5rem;
+
+            .edit-course-title {
+                margin-bottom: 2rem;
+                color: #1f1f1f;
+                font-family: OpenSans,Arial,sans-serif;
+                font-size: 24px;
+                font-weight: 700;
+                line-height: 30px;
+                border-radius: 5px 5px 0 0;
+                width: 100%;
+                text-align: center;
+                padding: .75rem 1.25rem;
+            }
 
             .collapse-wrap {
                 margin-bottom: 20px;
@@ -19,6 +34,65 @@
                         background: linear-gradient(90deg,#48b1bf,#06beb6);
                         color: #fff;
                         font-weight: 500;
+                    }
+                }
+            }
+
+            .last-row {
+                flex-wrap: wrap;
+                justify-content: center;
+
+                .last-row-col {
+                    margin-bottom: 1rem;
+                }
+
+                .last-row-col:first-child {
+                    .last-row-btn {
+                        text-align: right;
+                        margin-right: 1rem;
+                        margin-top: 0.5rem;
+                        margin-bottom: 0.5rem;
+                        font-weight: 500;
+                        font-family: 'Roboto';
+                        color: #f45858;
+                        
+                        &:hover {
+                            color: #f80000;
+                        }
+                    }
+                }
+
+                .last-row-col:nth-child(2) {
+                    .last-row-btn {
+                        text-align: left;
+                        margin-left: 1rem;
+                        margin-right: 1rem;
+                        margin-top: 0.5rem;
+                        margin-bottom: 0.5rem;
+                        background: linear-gradient(90deg,#48b1bf,#06beb6);
+                        color: #fff;
+                        font-weight: 500;
+                        font-family: 'Roboto';
+                        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+                    }
+                }
+
+                .last-row-col:nth-child(3) {
+                    .last-row-btn {
+                        text-align: left;
+                        margin-left: 1rem;
+                        margin-top: 0.5rem;
+                        margin-bottom: 0.5rem;
+                        border-color: #00e5ff;
+                        color: #00e5ff;
+                        font-weight: 500;
+                        font-family: 'Roboto';
+                        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06);
+
+                        &:hover {
+                            color: #00ccff;
+                            border-color: #00ccff;
+                        }
                     }
                 }
             }

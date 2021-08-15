@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import './EditWeek.scss'
 import 'antd/dist/antd.css';
@@ -10,7 +10,9 @@ import DeleteConfirm from '../fragment/DeleteConfirm'
 import AddLecture from '../fragment/AddLecture'
 import EditWeekName from '../fragment/EditWeekName'
 import EditLecture from '../fragment/EditLecture'
-import { selectWeekByID } from '../../../../../features/course/editCourse/editCourseSlice'
+import { selectWeekByID, saveWeekChanges } from '../../../../../features/course/currentCourse/courseSlice'
+
+
 
 const columns = [
   {
@@ -26,7 +28,7 @@ const columns = [
     dataIndex: 'name',
     className: 'drag-visible',
     width: 150,
-    fixed: 'left'
+    fixed: 'left',
   },
   {
     title: 'Type',
@@ -35,7 +37,7 @@ const columns = [
   {
     title: 'Status',
     dataIndex: 'status',
-    render: (text) => <Tag color='cyan'>{text}</Tag>,
+    render: (status) => status === 'publish' ? <Tag color='cyan'>{status}</Tag> : <Tag color='#f50'>{status}</Tag>,
   },
   {
     title: 'Edit',
@@ -43,7 +45,7 @@ const columns = [
   },
   {
     title: 'Delete',
-    render: () => <DeleteConfirm />,
+    render: (text) => <DeleteConfirm idLecture={text.idLecture}/>,
   },
 ];
 
@@ -53,16 +55,15 @@ const SortableContainer = sortableContainer(props => <tbody {...props} />);
 const EditWeekContext = React.createContext();
 
 const EditWeek = ({ idWeek }) => {
-  const [diableBtn, setDisableBtn] = useState(true);
   const weekStoreData = useSelector(state => selectWeekByID(state, idWeek));
-  const [weekData, setWeekData] = useState(weekStoreData);
+  const [weekData, setWeekData] = useState({ idWeek: idWeek, weekTitle: '', lectures: [] });
+  const dispatch = useDispatch(saveWeekChanges(weekData));
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
       if (oldIndex !== newIndex) {
         const newData = arrayMove([].concat(weekData.lectures), oldIndex, newIndex).filter(el => !!el);
         console.log('Sorted items: ', newData);
         setWeekData({...weekData, lectures: newData});
-        setDisableBtn(false);
       }
   };
 
@@ -82,12 +83,20 @@ const EditWeek = ({ idWeek }) => {
       return <SortableItem index={index} {...restProps} />;
   };
 
+  const handleSaveChanges = () => {
+    dispatch(saveWeekChanges(weekData))
+  }
+
+  useEffect(() => {
+    setWeekData({...weekStoreData});
+  }, [weekStoreData])
+
   return (
     <>
     {weekData && 
       <div className="edit-week">
-        <EditWeekName title={weekData.weekTitle}/>
         <EditWeekContext.Provider value={{weekData, setWeekData}}>
+          <EditWeekName title={weekData.weekTitle}/>
           <Table
             className='edit-table'
             pagination={false}
@@ -107,8 +116,8 @@ const EditWeek = ({ idWeek }) => {
               <AddLecture />
             </div>
             <div className="btn-wrap">
-              <Button className="edit-btn-save" shape="round" type="primary" disabled={diableBtn}>
-                Submit Changes
+              <Button className="edit-btn-save" shape="round" type="primary" onClick={() => handleSaveChanges()}>
+                Save Changes
               </Button>
             </div>
           </div>

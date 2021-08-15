@@ -1,12 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit"
 import userSlice from "../features/authentication/userSlice"
-import courseSlice from "../features/course/courseSlice"
-import editCourseSlice from "../features/course/editCourse/editCourseSlice"
+import coursesSlice from "../features/course/coursesSlice"
+import courseSlice from "../features/course/currentCourse/courseSlice"
+import submitSlice from "../features/submit/submitSlice"
+import quizSlice from "../features/quiz/quizSlice"
+
 const store = configureStore({
     reducer: {
         user: userSlice,
-        userCourse: courseSlice,
-        editingCourse: editCourseSlice
+        userCourses: coursesSlice,
+        currentCourse: courseSlice,
+        submit: submitSlice,
+        quiz: quizSlice,
     }
 })
 

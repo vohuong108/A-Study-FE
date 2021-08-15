@@ -1,96 +1,114 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Submit.scss'
-import { Layout, Table, Card, Row, Col } from 'antd';
-import { Link } from 'react-router-dom'
-const { Content } = Layout;
+import { Layout, Table, Card, Row, Col, Tag } from 'antd'
+import { Link, Switch, useParams, useRouteMatch, Route } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { getSubmitByID } from '../../../../features/submit/submitAction'
+import { getToken } from '../../../../utils/localStorageHandler'
+import Review from '../review/Review'
 
 
-const columns = [
-    {
-        title: 'ID',
-        dataIndex: 'id',
-    },
-    {
-        title: 'Time',
-        className: 'submit-table-time',
-        dataIndex: 'time',
-        align: 'left',
-    },
-    {
-        title: 'Score',
-        className: 'submit-table-score',
-        dataIndex: 'score',
-    },
-    {
-        title: 'State',
-        className: 'submit-table-state',
-        dataIndex: 'state',
-    },
-    {
-        title: 'Review',
-        className: 'submit-table-review',
-        render: () => <Link to="/">Review</Link>
-    }
-  ];
-  
-  const data = [
-    {
-      key: '1',
-      id: 1,
-      time: 'Wed, 12 May 2021, 10:44 AM',
-      score: 100,
-      state: 'Finished'
-    },
-    {
-      key: '2',
-      id: 2,
-      time: 'Wed, 12 May 2021, 10:44 AM',
-      score: 90,
-      state: 'Finished'
-    },
-    {
-      key: '3',
-      id: 3,
-      time: 'Wed, 12 May 2021, 10:44 AM',
-      score: 80,
-      state: 'Finished'
-    },
-  ];
+const Submit = ({ history }) => {
+    const { idQuiz } = useParams();
+    let { url, path } = useRouteMatch();
+    const user = useSelector(state => state.user.userObj);
+    const quiz = useSelector(state => state.submit.quiz);
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+        let token = getToken();
 
-const Submit = () => {
+        const getSubmit = async (requestData) => {
+            let submit = await dispatch(getSubmitByID(requestData));
+        }
+
+        if(user && token) {
+            let requestData = {
+                access_token: token,
+                idQuiz: idQuiz
+            }
+            getSubmit(requestData);
+        }
+    }, [user, idQuiz]);
+
+    const columns = [
+        {
+            title: 'ID',
+            dataIndex: 'idSub',
+        },
+        {
+            title: 'Time',
+            className: 'submit-table-time',
+            dataIndex: 'finishTime',
+            align: 'left',
+            render: (time) => {
+                let date = new Date(time);
+                let convertedDate = date.toGMTString();
+                return convertedDate;
+            }
+        },
+        {
+            title: 'Score',
+            className: 'submit-table-score',
+            dataIndex: 'score',
+        },
+        {
+            title: 'State',
+            className: 'submit-table-state',
+            dataIndex: 'state',
+        },
+        {
+            title: 'Review',
+            className: 'submit-table-review',
+            render: (_, record) => <Link to={`${url}/review/${record.idSub}`}>Review</Link>
+        }
+    ];
+
     return (
-        <Layout className="submit-layout">
-            <Content style={{ padding: '0 50px' }}>
-                <h1>Recomendation system quiz</h1>
-                <Layout className="submit-layout-list-degree">
-                        <Col xs={24} sm={24} xl={18} style={{ padding: '15px'}}>
-                            <Table 
-                                className="quiz-table"
-                                columns={columns}
-                                dataSource={data}
-                                title={() => 'List Submitted'}
-                                pagination={false}
-                            />
-                        </Col>
-                        <Col xs={24} sm={24} xl={6} style={{ padding: '15px'}}>
-                            <Card 
-                                className="quiz-card" 
-                                title="State Quiz" 
-                                bordered={false}
+        <Switch>
+            <Route path={`${path}/review/:idSub`}>
+                <Review name={quiz?.name} history={history}/>
+            </Route>
+            <Route path={path}>
+                <Layout className="submit-layout">
+                    <Layout.Content style={{ padding: '0 50px' }}>
+                        <h1>{quiz?.name}</h1>
+                        <Layout className="submit-layout-list-degree">
+                                <Col xs={24} sm={24} xl={18} style={{ padding: '15px'}}>
+                                    <Table 
+                                        className="quiz-table"
+                                        columns={columns}
+                                        dataSource={quiz?.submissions}
+                                        title={() => 'List Submitted'}
+                                        pagination={false}
+                                        rowKey={(record) => record.idSub}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} xl={6} style={{ padding: '15px'}}>
+                                    <Card 
+                                        className="quiz-card" 
+                                        title="State Quiz" 
+                                        bordered={false}
 
-                            >
-                                <p>Difficulty: </p>
-                                <p>Max Score: </p>
-                                <p>Number of submissions: </p>
-                            </Card>
+                                    >
+                                        <p>Difficulty:&nbsp;
+                                            {quiz?.difficulty === "easy" && <Tag color="#4dbd74">Easy</Tag>}
+                                            {quiz?.difficulty === "medium" && <Tag color="#e9e31c">Medium</Tag>}
+                                            {quiz?.difficulty === "hard" && <Tag color="#f86c6b">Hard</Tag>}
+                                        </p>
+                                        <p>Max Score: {quiz?.maxScore}</p>
+                                        <p>Number of submissions: {quiz?.numOfSub}</p>
+                                    </Card>
 
-                        </Col>
-                    
+                                </Col>
+                            
 
+                        </Layout>
+                    </Layout.Content>
                 </Layout>
-            </Content>
-        </Layout>
+            </Route>
+        </Switch>
     )
 }
 
