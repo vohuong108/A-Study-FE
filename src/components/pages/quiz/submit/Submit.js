@@ -48,12 +48,17 @@ const Submit = ({ history }) => {
         {
             title: 'ID',
             dataIndex: 'idSub',
+            fixed: 'left',
+            width: 50,
         },
         {
             title: 'Time',
             className: 'submit-table-time',
             dataIndex: 'finishTime',
             align: 'left',
+            fixed: 'left',
+            width: 150,
+
             render: (time) => {
                 let date = new Date(time);
                 let convertedDate = date.toGMTString();
@@ -87,7 +92,7 @@ const Submit = ({ history }) => {
                     <Layout.Content className="submit-layout-content">
                         <h1>{quiz?.name}</h1>
                         <Layout className="submit-layout-list-degree">
-                                <Col xs={24} sm={24} xl={18} style={{ padding: '15px'}}>
+                                <Col xs={24} sm={24} xl={18} style={{ padding: '1rem'}}>
                                     <Table 
                                         className="quiz-table"
                                         columns={columns}
@@ -95,9 +100,10 @@ const Submit = ({ history }) => {
                                         title={() => 'List Submitted'}
                                         pagination={false}
                                         rowKey={(record) => record.idSub}
+                                        scroll={{ x: 1000}}
                                     />
                                 </Col>
-                                <Col xs={24} sm={24} xl={6} style={{ padding: '15px'}}>
+                                <Col xs={24} sm={24} xl={6} style={{ padding: '1rem'}}>
                                     <Card 
                                         className="quiz-card" 
                                         title="State Quiz" 

@@ -34,7 +34,7 @@ const Review = ({ name, history }) => {
                         <Col 
                             className="review-content" 
                             xs={24} sm={24} xl={18}
-                            style={{padding: '15px'}}
+                            style={{padding: '1rem'}}
                         >
                         <Descriptions 
                             className="review-desc" 
@@ -51,7 +51,7 @@ const Review = ({ name, history }) => {
                         ))}
                             
                         </Col>
-                        <Col className="review-nav" xs={24} sm={24} xl={6} style={{ padding: '15px'}}>
+                        <Col className="review-nav" xs={24} sm={24} xl={6} style={{ padding: '1rem'}}>
                             <QuizNav review navData={submitNav}/>                            
                         </Col>
                         <Button 

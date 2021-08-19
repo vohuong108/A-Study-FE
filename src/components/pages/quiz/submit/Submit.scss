@@ -4,8 +4,6 @@
     // height: calc(100% - 72px);
 
     .submit-layout-content {
-        padding: 1rem;
-
         @include Responsive(sm) { padding: 1.5rem; }
         @include Responsive(md) { padding: 2.5rem; }
         @include Responsive(lg) { padding: 3rem; }
