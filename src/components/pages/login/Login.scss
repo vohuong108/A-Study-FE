@@ -1,25 +1,43 @@
+@import '../../../App.scss';
+
 .login {
     background-color: #F0F3F5;
+
+    .login-container {
+        @include Responsive(xs) {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
 
     .login-row {
         justify-content: center;
         padding: 50px 0;
     }
+
     .login-wrap {
         width: 960px;
         background: #fff;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 0 12px 0 #afafaf;
+
+        h1 {
+            text-align: left;
+            font-weight: bold;
+            padding: 30px;
+            font-size: 25px;
+            line-height: 1.2;
+
+            @include Responsive(xs) {
+                font-size: 20px;
+            }
+            @include Responsive(sm) {
+                font-size: 20px;
+            }
+        }
     }
 
-    .login-wrap h1 {
-        text-align: left;
-        font-weight: bold;
-        padding: 30px;
-        font-size: 25px;
-        line-height: 1.2;
-    }
 
     .login-inner {
         display: flex;
@@ -28,7 +46,6 @@
 
     .inner-left {
         width: 100%;
-        flex: auto;
 
         p {
             color: #73818f;
@@ -37,17 +54,23 @@
             font-size: 21px;
             font-weight: 500;
             line-height: 1.2;
+
+            @include Responsive(xs) {
+                font-size: 16px;
+            }
+            @include Responsive(sm) {
+                font-size: 16px;
+            }
         }
 
         img {
             width: 100%;
-            max-width: fit-content;
+            max-width: 250px;
         }
+
     }
 
     .inner-right {
-        flex: 0 0 40%;
-        margin-left: 1rem;
 
         h3{
             color: rgb(31, 31, 31);
@@ -56,6 +79,13 @@
             text-align: center;
             font-weight: 400;
             margin-bottom: 40px;
+
+            @include Responsive(xs) {
+                font-size: 24px;
+            }
+            @include Responsive(sm) {
+                font-size: 24px;
+            }
         }
 
         form label {

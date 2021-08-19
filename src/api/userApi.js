@@ -13,7 +13,8 @@ const userApi = {
         return response.data;
     },
     userRegisting: async (data) => {
-        const url = `${baseUrl}/register`
+        // const url = `${baseUrl}/register`
+        const url = `${baseUrl}/login`
         const response = await axios.post(url, data);
         return response.data;
     },

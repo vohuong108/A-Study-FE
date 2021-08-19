@@ -1,25 +1,43 @@
+@import '../../../App.scss';
+
 .signup {
     background-color: #F0F3F5;
+
+    .signup-container {
+        @include Responsive(xs) {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+    }
 
     .signup-row {
         justify-content: center;
         padding: 50px 0;
     }
+
     .signup-wrap {
         width: 960px;
         background: #fff;
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 0 12px 0 #afafaf;
+
+        h1 {
+            text-align: left;
+            font-weight: bold;
+            padding: 30px;
+            font-size: 25px;
+            line-height: 1.2;
+    
+            @include Responsive(xs) {
+                font-size: 20px;
+            }
+            @include Responsive(sm) {
+                font-size: 20px;
+            }
+        }
     }
 
-    .signup-wrap h1 {
-        text-align: left;
-        font-weight: bold;
-        padding: 30px;
-        font-size: 25px;
-        line-height: 1.2;
-    }
 
     .signup-inner {
         display: flex;
@@ -28,7 +46,6 @@
 
     .inner-left {
         width: 100%;
-        flex: auto;
 
         p {
             color: #73818f;
@@ -37,17 +54,22 @@
             font-size: 21px;
             font-weight: 500;
             line-height: 1.2;
+
+            @include Responsive(xs) {
+                font-size: 16px;
+            }
+            @include Responsive(sm) {
+                font-size: 16px;
+            }
         }
 
         img {
             width: 100%;
-            max-width: fit-content;
+            max-width: 250px;
         }
     }
 
     .inner-right {
-        flex: 0 0 40%;
-        margin-left: 1rem;
 
         h3 {
             color: rgb(31, 31, 31);
@@ -56,6 +78,13 @@
             text-align: center;
             font-weight: 400;
             margin-bottom: 40px;
+
+            @include Responsive(xs) {
+                font-size: 24px;
+            }
+            @include Responsive(sm) {
+                font-size: 24px;
+            }
         }
         
         form label {
@@ -162,64 +191,3 @@
 //   xl: '1200px',
 //   xxl: '1600px',
 
-
-@media only screen and (max-width: 480px) {
-    .signup .signup-wrap {
-        width: 90%;
-    }
-
-    .signup-inner {
-        flex-wrap: wrap;
-    }
-
-    .signup .inner-right {
-        flex: 0 0 100%;
-    }
-
-    .signup .inner-left p {
-        font-size: 14px;
-    }
-
-    .signup .form-license p {
-        font-size: 12px;
-    }
-}
-
-@media only screen and (min-width: 481px) and (max-width: 576px) {
-    .signup .signup-wrap {
-        width: 90%;
-    }
-
-    .signup .inner-right {
-        flex: 0 0 60%;
-    }
-
-    .signup .inner-left p {
-        font-size: 14px;
-    }
-
-    .signup .form-license p {
-        font-size: 12px;
-    }
-}
-
-@media only screen and (min-width: 577px) and (max-width: 768px) {
-    .signup .signup-wrap {
-        width: 560px;
-    }
-
-    .signup .inner-right {
-        flex: 0 0 50%;
-    }
-}
-
-@media only screen and (min-width: 769px) and (max-width: 992px) {
-    .signup .signup-wrap {
-        width: 760px;
-    }
-    
-}
-
-@media only screen and (min-width: 993px) and (max-width: 1200px) {
-    
-}

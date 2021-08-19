@@ -3,7 +3,7 @@ import './Login.scss'
 import 'antd/dist/antd.css';
 import loginBanner from '../../../assets/loginBanner.png'
 import { LockFilled, MailFilled} from '@ant-design/icons'
-import { Spin, message } from 'antd';
+import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
@@ -16,8 +16,8 @@ import { unwrapResult } from '@reduxjs/toolkit'
 
 const Login = ({ history, location }) => {
     console.log("from: ", location);
+    
     const { register, handleSubmit } = useForm();
-
     const dispatch = useDispatch();
     const loading = useSelector(state => state.user.loading);
 
@@ -44,7 +44,7 @@ const Login = ({ history, location }) => {
             message.error({
                 content: err.message,
                 style: {marginTop: '72px'},
-                key: "enroll-msg"
+                key: "login-msg"
             })
         }
         
@@ -52,63 +52,66 @@ const Login = ({ history, location }) => {
 
     return (
         <div className="login">
-            <div className="container">
+            <div className="container login-container">
                 <div className="row login-row">
-                
                     <div className="login-wrap">
                         <Spin tip="Loading..." spinning={loading}>
                             <h1>AStudy - Learn without limits</h1>
-                            <div className="login-inner">
-                                <div className="inner-left">
-                                    <img src={loginBanner} alt=""/>
-                                    <p>Online teaching and learning support system</p>
-                                </div>
-                                <div className="inner-right">
-                                    <h3>LOG IN</h3>
-                                    <form onSubmit={handleSubmit(onSubmit)}>
-                                        <label>Email</label>
-                                        <div className="input-wrap">
-                                            <MailFilled className="input-icon" />
-                                            <input
-                                                id="email"
-                                                name="email" 
-                                                type="email"
-                                                placeholder="name@email.com" 
-                                                {...register("email")}
-                                                required 
-                                            />
-                                        </div>
-                                        <label>Password</label>
-                                        <div className="input-wrap">
-                                            <LockFilled className="input-icon" />
-                                            <input 
-                                                name="password" 
-                                                type="password"
-                                                placeholder="Enter your password" 
-                                                {...register("password")}
-                                                required 
-                                            />
-                                        </div>
+                            <Row className="login-inner" gutter={{xs: 16, sm: 16}}>
+                                <Col xs={24} sm={10}>
+                                    <div className="inner-left">
+                                        <img src={loginBanner} alt=""/>
+                                        <p>Online teaching and learning support system</p>
+                                    </div>
+                                </Col>
+                                <Col xs={24} sm={14}>
+                                    <div className="inner-right">
+                                        <h3>LOG IN</h3>
+                                        <form onSubmit={handleSubmit(onSubmit)}>
+                                            <label>Email</label>
+                                            <div className="input-wrap">
+                                                <MailFilled className="input-icon" />
+                                                <input
+                                                    id="email"
+                                                    name="email" 
+                                                    type="email"
+                                                    placeholder="name@email.com" 
+                                                    {...register("email")}
+                                                    required 
+                                                />
+                                            </div>
+                                            <label>Password</label>
+                                            <div className="input-wrap">
+                                                <LockFilled className="input-icon" />
+                                                <input 
+                                                    name="password" 
+                                                    type="password"
+                                                    placeholder="Enter your password" 
+                                                    {...register("password")}
+                                                    required 
+                                                />
+                                            </div>
 
-                                        <div className="form-btn">
-                                            <input className="submit-btn" type="submit" value="Log In"></input>
-                                        </div>
-                                        
+                                            <div className="form-btn">
+                                                <input className="submit-btn" type="submit" value="Log In"></input>
+                                            </div>
                                             
-                                        
-                                    </form>
-                                    <Link to="/help">
-                                        Forgot your password?
-                                    </Link>
-                                    
-                                    <p>
-                                        Don't have an account?&nbsp; 
-                                        <Link to="/signup">
-                                            Sign up
+                                                
+                                            
+                                        </form>
+                                        <Link to="/help">
+                                            Forgot your password?
                                         </Link>
-                                    </p>
-                                </div>
-                            </div>
+                                        
+                                        <p>
+                                            Don't have an account?&nbsp; 
+                                            <Link to="/signup">
+                                                Sign up
+                                            </Link>
+                                        </p>
+                                    </div>
+                                </Col>
+                            </Row>
                         </Spin>
                     </div>
                 </div>
