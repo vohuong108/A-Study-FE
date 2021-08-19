@@ -17,3 +17,11 @@ export const deleteCourseByID = createAsyncThunk(
         return result;
     }
 )
+
+export const addCourse = createAsyncThunk(
+    'courses/addCourse',
+    async (requestData) => {
+        const result = await userApi.addCourse(requestData);
+        return result;
+    }
+)

@@ -42,7 +42,7 @@
                             line-height: 1.2;
                             letter-spacing: -.02rem;
                             font-size: 1rem;
-                            color: #1c1d1f;
+                            color: #0f7c90;
                         }
         
                         &:hover {
@@ -64,7 +64,7 @@
                 padding: 0 1rem 1rem 1rem;
                 margin: 0;
                 text-align: left;
-                color: #1c1d1f;
+                // color: #1c1d1f;
 
                 border-bottom: 1px solid #dcdacb;
                 
@@ -76,13 +76,15 @@
                         height: 100%;
                         align-items: center;
                         font-size: .875rem;
-                        font-weight: 400;
+                        font-weight: 500;
                         line-height: 1.225rem;
+                        color: #1c1d1f;
+                        
+                        &:hover {
+                            color:rgb(15, 124, 144);
+                        }
                     }
 
-                    &:hover {
-                        color:rgb(15, 124, 144);
-                    }
                 }
 
                 &:last-child {

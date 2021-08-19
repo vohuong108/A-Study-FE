@@ -1,0 +1,172 @@
+@import "../../../App.scss";
+
+.search-layout {
+    background-color: #fff;
+    .search-header {
+        .s-header {
+            text-align: left;
+            padding-top: 2rem;
+
+            .num-result {
+                color: #1c1d1f;
+                font-weight: 700;
+                font-family: OpenSans,Arial,sans-serif;
+                font-size: 1.5rem;
+
+                @include Responsive(md) {
+                    font-size: 2rem;
+                }
+            }
+
+            .filter {
+                .btn-filter {
+                    display: flex;
+                    align-items: center;
+                    color: #1c1d1f;
+                    font-weight: 700;
+                    border-color: #1c1d1f;
+                    height: 3rem;
+                    &:hover {
+                        background-color: rgba(0,0,0,.04);
+                    }
+                }
+            }
+        }
+    }
+    .search-body {
+
+        .s-body {
+            background-color: #fff;
+
+            .filter-slide {
+                background-color: transparent;
+                display: none;
+
+                @include Responsive(lg) {
+                    display: block;
+                }
+
+                
+            }
+
+            .s-body-content {
+                padding-left: 1rem;
+            }
+        }
+        .search-course {
+            .col-img {
+                img {
+                    float: left;
+                    max-width: 100%;
+
+                }
+            }
+
+            .col-info {
+                .info-wrap {
+                    text-align: left;
+                    .s-course-name {
+                        color: rgba(0,0,0,.87);
+                        font-size: 1rem;
+                        margin-bottom: 6px;
+                        @include Responsive(xl) { 
+                            font-size: 1.25rem;
+                        }
+                    }
+
+                    .s-course-author {
+                        color: #525252;
+                    }
+
+                    .s-course-quality {
+                        margin-top: 6px;
+                        display: flex;
+                        align-items: center;
+
+                        .quality-left {
+                            height: 100%;
+                            display: flex;
+                            align-items: flex-end;
+                            flex-wrap: wrap;
+
+                            .course-rate {
+                                margin-right: 1rem;
+                            }
+    
+                            .rate-ratio {
+                                font-size: 1rem;
+                                font-weight: 500;
+                                margin-right: 1rem;
+                            }
+    
+                            .num-rate {
+                                font-size: 1rem;
+                                font-weight: 500;
+                                margin-right: 1rem;
+                            }
+                        }
+
+
+                        .numStudent {
+                            margin-left: 1rem;
+
+                            .fa-user-graduate {
+                                font-size: 1rem;
+                            }
+
+                            .ant-statistic-content-value {
+                                font-size: 1rem;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .search-content {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1rem 1rem 1rem 1rem;
+
+        @include Responsive(xs) {
+            width: 100%;
+        }
+        @include Responsive(sm) { 
+            max-width: 540px;
+        }
+        @include Responsive(md) { 
+            max-width: 720px;
+        }
+        @include Responsive(lg) { 
+            max-width: 960px;
+        }
+        @include Responsive(xl) { 
+            max-width: 1140px;
+        }
+        @include Responsive(xxl) { 
+            max-width: 1320px;
+        }
+    }
+
+}
+
+.filter-drawer {
+    // background-color: #fff;
+
+    @include Responsive(xs) {
+        display: block;
+    }
+    @include Responsive(sm) {
+        display: block;
+    }
+    @include Responsive(lg) {
+        display: none;
+    }
+
+    .ant-drawer-close {
+        height: 100%;
+        padding: 16px;
+    }
+}

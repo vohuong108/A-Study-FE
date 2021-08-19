@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../../../../features/authentication/userSlice'
 import { removeToken } from '../../../../utils/localStorageHandler'
-import { Avatar, Image } from 'antd'
-import { UserOutlined } from '@ant-design/icons'
+import { Avatar } from 'antd'
 import { useHistory, Link } from "react-router-dom"
 import 'antd/dist/antd.css'
 import './UserAvatar.scss'
 
-const UserAvatar = ({ avtURL }) => {
+const UserAvatar = () => {
     const [isHover, setHover] = useState(false);
     const dispatch = useDispatch();
+    const user = useSelector(state => state.user.userObj);
     let history = useHistory();
     
     const handleLogOut = () => {
@@ -32,8 +32,7 @@ const UserAvatar = ({ avtURL }) => {
                 style={{
                     backgroundColor: '#87d068',
                 }}
-                // icon={<UserOutlined />}
-                src={avtURL}
+                src={user?.avatar}
             />
             <div className={`avt-wrap__pop ${isHover ? 'pop-act' : ''}`}>
                 <div className="avt-pop">
@@ -42,11 +41,11 @@ const UserAvatar = ({ avtURL }) => {
                             <Avatar 
                                 size={64} 
                                 className="avt-user"
-                                src={avtURL}
+                                src={user?.avatar}
                             />
                             <div className="account-detail">
-                                <p>username</p>
-                                <p>email@gmail.com</p>
+                                <p>{user?.userName}</p>
+                                <p>{user?.email}</p>
                             </div>
                         </a>
                         <ul className="list-menu">
@@ -54,13 +53,11 @@ const UserAvatar = ({ avtURL }) => {
                                 <Link to="/dashbroad">My Courses</Link>
                             </li>
                             <li>
-                                <a>My Cart</a>
+                                <Link to="/profile">My Profile</Link>
                             </li>
                         </ul>
                         <ul className="list-menu">
-                            <li>
-                                <a>My Profile</a>
-                            </li>
+                            
                             <li onClick={() => handleLogOut()}>
                                 <a>Log Out</a>
                             </li>

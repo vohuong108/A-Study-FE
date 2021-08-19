@@ -34,6 +34,7 @@ const submitSlice = createSlice({
         [getSubmitByID.fulfilled]: (state, action) => {
             state.loading = false;
             state.quiz = action.payload;
+            
         },
     }
 });

@@ -1,3 +1,5 @@
+@import '../../../../App.scss';
+
 .progress-course {
     margin-top: 30px;
     padding: 18px;
@@ -20,19 +22,21 @@
         .course-desc {
             display: flex;
             justify-content: space-between;
-            h3 {
+            .p-course-title {
                 font-size: 1.25rem;
                 line-height: 1.875rem;
                 font-weight: normal;
                 font-family: OpenSans-Light, OpenSans, Arial, sans-serif;
                 color: #1F1F1F;
                 margin-bottom: 0;
+                text-align: left;
             }
     
-            p {
+            .p-course-author {
                 color: #6E767F;
                 font-size: .9rem;
                 margin-bottom: 10px;
+                text-align: left;
             }
     
             .course-statistic {
@@ -63,14 +67,25 @@
     .progress-course-btn {
         height: 100%;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+
+        @include Responsive(md) {
+            flex-direction: column;
+            justify-content: flex-end;
+        }
 
         a {
             display: inline-block;
+
             &:last-child {
-                margin-top: 10px;
+
+                @include Responsive(md) {
+                    margin-top: 10px;
+                }
             }
+
         }
         .pc-btn {
             color: #FFF;
@@ -98,8 +113,6 @@
         .resume-btn {
             background-color: rgb(42, 115, 204);
             border: 1px solid rgb(42, 115, 204);
-            
-            
 
             &:hover {
                 background-color: rgb(1, 86, 184);

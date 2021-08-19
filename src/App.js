@@ -1,5 +1,6 @@
 import React from 'react'
-import './App.css'
+import './App.scss'
+import { BrowserRouter, Switch, Route, } from "react-router-dom"
 import Footer from './components/pages/footer/Footer'
 import Header from './components/pages/header/Header'
 import Home from './components/pages/home/Home'
@@ -9,22 +10,13 @@ import Profile from './components/pages/user/profile/Profile'
 import PrivateRoute from './components/routes/PrivateRoute'
 import PublicRoute from './components/routes/PublicRoute'
 import SignUp from './components/pages/signup/SignUp'
-import {
-  BrowserRouter,
-  Switch,
-  Route,
-  Redirect
-} from "react-router-dom";
-
 import Course from './components/pages/course/Course'
-import SignupConfirm from './SignupConfirm'
-import Overview from './components/pages/course/overview/Overview'
 import Lecture from './components/pages/course/lectureByWeek/Lecture'
 import Submit from './components/pages/quiz/submit/Submit'
 import Quiz from './components/pages/quiz/Quiz'
-import Review from './components/pages/quiz/review/Review'
-import AuthorDash from './components/pages/author/authorDash/AuthorDash'
 import EditCourse from './components/pages/author/editCourse/EditCourse'
+import Search from './components/pages/search/Search'
+import PaidCourse from './components/pages/paidCourse/PaidCourse'
 
 function App() {
 
@@ -35,18 +27,17 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          
-          <Route path="/author">
-            <AuthorDash />
-          </Route>
+          <PrivateRoute path="/profile" component={Profile} />
+          <Route exact path="/search" render={(props) => <Search {...props} />} />
+          <Route path="/search/course/:idCourse" render={(props) => <PaidCourse {...props} />} />
           <PrivateRoute path="/quiz/:idQuiz" component={Quiz} />
           <PrivateRoute path="/submit/:idQuiz" component={Submit} />
           <PrivateRoute path="/learn/:idCourse/week/:idWeek" component={Lecture} />
           <PrivateRoute path="/edit/:id" component={EditCourse} />
+          <PrivateRoute path="/course/:id" component={Course} />
           <PublicRoute exact path="/login" component={Login} />
           <PublicRoute exact path="/signup" component={SignUp} />
           <PrivateRoute exact path="/dashbroad" component={UserDash} />
-          <PrivateRoute path="/course/:id" component={Course} />
           <DisplayFooter exact path="/" component={Home} />
         
         </Switch>

@@ -1,24 +1,25 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { setToken } from '../../../utils/localStorageHandler'
-import { useHistory, Link } from "react-router-dom"
-import { login, getUserByToken } from "../../../features/authentication/asyncThunkAction"
-import { unwrapResult } from '@reduxjs/toolkit'
-import { useForm } from "react-hook-form"
-
+import React from 'react'
 import './Login.scss'
+import 'antd/dist/antd.css';
 import loginBanner from '../../../assets/loginBanner.png'
 import { LockFilled, MailFilled} from '@ant-design/icons'
-import { Spin } from 'antd';
-import 'antd/dist/antd.css';
+import { Spin, message } from 'antd';
+import { Link } from "react-router-dom"
+import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from 'react-redux'
+import { setToken } from '../../../utils/localStorageHandler'
+import { login, getUserByToken } from "../../../features/authentication/userAction"
+import { unwrapResult } from '@reduxjs/toolkit'
+
+
 
 
 const Login = ({ history, location }) => {
+    console.log("from: ", location);
     const { register, handleSubmit } = useForm();
-    
+
     const dispatch = useDispatch();
     const loading = useSelector(state => state.user.loading);
-    const loggedIn = useSelector(state => state.user.loggedIn);
 
     const onSubmit = async (data) => {
 
@@ -32,18 +33,19 @@ const Login = ({ history, location }) => {
             const login_res = await dispatch(login(requestData))
             const un_login_res = unwrapResult(login_res);
             setToken(un_login_res.access_token);
-            console.log("unwrapResult in login", un_login_res.access_token);
             
-            // setAuthHeader(un_access_token);
             const profile = await dispatch(getUserByToken(un_login_res.access_token))
-            const un_profile = unwrapResult(profile);
-            // console.log("unwrapResult in profile", un_profile)
 
             if(location.state) history.push(location.state.from.pathname)
             else history.push('/dashbroad');
 
-        } catch (error) {
-            console.error("error in login: ", error)
+        } catch (err) {
+            console.error("error in login: ", err)
+            message.error({
+                content: err.message,
+                style: {marginTop: '72px'},
+                key: "enroll-msg"
+            })
         }
         
     }

@@ -20,7 +20,7 @@ const ProgressCourse = ({ data, permission }) => {
         {data && 
             <div className="progress-course">
                 <div className="progress-course-wrap">
-                    <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
+                    <Row gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, {xs: 16, sm: 16}]}>
                         <Col xs={0} sm={0} md={0} lg={3}>
                             <div className="progress-course-poster">
                                 <Link to={`/course/${url}`}>
@@ -29,7 +29,7 @@ const ProgressCourse = ({ data, permission }) => {
                                 </Link>
                             </div>
                         </Col>
-                        <Col xs={20} sm={20} md={20} lg={18}>
+                        <Col xs={24} sm={24} md={20} lg={18}>
                             <div className="course-info">
                                 <div className="course-desc">
                                     <Link to={`/course/${url}`}>
@@ -55,7 +55,7 @@ const ProgressCourse = ({ data, permission }) => {
                                 </div>
                             </div>
                         </Col>
-                        <Col xs={4} sm={4} md={4} lg={3}>
+                        <Col xs={24} sm={24} md={4} lg={3}>
                             <div className="progress-course-btn">
                                 {permission === 'teacher' &&
                                     <Link to={`/edit/${url}`}>

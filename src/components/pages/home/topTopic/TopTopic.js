@@ -1,5 +1,5 @@
 import React from 'react'
-import './TopTopic.css'
+import './TopTopic.scss'
 import ChainCourse from './chainCourse/ChainCourse'
 
 const TopTopic = () => {

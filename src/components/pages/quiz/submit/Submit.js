@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import './Submit.scss'
-import { Layout, Table, Card, Row, Col, Tag } from 'antd'
+import { Layout, Table, Card, message, Col, Tag } from 'antd'
 import { Link, Switch, useParams, useRouteMatch, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -20,7 +20,19 @@ const Submit = ({ history }) => {
         let token = getToken();
 
         const getSubmit = async (requestData) => {
-            let submit = await dispatch(getSubmitByID(requestData));
+            try {
+                let submit = await dispatch(getSubmitByID(requestData));
+                let un_submit = unwrapResult(submit);
+
+                if(un_submit.isEnroll === false) history.push('/dashbroad');
+
+            } catch (err) {
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                })
+            }
         }
 
         if(user && token) {
@@ -72,7 +84,7 @@ const Submit = ({ history }) => {
             </Route>
             <Route path={path}>
                 <Layout className="submit-layout">
-                    <Layout.Content style={{ padding: '0 50px' }}>
+                    <Layout.Content className="submit-layout-content">
                         <h1>{quiz?.name}</h1>
                         <Layout className="submit-layout-list-degree">
                                 <Col xs={24} sm={24} xl={18} style={{ padding: '15px'}}>
@@ -108,6 +120,7 @@ const Submit = ({ history }) => {
                     </Layout.Content>
                 </Layout>
             </Route>
+
         </Switch>
     )
 }

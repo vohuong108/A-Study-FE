@@ -1,7 +1,12 @@
+@import '../../../../../App.scss';
+
 .lecture-quiz {
     text-align: left;
     h1 {
-        
+        font-size: 1.5rem;
+
+        @include Responsive(sm) { font-size: 1.875rem; }
+        @include Responsive(md) { font-size: 2.125rem; }
     }
 
     .lecture-quiz-info-submit {
@@ -57,12 +62,15 @@
 
             h3 {
                 text-align: left;
-                font-size: 1.75rem;
+                font-size: 1.25rem;
                 font-weight: 200;
                 line-height: 1.2;
                 color: #58585b;
                 font-family: CiscoSans, Arial, sans-serif;
                 margin-bottom: 0;
+
+                @include Responsive(sm) { font-size: 1.5rem;}
+                @include Responsive(md) { font-size: 1.75rem;}
             }
 
             a {
@@ -78,12 +86,15 @@
     }
 
     .lecture-quiz-grade {
-        text-align: left;
-        font-size: 1.75rem;
+        text-align: center;
+        font-size: 1rem;
         font-weight: 200;
         line-height: 1.2;
         color: #58585b;
         font-family: CiscoSans, Arial, sans-serif;
         margin-top: 2rem;
+
+        @include Responsive(sm) { font-size: 1.5rem;}
+        @include Responsive(md) { font-size: 1.75rem;}
     }
 }

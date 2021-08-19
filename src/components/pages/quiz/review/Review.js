@@ -26,7 +26,7 @@ const Review = ({ name, history }) => {
 
     return (
         <Layout className="review">
-            <Layout.Content style={{ padding: '50px 50px' }}>
+            <Layout.Content className="review-layout-content">
                 <h2>{name}</h2>
                 <Divider />
                 <Layout className="review-wrap">

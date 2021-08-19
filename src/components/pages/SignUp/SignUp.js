@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, Link } from "react-router-dom"
-import { registing } from "../../../features/authentication/asyncThunkAction"
+import { registing } from "../../../features/authentication/userAction"
 import { unwrapResult } from '@reduxjs/toolkit'
 import { useForm } from "react-hook-form"
 

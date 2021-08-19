@@ -1,12 +1,26 @@
+@import '../../../../App.scss';
+
 .review {
+
+    .review-layout-content {
+        padding: 1rem;
+
+        @include Responsive(sm) { padding: 1.5rem; }
+        @include Responsive(md) { padding: 2.5rem; }
+        @include Responsive(lg) { padding: 3rem; }
+    }
+    
     h2 {
         text-transform: capitalize;
         text-align: left;
-        font-size: 1.75rem;
+        font-size: 1.25rem;
         font-weight: 200;
         margin-bottom: 0;
         font-family: CiscoSans, Arial,sans-serif;
         color: #58585b;
+
+        @include Responsive(sm) { font-size: 1.5rem; }
+        @include Responsive(md) { font-size: 1.75rem; }
     }
 
     .review-desc {

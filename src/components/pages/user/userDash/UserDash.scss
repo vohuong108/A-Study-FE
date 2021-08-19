@@ -1,8 +1,21 @@
+@import '../../../../App.scss';
+
 .userDash {
+
+    .dash-container {
+        @include Responsive(xs) {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+    }
     
     .userDash-row {
         padding-top: 50px;
         padding-bottom: 50px;
+
+        .skt-progress {
+            margin-top: 30px;
+        }
     }
     
     .title {
@@ -17,7 +30,7 @@
         padding: .75rem 1.25rem;
     }
     
-    .dash-add {
+    .add-course {
         .btn-new-course {
             margin-top: 2rem;
             background-color: #2ac8cc;
@@ -34,9 +47,104 @@
     }
 }
 
-.title-add-course {
-    text-align: center;
-    margin-bottom: 0;
-    font-size: 1.5rem;
-    font-weight: 500;
+.add-course-drawer {
+    
+    .title-add-course {
+        text-align: center;
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    .add-course-form {
+        padding: 1rem 1.5rem;
+
+        .a-c-form-item {
+            margin-bottom: 1rem;
+            
+            label {
+                color: #2d3748;
+                font-size: 0.875rem;
+                font-family: Roboto;
+                margin: 0 0 8px;
+            }
+
+            .course-name {
+                width: 100%;
+                border-radius: .375rem;
+                border-width: 1px;
+                border-color: rgb(241, 245, 248);
+                border-style: solid;
+                padding: .5rem .75rem;
+                outline: none;
+                box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                font-size: 100%;
+
+                &:focus {
+                    outline: 2px solid transparent;
+                    outline-offset: 2px;
+                    box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                }
+            }
+
+            .s-item {
+                .ant-select-selector {
+                    width: 100%;
+                    border-radius: .375rem;
+                    border-width: 1px;
+                    border-color: rgb(241, 245, 248);
+                    border-style: solid;
+                    padding: .5rem .25rem;
+                    outline: none;
+                    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    font-size: 100%;
+                    transition: box-shadow 0s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+                    &:hover {
+                        outline: 2px solid transparent;
+                        outline-offset: 2px;
+                        box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+                    }
+
+                }
+            }
+
+            .category-select {
+                width: 100%;
+            }
+        }
+
+        .a-c-btn-save {
+            margin-top: 0.75rem;
+            background-color: rgb(28, 63, 170);
+            width: 5rem;
+            margin-right: auto;
+            border-color: rgb(28, 63, 170);
+            color: #fff;
+            border-radius: 0.375rem;
+            border: 1px solid rgb(28, 63, 170);
+            display: inline-flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            padding: .5rem .75rem;
+            font-weight: 500;
+
+            &:hover {
+                background-color: rgba(28, 63, 170, .9);
+                border-color: rgba(28, 63, 170, .9);
+            }
+
+            &:focus {
+                outline: 2px solid transparent;
+                outline-offset: 2px;
+                box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(59, 130, 246, 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+            }
+
+        }
+
+        .err-msg {
+            color: red;
+        }
+    }
 }

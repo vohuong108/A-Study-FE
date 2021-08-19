@@ -1,0 +1,26 @@
+.filter-collapse {
+    background-color: #fff;
+    text-align: left;
+    text-transform: capitalize;
+
+    .f-c-panel {
+        text-align: left;
+
+        .ant-collapse-header {
+            color: #1c1d1f;
+            font-weight: 700;
+            font-size: 1.1875rem;
+            display: flex;
+            align-items: center;
+        }
+
+        &:first-child {
+            border-top: 1px solid #dfdfdf;
+        }
+
+        .ant-checkbox-group {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

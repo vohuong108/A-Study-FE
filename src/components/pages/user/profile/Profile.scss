@@ -1,10 +1,17 @@
-.profile {
-    .profile-container {
-        margin: 1.25rem 1.875rem;
+@import "../../../../App.scss";
 
+.profile {
+    background-color: #f1f5f8;
+    padding: 1.25rem 1.875rem;
+
+    .profile-container {
+        
         .profile-row {
-            display: flex;
             justify-content: space-between;
+
+            .profile-row-left {
+                margin-bottom: 2rem;
+            }
         }
     }
 
@@ -18,27 +25,46 @@
     }
 
     .user-card-info {
-        display: flex;
-
+        display: inline-flex;
+        width: 100%;
         .user-avt {
             border: .25rem solid #2bcddd;
+            flex: 0 0 80px;
         }
 
         .user-content {
             text-align: left;
             margin-left: .5rem;
-            color: #FFFFFF !important;
+            color: #FFFFFF;
             font-weight: 500;
             line-height: 1.2;
+            overflow-wrap: anywhere;
+            flex: 1;
     
             h3 {
                 color: #FFFFFF;
-                font-size: 1.5rem;
+                max-width: 100%;
+
+                @include Responsive(xs) {
+                    font-size: 1rem;
+                }
+
+                @include Responsive(sm) {
+                    font-size: 1.5rem;
+                }
             }
     
             p {
-                font-size: 1.09375rem;
                 margin-bottom: .5rem;
+                max-width: 100%;
+
+                @include Responsive(xs) {
+                    font-size: 0.875rem;
+                }
+
+                @include Responsive(sm) {
+                    font-size: 1rem;
+                }
             }
         }
     }

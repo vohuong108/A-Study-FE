@@ -4,10 +4,11 @@ import { getToken } from '../../utils/localStorageHandler'
 import Footer from '../pages/footer/Footer'
 
 const PublicRoute = ({ component: Component, ...rest}) => {
+    let token = getToken();
     return (
         <Route
             {...rest}
-            render={(props) => !getToken() 
+            render={(props) => !token 
                 ? <><Component {...props} /><Footer /></>
                 : <Redirect to={{ pathname: '/dashbroad' }} />}
         />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { unwrapResult } from '@reduxjs/toolkit'
@@ -12,7 +12,7 @@ import { deleteCourseByID, } from '../../../../features/course/coursesAction'
 import { addNewWeek } from '../../../../features/course/currentCourse/courseSlice'
 import { getToken } from '../../../../utils/localStorageHandler'
 
-const EditCourse = ({ idCourse, history }) => {
+const EditCourse = ({ history }) => {
   console.log("ed his: ", history);
   let { id } = useParams();
   const user = useSelector(state => state.user.userObj);
@@ -30,33 +30,43 @@ const EditCourse = ({ idCourse, history }) => {
   const handleSubmitChanges = async () => {
     let token = getToken();
 
-    let result = await dispatch(submitCourseChanges({
-      access_token: token,
-      data: data,
-    }))
+    try {
+      let result = await dispatch(submitCourseChanges({ access_token: token, data: data }))
 
-    let un_result = unwrapResult(result);
+      message.success({
+        content: "Submit changes successfully",
+        style: {marginTop: '72px'},
+        key: "submit-course-msg",
+      })
+
+    } catch(error) {
+      message.error({
+        content: error?.message,
+        style: {marginTop: '72px'},
+        key: "submit-course-msg",
+      })
+    }
+
   }
 
   const handleDeleteCourse = async () => {
     let token = getToken();
 
     try {
-      let result = await dispatch(deleteCourseByID({
-        access_token: token,
-        idCourse: id
-      }));
-      let un_result = unwrapResult(result);
+      let result = await dispatch(deleteCourseByID({ access_token: token, idCourse: id }));
       
       message.success({
         content: "Delete this course successfully",
-        style: {marginTop: '72px'}
+        style: {marginTop: '72px'},
+        key: "del-course-msg",
       })
     } catch (error) {
       message.error({
         content: error?.message,
-        style: {marginTop: '72px'}
+        style: {marginTop: '72px'},
+        key: "del-course-msg",
       })
+      
     }
   }
 
@@ -65,26 +75,35 @@ const EditCourse = ({ idCourse, history }) => {
     let token = getToken();
 
     const getCourse = async (requestData) => {
+      try {
         let course = await dispatch(getCourseByID(requestData));
         let un_course = unwrapResult(course);
+
+        if(un_course?.isEnroll === false) history.push(`/search/course/${id}`)
+      } catch (err) {
+        message.error({
+          content: err.message,
+          style: {marginTop: '72px'},
+          key: "enroll-msg"
+        })
+      }
     }
 
     if(user && token) {
-        let requestData = {
-            access_token: token,
-            idCourse: id
-        }
+        let requestData = { access_token: token, idCourse: id };
+
         getCourse(requestData);
     }
   }, [id, user]);
 
   return (
       <div className="edit">
+        {user?.permission === 'teacher' &&
           <Layout className="edit-layout">
               <Layout.Content className="e-layout-content">
                 <Row>
                   <Col span={24}>
-                    <h3 className="edit-course-title">{data && data.name}</h3>
+                    <h3 className="edit-course-title">{data?.name}</h3>
                   </Col>
                 </Row>
                 <Row>
@@ -99,37 +118,46 @@ const EditCourse = ({ idCourse, history }) => {
                     </Collapse>
                   </Col>
                 </Row>
-                <Row className="last-row">
-                  <Col className="last-row-col">
+                <Row className="last-row" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, {xs: 8}]}>
+                  <Col className="last-row-col" xs={24} sm={8}>
                     <Button 
                       shape="round" 
                       className="last-row-btn" 
                       danger
+                      disabled={!data}
                       onClick={() => confirm(handleDeleteCourse, "Permanently delete the course!!!", "Are you sure?")}
                       loading={loadingDel}
                     >
                       Delete this course
                     </Button>
                   </Col>
-                  <Col className="last-row-col">
+                  <Col className="last-row-col" xs={24} sm={8} >
                     <Button 
                       shape="round" 
-                      className="last-row-btn" 
+                      className="last-row-btn"
+                      disabled={!data} 
                       onClick={() => confirm(handleSubmitChanges, "Please save all week changes before submit!!!", "Do you want to submit?")}
                       loading={loadingSubmit}
                       >
                       Submit Changes
                     </Button>
                   </Col>
-                  <Col className="last-row-col">
-                    <Button shape="round" className="last-row-btn" onClick={() => handleAddNewWeek()}>
+                  <Col className="last-row-col" xs={24} sm={8} >
+                    <Button 
+                      shape="round" 
+                      className="last-row-btn" 
+                      disabled={!data} 
+                      onClick={() => handleAddNewWeek()}
+                    >
                       New Week
                     </Button>
                   </Col>
           
                 </Row>
+                <div className="pedal"></div>
               </Layout.Content>
           </Layout>
+        }
 
       </div>
   )

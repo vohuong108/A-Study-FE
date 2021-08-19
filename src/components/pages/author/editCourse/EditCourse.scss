@@ -1,3 +1,5 @@
+@import '../../../../App.scss';
+
 .edit {
     height: calc(100vh - 72px);
 
@@ -7,19 +9,23 @@
         overflow-x: hidden;
 
         .e-layout-content {
-            padding: 1.5rem;
+            padding: .5rem;
+            @include Responsive(sm) { padding: 1.5rem; } 
 
             .edit-course-title {
                 margin-bottom: 2rem;
                 color: #1f1f1f;
                 font-family: OpenSans,Arial,sans-serif;
-                font-size: 24px;
+                font-size: 1.25rem;
                 font-weight: 700;
                 line-height: 30px;
                 border-radius: 5px 5px 0 0;
                 width: 100%;
                 text-align: center;
                 padding: .75rem 1.25rem;
+                background-color: #dde3e6;
+
+                @include Responsive(sm) { font-size: 1.5rem; } 
             }
 
             .collapse-wrap {
@@ -41,17 +47,17 @@
             .last-row {
                 flex-wrap: wrap;
                 justify-content: center;
+                align-items: center;
 
                 .last-row-col {
-                    margin-bottom: 1rem;
+                    
+                    .last-row-btn:disabled {
+                        opacity: 0.5;
+                    }
                 }
 
                 .last-row-col:first-child {
                     .last-row-btn {
-                        text-align: right;
-                        margin-right: 1rem;
-                        margin-top: 0.5rem;
-                        margin-bottom: 0.5rem;
                         font-weight: 500;
                         font-family: 'Roboto';
                         color: #f45858;
@@ -64,11 +70,6 @@
 
                 .last-row-col:nth-child(2) {
                     .last-row-btn {
-                        text-align: left;
-                        margin-left: 1rem;
-                        margin-right: 1rem;
-                        margin-top: 0.5rem;
-                        margin-bottom: 0.5rem;
                         background: linear-gradient(90deg,#48b1bf,#06beb6);
                         color: #fff;
                         font-weight: 500;
@@ -79,10 +80,6 @@
 
                 .last-row-col:nth-child(3) {
                     .last-row-btn {
-                        text-align: left;
-                        margin-left: 1rem;
-                        margin-top: 0.5rem;
-                        margin-bottom: 0.5rem;
                         border-color: #00e5ff;
                         color: #00e5ff;
                         font-weight: 500;
@@ -95,6 +92,11 @@
                         }
                     }
                 }
+            }
+
+            .pedal {
+                margin-top: 3rem;
+                height: 1px;
             }
         }
     }

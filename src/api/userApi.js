@@ -1,7 +1,10 @@
 import axios from 'axios'
+import qs from 'query-string'
+
 const baseUrl = 'https://61108d28c848c900171b3b61.mockapi.io'
 const baseUrl2 = 'https://6113c916cba40600170c1c34.mockapi.io'
-const baseUrl3 = 'https://6118c1939bcfb400171688a9.mockapi.io/'
+const baseUrl3 = 'https://6118c1939bcfb400171688a9.mockapi.io'
+const baseUrl4 = 'https://611cd13f7d273a0017e2f42e.mockapi.io'
 
 const userApi = {
     userLogin: async (data) => {
@@ -41,6 +44,20 @@ const userApi = {
             headers: {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
+        });
+        
+        return response.data;
+    },
+    addCourse: async (requestData) => {
+        const url = `${baseUrl}/courses`
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
         });
         
         return response.data;
@@ -123,7 +140,6 @@ const userApi = {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
         })
-        console.log("res: ", response.data)
         return response.data;
     }, 
     submitExamineResults: async (requestData) => {
@@ -132,11 +148,90 @@ const userApi = {
             url: url,
             method: 'post',
             headers: {
-                "Authorization": `Bearer ${requestData.access_token}`
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
             },
             data: requestData.data
         })
-    } 
+        return response.data;
+    },
+    searchCourse: async (requestData) => {
+        const url = `${baseUrl3}/search`;
+        const response = await axios({
+            url: url,
+            method: 'get',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            params: requestData.params,
+            paramsSerializer: params => {
+                return qs.stringify(params)
+            }
+        })
+        return response.data;
+    },
+    getCategory: async () => {
+        const url = `${baseUrl3}/category`;
+        const response = await axios({
+            url: url,
+            method: 'get',
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+        return response.data;
+    },
+    changeInformation: async (requestData) => {
+        const url = `${baseUrl3}/changeInfo`;
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        return response.data;
+    },
+    changePassword: async (requestData) => {
+        const url = `${baseUrl3}/changeInfo`;
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        return response.data;
+    },
+    getSearchedCourseInfo: async (requestData) => {
+        const url = `${baseUrl4}/searchedCourse/${requestData.idCourse}`;
+        const response = await axios({
+            url: url,
+            method: 'get',
+            headers: {
+                "Authorization": `Bearer ${requestData?.access_token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        return response.data;
+    },
+    enrollCourse: async (requestData) => {
+        const url = `${baseUrl4}/searchedCourse/${requestData.idCourse}`;
+        const response = await axios({
+            url: url,
+            method: 'put',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        return response.data;
+    },
 }
 
 export default userApi;

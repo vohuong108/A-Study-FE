@@ -3,7 +3,7 @@ $sm: 576px;
 $md: 768px;   
 $lg: 992px;     
 $xl: 1200px;  
-$xxl: 1600px;   
+$xxl: 1400px;   
 
 // media queries
 
@@ -26,4 +26,18 @@ $xxl: 1600px;
     @else if $canvas == xxl {
         @media only screen and (min-width: $xxl) { @content; } 
     }
+}
+
+.App {
+    text-align: center;
+    height: 100%;
+}
+  
+@keyframes App-logo-spin {
+from {
+    transform: rotate(0deg);
+}
+to {
+    transform: rotate(360deg);
+}
 }

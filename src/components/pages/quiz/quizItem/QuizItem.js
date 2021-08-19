@@ -6,7 +6,7 @@ import { marked } from '../../../../features/quiz/quizSlice'
 import { useDispatch } from 'react-redux'
 
 const QuizItem = ({ data, control, review, indexQ, setValue }) => {
-    
+    console.log("re-render in quiz item")
     return (
         <>
         {data && 

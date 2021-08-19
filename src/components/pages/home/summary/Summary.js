@@ -1,5 +1,5 @@
 import React from 'react'
-import './Summary.css'
+import './Summary.scss'
 import { Button } from 'antd'
 import { Link } from 'react-router-dom'
 import banner from '../../../../assets/banner.png'
@@ -14,7 +14,7 @@ const Summary = () => {
         <div className="summary">
             <div className="container">
                 <div className="row banner-row">
-                    <div className="col-6">
+                    <div className="col-12 col-sm-6">
                         <div className="banner-left">
                             <div className="banner-left__top">
                                 <h1>Learn Without Limits</h1>
@@ -27,7 +27,7 @@ const Summary = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-6">
+                    <div className="col-12 col-sm-6">
                         <div className="banner-right">
                             <img src={banner} alt="" />
                         </div>
@@ -36,28 +36,28 @@ const Summary = () => {
                 <div className="row achieve-row">
                     <h2>Achieve your goals with AStudy</h2>
                     <div className="achieve-wrap">
-                        <div className="col-3 achieve-col">
+                        <div className="col-6 col-sm-3 achieve-col">
                             <div className="achieve-title">
                                 <img src={achieve1} />
                                 <span>Learn the latest skills</span>
                             </div>
                             <p className="achieve-detail">like business analytics, graphic design, Python, and more</p>
                         </div>
-                        <div className="col-3 achieve-col">
+                        <div className="col-6 col-sm-3 achieve-col">
                             <div className="achieve-title">
                                 <img src={achieve2} />
                                 <span>Get ready for a career</span>
                             </div>
                             <p className="achieve-detail">in high-demand fields like IT, AI and cloud engineering</p>
                         </div>
-                        <div className="col-3 achieve-col">
+                        <div className="col-6 col-sm-3 achieve-col">
                             <div className="achieve-title">
                                 <img src={achieve3} />
                                 <span>Earn a degree</span>
                             </div>
                             <p className="achieve-detail">from a leading university in business, computer science, and more</p>
                         </div>
-                        <div className="col-3 achieve-col">
+                        <div className="col-6 col-sm-3 achieve-col">
                             <div className="achieve-title">
                                 <img src={achieve4} />
                                 <span>Upskill your organization</span>

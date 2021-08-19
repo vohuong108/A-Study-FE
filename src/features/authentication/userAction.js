@@ -24,3 +24,27 @@ export const getUserByToken = createAsyncThunk(
         return userData;
     }
 )
+
+export const getCategory = createAsyncThunk(
+    'user/getCategory',
+    async () => {
+        const userData = await userApi.getCategory()
+        return userData;
+    }
+)
+
+export const changeInformation = createAsyncThunk(
+    'user/changeInfo',
+    async (requestData) => {
+        const userData = await userApi.changeInformation(requestData)
+        return userData;
+    }
+)
+
+export const changePassword = createAsyncThunk(
+    'user/changePass',
+    async (requestData) => {
+        const userData = await userApi.changePassword(requestData)
+        return userData;
+    }
+)

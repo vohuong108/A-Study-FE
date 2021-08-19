@@ -2,26 +2,31 @@ import React, { useEffect, useState } from 'react'
 import './UserDash.scss'
 import ProgressCourse from '../../course/progressCourse/ProgressCourse'
 import { getToken } from '../../../../utils/localStorageHandler'
-import { getCourses } from '../../../../features/course/coursesAction'
+import { getCourses,addCourse } from '../../../../features/course/coursesAction'
 import { useDispatch, useSelector } from 'react-redux'
-import { unwrapResult } from '@reduxjs/toolkit'
-import { Button, Drawer, Select } from 'antd'
+import { Button, Drawer, Select, message, Skeleton } from 'antd'
 import { useForm, Controller } from "react-hook-form"
 
 const UserDash = () => {
     const dispatch = useDispatch();
-    const courses = useSelector(stateStore => stateStore.userCourses.courses);
+    const courses = useSelector(state => state.userCourses.courses);
+    const loading = useSelector(state => state.userCourses.loading);
     const user = useSelector(state => state.user.userObj);
     
     useEffect(() => {
+        let access_token = getToken();
+
         const getUserCourses = async () => {
             try {
-                let access_token = getToken();
-                const courses = await dispatch(getCourses(access_token))
-                const un_courses = unwrapResult(courses);
+                const courses = await dispatch(getCourses(access_token));
                 
-            } catch (error) {
-                console.error("error in login: ", error)
+            } catch (err) {
+                console.error("error in login: ", err);
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                })
             }
 
         }
@@ -32,9 +37,15 @@ const UserDash = () => {
 
     return (
         <div className="userDash">
-            <div className="container">
+            <div className="container dash-container">
                 <div className="row userDash-row">
                     <div className="title">My Courses</div>
+                    <Skeleton 
+                        className="skt-progress" 
+                        active 
+                        loading={loading}
+                        avatar={{shape: "square" }}
+                    />
                     {courses?.map(course => 
                         <ProgressCourse key={course.courseId} data={course} permission={user?.permission}/>
                     )}
@@ -52,49 +63,147 @@ const UserDash = () => {
 
 const AddNewCourse = () => {
     const [visible, setVisible] = useState(false);
-    const { control, handleSubmit, register, setValue } = useForm();
+    const { control, handleSubmit, register, formState: { errors }} = useForm();
+    const category = useSelector(state => state.user.category);
+    const user = useSelector(state => state.user.userObj);
+    const dispatch = useDispatch();
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (formData) => {
+        console.log(formData);
+        let token = getToken();
+
+        let requestData = {
+            access_token: token, 
+            data: {
+                name: formData.course_name,
+                author: user?.userName,
+                whatLearn: formData.whatLearn,
+                skills: formData.skills,
+                category: formData.category
+            }
+        }
+        try {
+            message.loading({ content: 'Loading...', key: "add-msg" });
+            let result = await dispatch(addCourse(requestData));
+            message.success({
+                content: "Add new course successfully",
+                style: {marginTop: '72px'},
+                key: "add-msg"
+            })
+        } catch (err) {
+            message.error({
+                content: err.message,
+                style: {marginTop: '72px'},
+                key: "add-msg"
+            })
+        }
     }
+
     return(
-        <div className="dash-add">
+        <div className="add-course">
             <Button shape="round" className="btn-new-course" onClick={() => setVisible(true)}>New Course</Button>
             <Drawer
+                className="add-course-drawer"
                 placement='top'
-                height="50%"
+                height="70%"
                 title={<p className="title-add-course">Create a new course</p>}
                 visible={visible}
                 onClose={() => setVisible(false)}
                 forceRender={true}
                 destroyOnClose={true}
             >
-                <form onSubmit={() => handleSubmit(onSubmit)}>
-                    <div>
+                <form className="add-course-form" onSubmit={handleSubmit(onSubmit)}>
+                    <div className="a-c-form-item">
                         <label>Course Name</label>
-                        <input {...register("course_name")} required type="text" placeholder="Please type course name"/>
+                        <input 
+                            className="course-name" 
+                            {...register("course_name")} 
+                            required type="text" 
+                            placeholder="Please type course name"
+                        />
                     </div>
-                    <Select className="option-type" defaultValue={"video"} style={{ width: 120 }} >
-                        <Select.Option value="video">Video</Select.Option>
-                        <Select.Option value="reading">Reading</Select.Option>
-                        <Select.Option value="quiz">Quiz</Select.Option>
-                        <Select.Option value="video">Video</Select.Option>
-                        <Select.Option value="reading">Reading</Select.Option>
-                        <Select.Option value="quiz">Quiz</Select.Option>
-                        <Select.Option value="video">Video</Select.Option>
-                        <Select.Option value="reading">Reading</Select.Option>
-                        <Select.Option value="quiz">Quiz</Select.Option>
-                        <Select.Option value="video">Video</Select.Option>
-                        <Select.Option value="reading">Reading</Select.Option>
-                        <Select.Option value="quiz">Quiz</Select.Option>
-                        <Select.Option value="video">Video</Select.Option>
-                        <Select.Option value="reading">Reading</Select.Option>
-                        <Select.Option value="quiz">Quiz</Select.Option>
-                    </Select>
+                    <div className="a-c-form-item">
+                        <label>Select Category</label>
+                        <Controller 
+                            name="category"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) =>
+                                <Select className="category-select" onChange={(value) => field.onChange(value)} >
+                                    {category && category.map((ctg, index) => 
+                                        <Select.Option key={index} value={ctg.name}>{ctg.name}</Select.Option>
+                                    )}
+                                </Select>
+                            }
+                        />
+                    </div>
+                    <div className="a-c-form-item">
+                        <label>What will the student learn</label>
+                        <WhatLearn control={control} errors={errors} />
+                    </div>
+                    <div className="a-c-form-item">
+                        <label>What skills will you teach</label>
+                        <Skills control={control} errors={errors} />
+                    </div>
+                    
+                    <Button htmlType="submit" className="a-c-btn-save"> Save </Button>
                 </form>
             </Drawer>
         </div>
     )
 }
+
+const WhatLearn = ({ control, errors }) => {
+    console.log("re-render in whatLearn: ", errors)
+    return (
+        <React.Fragment>
+            <Controller 
+                name="whatLearn"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) =>
+                    <Select 
+                        className="s-item what-learn-select"
+                        mode="tags" 
+                        style={{ width: '100%' }} 
+                        placeholder="What will the student learn?" 
+                        onChange={(value) => field.onChange(value)}
+                    >
+                        {field.value}
+                    </Select>
+                }
+            />
+            {errors.whatLearn && <p className="err-msg">Please type this field</p>}
+        </React.Fragment>
+    )
+}
+
+const Skills = ({ control, errors }) => {
+    console.log("re-render in skills: ", errors)
+
+    return (
+        <React.Fragment>
+            <Controller 
+                name="skills"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) =>
+                    <Select 
+                        className="s-item skills-select"
+                        mode="tags" 
+                        style={{ width: '100%' }} 
+                        placeholder="What skills will you teach?" 
+                        onChange={(value) => field.onChange(value)}
+                    >
+                        {field.value}
+                    </Select>
+                }
+            />
+            {errors.skills && <p className="err-msg">Please type this field</p>}
+        </React.Fragment>
+    )
+}
+
+
 
 export default UserDash

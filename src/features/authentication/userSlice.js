@@ -1,16 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { login, registing, getUserByToken } from './asyncThunkAction'
+import { login, registing, getUserByToken, getCategory, changeInformation, changePassword } from './userAction'
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         userObj: null,
         access_token: null,
+        category: null,
+        loadingCategory: false,
+        loadingChangePass: false,
+        loadingChangeInfo: false,
         loading: false,
         loggedIn: false,
         registed: false,
         verifyAcc: false,
-        error: ''
+        error: '',
+        errorChangePass: '',
+        errorChangeInfo: '',
     },
     reducers: {
         logOut: (state) => {
@@ -46,11 +52,44 @@ const userSlice = createSlice({
         },
         [registing.rejected]: (state, action) => {
             state.error = action.error;
+            state.loading = false;
         },
         [registing.fulfilled]: (state, action) => {
             state.loading = false;
-            if(action.payload.message === "Register successful") state.registed = true;
-        }
+            // if(action.payload.message === "Register successful") state.registed = true;
+            state.registed = true;
+        },
+        [getCategory.pending]: (state) => {
+            state.loadingCategory = true;
+        },
+        [getCategory.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loadingCategory = false;
+        },
+        [getCategory.fulfilled]: (state, action) => {
+            state.loadingCategory = false;
+            state.category = action.payload;
+        },
+        [changeInformation.pending]: (state) => {
+            state.loadingChangeInfo = true;
+        },
+        [changeInformation.rejected]: (state, action) => {
+            state.errorChangeInfo = action.error;
+            state.loadingChangeInfo = false;
+        },
+        [changeInformation.fulfilled]: (state, action) => {
+            state.loadingChangeInfo = false;
+        },
+        [changePassword.pending]: (state) => {
+            state.loadingChangePass = true;
+        },
+        [changePassword.rejected]: (state, action) => {
+            state.errorChangePass = action.error;
+            state.loadingChangePass = false;
+        },
+        [changePassword.fulfilled]: (state, action) => {
+            state.loadingChangePass = false;
+        },
     }
 });
 

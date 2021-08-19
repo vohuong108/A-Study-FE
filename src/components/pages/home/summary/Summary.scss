@@ -1,0 +1,173 @@
+@import '../../../../App.scss';
+// $xs: 575.98px;   
+// $sm: 576px;  
+// $md: 768px;   
+// $lg: 992px;     
+// $xl: 1200px;  
+// $xxl: 1400px; 
+.summary {
+    
+    .banner-row {
+        padding-top: 50px;
+        padding-bottom: 30px;
+        flex-wrap: wrap-reverse;
+    }
+
+    .banner-left {
+        text-align: left;
+
+        @include Responsive(xs) {
+            text-align: center;
+        }
+
+        .banner-left__top {
+            
+            h1 {
+                font-size: 84px;
+                font-family: "Source Sans Pro", Arial, sans-serif;
+                letter-spacing: -0.2px;
+                font-weight: 600;
+        
+                @include Responsive(xs) {
+                    font-size: 2rem;
+                }
+                @include Responsive(sm) {
+                    font-size: 4rem;
+                }
+                @include Responsive(md) {
+                    font-size: 5rem;
+                    line-height: 92px;
+                }
+
+            }
+
+            p {
+                line-height: 28px;
+                font-size: 20px;
+                font-family: "Source Sans Pro", Arial, sans-serif;
+                letter-spacing: -0.1px;
+                margin-bottom: 25px;
+                margin-top: 24px;
+            }
+        }
+
+        .banner-left__bottom {
+            .banner-btn {
+                line-height: 28px;
+                font-size: 20px;
+                font-family: "Source Sans Pro", Arial, sans-serif;
+                letter-spacing: -0.1px;
+                font-weight: bold;
+                padding: 0px;
+                max-width: 100%;
+                width: 238px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                @include Responsive(xs) {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+    
+    .banner-right {
+        text-align: right;
+
+        @include Responsive(xs) {
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+        }
+    }
+    
+    .achieve-row h2 {
+        font-weight: 600;
+        color: rgb(31, 31, 31);
+        margin-bottom: 50px;
+        padding: 0px 20px;
+        text-align: center;
+        font-family: "Source Sans Pro", Arial, sans-serif;
+
+        @include Responsive(xs) {
+            font-size: 1.5rem;
+        }
+        @include Responsive(sm) {
+            font-size: 2rem;
+            line-height: 52px;
+        }
+        @include Responsive(md) {
+            font-size: 2.75rem;
+        }
+    }
+    
+    
+    .achieve-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 20px;
+    }
+    
+    .achieve-col {
+        padding:0 15px;
+    }
+    
+    .achieve-title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            height: 55px;
+            width: 55px;
+        }
+
+        span {
+            display: block;
+            font-weight: 600;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            color: rgb(31, 31, 31);
+            font-style: normal;
+            text-align: center;
+            letter-spacing: -0.1px;
+            font-family: "Source Sans Pro", Arial, sans-serif;
+            
+            @include Responsive(xs) {
+                font-size: 0.875rem;
+                height: 2rem;
+            }
+            @include Responsive(sm) {
+                font-size: 1rem;
+                height: 3rem;
+            }
+            @include Responsive(md) {
+                line-height: 28px;
+                font-size: 20px;
+            }
+        }
+
+        .achieve-detail {
+            font-weight: normal;
+
+            @include Responsive(xs) {
+                font-size: 0.875rem;
+            }
+            @include Responsive(sm) {
+                font-size: 1rem;
+            }
+            @include Responsive(md) {
+                line-height: 28px;
+                font-size: 20px;
+            }
+        }
+    }
+    
+    
+    
+}

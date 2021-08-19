@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getCourses, deleteCourseByID } from './coursesAction'
+import { getCourses, deleteCourseByID, addCourse } from './coursesAction'
 
 const coursesSlice = createSlice({
     name: 'userCourses',
@@ -7,6 +7,7 @@ const coursesSlice = createSlice({
         courses: null,
         loading: false,
         loadingDel: false,
+        loadingAdd: false,
         error: null
     },
     reducers: {
@@ -34,6 +35,17 @@ const coursesSlice = createSlice({
         [deleteCourseByID.fulfilled]: (state, action) => {
             state.loadingDel = false;
             state.courses = action.payload.data;
+        },
+        [addCourse.pending]: (state) => {
+            state.loadingAdd = true;
+            state.error = null;
+        },
+        [addCourse.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loadingAdd = false;
+        },
+        [addCourse.fulfilled]: (state, action) => {
+            state.loadingAdd = false;
         }
         
     }

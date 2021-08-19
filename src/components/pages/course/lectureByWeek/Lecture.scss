@@ -1,3 +1,5 @@
+@import '../../../../App.scss';
+
 .lecture {
     .lecture-layout {
         height: calc(100vh - 72px);
@@ -41,17 +43,17 @@
     }
 
     .lecture-sidebar {
-        flex: 0 0 15rem !important;
-        width: 15rem !important;
-        min-width: 15rem !important;
-        max-width: 15rem !important;
+        // flex: 0 0 15rem !important;
+        // width: 15rem !important;
+        // min-width: 15rem !important;
+        // max-width: 15rem !important;
     }
 
     .lecture-sidebar-collapsed {
-        flex: 0 0 0 !important;
-        width: 0 !important;
-        min-width: 0 !important;
-        max-width: 0 !important;
+        // flex: 0 0 0 !important;
+        // width: 0 !important;
+        // min-width: 0 !important;
+        // max-width: 0 !important;
     }
 
     a {
@@ -64,6 +66,15 @@
     .lecture-layout-wrap-content {
         background-color: #FFFFFF;
         overflow-y: auto;
+    }
+
+    .lecture-content {
+        padding: 1rem;
+
+        @include Responsive(sm) {
+            margin: 24px 16px;
+            padding: 1.25rem;
+        }
     }
 
     .lecture-title {
@@ -81,10 +92,6 @@
 
     }
 
-    .lecture-content {
-        padding-right: 10% !important;
-        padding-left: 10% !important;
-    }
 
     .pedal {
         margin-top: 2rem;

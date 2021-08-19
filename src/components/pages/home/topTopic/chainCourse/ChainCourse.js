@@ -1,5 +1,5 @@
 import React from 'react'
-import './ChainCourse.css'
+import './ChainCourse.scss'
 import TopCourse from '../topCourse/TopCourse'
 
 const data = {
@@ -31,13 +31,13 @@ const data = {
 
 const ChainCourse = () => {
     return (
-        <div className="chainCourse">
-            <div className="chainCourse-title">
+        <div className="chain-course">
+            <div className="chain-course-title">
                 <h2>{data.chainTitle}</h2>
             </div>
-            <div className="chainCourse-wrap">
+            <div className="chain-course-wrap">
                 {data.courses.map((course) => (
-                    <div className="col-3 chain-col" key={course.id}>
+                    <div className="col-6 col-sm-3 chain-col" key={course.id}>
                         <TopCourse dataCourse={course}/>
                     </div>
                 ))}

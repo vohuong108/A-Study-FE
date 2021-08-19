@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Upload, Tag } from 'antd';
+import { Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, Switch } from 'antd';
 import { useForm, Controller  } from "react-hook-form"
@@ -13,18 +13,18 @@ const VideoEditor = ({ action, setVisible }) => {
     const weekContext = useContext(EditWeekContext);
     const [videoFile, setVideoFile] = useState(null);
 
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
+    // const toBase64 = file => new Promise((resolve, reject) => {
+    //     const reader = new FileReader();
+    //     reader.readAsDataURL(file);
+    //     reader.onload = () => resolve(reader.result);
+    //     reader.onerror = error => reject(error);
+    // });
     
 
     const onSubmit = async (data) => {
         console.log('form: ', data.video)
 
-        let video64 = await toBase64(data.video);
+        // let video64 = await toBase64(data.video);
 
         let videoLecture = {
             idLecture: action?.type === 'EDIT' ? action.data.idLecture : weekContext.weekData.lectures.length,

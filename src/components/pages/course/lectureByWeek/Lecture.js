@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './Lecture.scss'
 import 'antd/dist/antd.css'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, message } from 'antd'
 import { MenuUnfoldOutlined, MenuFoldOutlined, PlayCircleOutlined, ReadOutlined, ContainerOutlined } from '@ant-design/icons'
 import { Link, useParams, useRouteMatch, useLocation, Route, Switch } from 'react-router-dom'
 import LectureVideo from './LectureVideo/LectureVideo'
@@ -14,7 +14,7 @@ import { getToken } from '../../../../utils/localStorageHandler'
 import { useDispatch, useSelector } from 'react-redux'
 
 
-const Lecture = () => {
+const Lecture = ({ history }) => {
     let { idCourse, idWeek } = useParams();
     let { url, path} = useRouteMatch();
     const user = useSelector(state => state.user.userObj);
@@ -22,11 +22,22 @@ const Lecture = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("run in get course in lecture.js, id: ", idCourse);
         let token = getToken();
 
         const getCourse = async (requestData) => {
-            let course = await dispatch(getLearnCourseByID(requestData));
+            try {
+                let course = await dispatch(getLearnCourseByID(requestData));
+                let un_course = unwrapResult(course);
+
+                if(un_course?.isEnroll === false) history.push(`/search/course/${idCourse}`);
+
+            } catch(err) {
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                })
+            }
         }
 
         if(user && token) {
@@ -43,14 +54,7 @@ const Lecture = () => {
             <Layout className="lecture-layout">
                 <LectureSlide week={week} url={url} />
                 <Layout className="lecture-layout-wrap-content">
-                    <Layout.Content 
-                        className="lecture-content"
-                        style={{
-                            margin: '24px 16px',
-                            padding: 24,
-                            minHeight: 280,
-                        }}
-                    >
+                    <Layout.Content className="lecture-content" >
                         <Switch>
                             <Route path={`${path}/r/:idLecture`}>
                                 <LectureReading />
@@ -89,6 +93,7 @@ const LectureSlide = ({ week, url }) => {
                 trigger={null} 
                 collapsible 
                 collapsed={collapsed}
+                collapsedWidth={0}
             >
                 <Menu className="lecture-menu" mode="inline" selectedKeys={[keySlide]}>
                     {week && week.lectures.map(lecture => (

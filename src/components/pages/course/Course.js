@@ -3,30 +3,41 @@ import './Course.scss'
 import 'antd/dist/antd.css'
 import Supplement from './supplement/Supplement'
 import { Route, Link, useLocation, useParams, Redirect, useRouteMatch, Switch } from 'react-router-dom'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, message } from 'antd'
+import { MenuOutlined } from '@ant-design/icons'
 import Overview from './overview/Overview'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCourseByID } from '../../../features/course/currentCourse/courseAction'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { getToken } from '../../../utils/localStorageHandler'
 
-const Course = () => {
+const Course = ({ history, location }) => {
     let { id } = useParams();
     let { url, path } = useRouteMatch();
-    let location = useLocation();
     const user = useSelector(state => state.user.userObj);
     const course = useSelector(state => state.currentCourse.course)
     const dispatch = useDispatch();
     
-    console.log("loc: ", location);
+    console.log("location: ", location);
     console.log("url: ", url);
 
     useEffect(() => {
         let token = getToken();
 
         const getCourse = async (requestData) => {
-            let course = await dispatch(getCourseByID(requestData));
-            let un_course = unwrapResult(course);
+            try {
+                let course = await dispatch(getCourseByID(requestData));
+                let un_course = unwrapResult(course);
+    
+                if(un_course?.isEnroll === false) history.push(`/search/course/${id}`);
+
+            } catch(err) {
+                message.error({
+                    content: err.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                })
+            }
         }
 
         if(user && token) {
@@ -59,6 +70,7 @@ const Course = () => {
 
 const CourseSlide = ({ course }) => {
     const [keySlide, setKeySlide] = useState(null);
+    const [collapsed, setCollapsed] = useState(false);
     const location = useLocation();
     const { url } = useRouteMatch();
 
@@ -75,7 +87,14 @@ const CourseSlide = ({ course }) => {
     }, [location.pathname])
 
     return (
-        <Layout.Sider className="course-left">
+        <Layout.Sider 
+            className="course-left"
+            collapsedWidth={0} 
+            collapsible 
+            collapsed={collapsed} 
+            onCollapse={() => setCollapsed(!collapsed)}
+            trigger={<MenuOutlined className="course-trigger-slide" />}
+        >
             <Menu
                 mode="inline"
                 selectedKeys={[keySlide]}

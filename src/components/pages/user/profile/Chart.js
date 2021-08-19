@@ -1,15 +1,15 @@
 import React from 'react'
 import { Pie } from '@ant-design/charts';
 
-const Chart = () => {
+const Chart = ({ progress }) => {
     var data = [
         {
           type: 'Complete',
-          value: 70,
+          value: progress?.complete,
         },
         {
-          type: 'Learning',
-          value: 30,
+          type: 'Processing',
+          value: progress?.processing,
         }
     ];
 

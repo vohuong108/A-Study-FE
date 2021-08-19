@@ -35,11 +35,12 @@ const quizSlice = createSlice({
             state.quiz = null;
             state.quizNav = null
             state.loading = false;
+            
         },
         [getQuizByID.fulfilled]: (state, action) => {
             state.loading = false;
-            console.log("get: ", action);
             state.quiz = action.payload;
+            
         },
         [submitExamineResults.pending]: (state) => {
             state.loading = true;
@@ -48,7 +49,7 @@ const quizSlice = createSlice({
             state.error = action.error;
             state.loading = false;
         },
-        [getQuizByID.fulfilled]: (state, action) => {
+        [submitExamineResults.fulfilled]: (state, action) => {
             state.loading = false;
         },
     }

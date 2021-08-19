@@ -14,7 +14,7 @@ const Supplement = ({ permission }) => {
         <>
         {dataWeek && 
             <div className="supplement">
-                <div className="supplement-container">
+                <div className="container supplement-container">
                     <div className="supplement-row">
                         <div className="supplement-header">
                             <h1>{`Week ${dataWeek.idWeek}`}</h1>
