@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import 'antd/dist/antd.css';
 import './Overview.scss'
 import { useSelector, useDispatch } from 'react-redux'
@@ -32,15 +32,7 @@ const Overview = () => {
     }, [user, id])
     return (
         <Layout className="overview" style={{ backgroundColor: '#FFFFFF' }}>
-            <Layout.Content
-                style={{
-                    padding: 24,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    minHeight: 280,
-                    width: '80%'
-                }}
-            >
+            <Layout.Content className="container overview-layout-content">
                 <h3 className="title-course" >{overview?.name}</h3>
                 <Collapse defaultActiveKey={['1']} className="collapse-wrap">
                     {overview && overview.weeks.map((dataWeek) => (

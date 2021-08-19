@@ -1,38 +1,49 @@
+@import '../../../../App.scss';
+
 .overview {
     background-color: #FFFFFF !important;
     overflow-y: auto;
+
+    .overview-layout-content {
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+    }
 
     .title-course {
         margin-bottom: 2rem;
         color: #1f1f1f;
         font-family: OpenSans,Arial,sans-serif;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
         line-height: 30px;
         border-radius: 5px 5px 0 0;
         background-color: #f0f3f5;
         text-align: left;
         padding: .75rem 1.25rem;
+
+        @include Responsive(sm) { font-size: 24px; }
     }
 
     .collapse-wrap .panel-wrap {
         text-align: left;
+
+        h3 {
+            font-size: 20px;
+            @include Responsive(sm) { font-size: 24px; }
+        }
     }
 
     .week-content {
-        display: flex;
-        margin: 1.5rem 0;
-        flex-wrap: wrap;
 
         .left {
-            flex: 0 0 40%;
-            border-right: 1px solid #dcdacb;
             text-align: center;
             font-size: 1rem;
             line-height: 1.5rem;
             font-family: "Source Sans Pro",Arial,sans-serif;
             font-weight: 400;
             color: #525252;
+
+            @include Responsive(md) { border-right: 1px solid #dcdacb; }
 
             .left-item {
                 height: 3rem;
@@ -47,7 +58,8 @@
 
                     .icon {
                         font-size: 1.2rem;
-                        margin-left: 1rem;
+
+                        @include Responsive(sm) { margin-left: 1rem; }
                     }
 
                     p {
@@ -65,11 +77,9 @@
         }
 
         .right {
-            flex: 0 0 60%;
-
             .right-content {
-                margin-left: 1rem;
                 height: 100%;
+                @include Responsive(sm) { margin-left: 1rem; }
 
                 table {
                     width: 100%;

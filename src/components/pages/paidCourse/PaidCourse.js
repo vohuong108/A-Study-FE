@@ -95,11 +95,11 @@ const PaidCourse = ({ history, location }) => {
                             </div>
                             {courseInfo?.enrolled 
                                 ? <Link to={`/course/${idCourse}`}>
-                                    <Button className="btn-enroll">
+                                    <Button className="btn-enroll" disabled={!courseInfo}>
                                         Go to course
                                     </Button>
                                 </Link>
-                                : <Button className="btn-enroll" onClick={handleEnroll}>
+                                : <Button className="btn-enroll" disabled={!courseInfo} onClick={handleEnroll}>
                                     Enroll Now
                                 </Button>
                             
