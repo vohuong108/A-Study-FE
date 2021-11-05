@@ -1,0 +1,50 @@
+.TopBarWrapper {
+  // margin-bottom: 10px;
+  position: sticky;
+  background-color: rgb(124, 255, 255);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+  height: 50px;
+  top: 0;
+  z-index: 9999;
+  margin-top: 0;
+  .topRight {
+    color: rgb(46, 41, 41);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .IconContainer {
+      position: relative;
+      margin-right: 10px;
+      cursor: pointer;
+
+      .topIconBadge {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 15px;
+        height: 15px;
+        top: -6px;
+        right: 1px;
+        border-radius: 50%;
+        background-color: rgb(221, 43, 43);
+        color: black;
+      }
+    }
+    .topAvt {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  .topLeft {
+    font-size: xx-large;
+    font-weight: 800;
+  }
+}
