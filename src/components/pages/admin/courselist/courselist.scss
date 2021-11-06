@@ -1,0 +1,27 @@
+.CourseList {
+  flex: 4;
+  .courseList {
+    display: flex;
+    align-items: center;
+    .courseImg {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+  }
+  .courseEdit {
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(105, 223, 184);
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  .courseEdit:hover {
+    background-color: rgb(105, 190, 162);
+  }
+  .courseDel {
+    cursor: pointer;
+  }
+}

@@ -1,7 +1,7 @@
 import React from 'react'
 import './sidebar.scss'
 import {PeopleOutline,Home,Comment,Report,CollectionsBookmark, Timeline,TrendingUpOutlined,MailOutline} from '@mui/icons-material';
-
+import {Link} from "react-router-dom";
 
 export default function sidebar() {
     return (
@@ -19,7 +19,9 @@ export default function sidebar() {
                 <div className="sidebarMenu">
                     <h3 className="title">Quản lý</h3>
                     <ul className="sidebarList">
-                        <div className="sidebarListItem"><PeopleOutline className="sidebarIcon"/>Thành Viên </div>
+                       <Link to="/admin/user"> 
+                       <div className="sidebarListItem"><PeopleOutline className="sidebarIcon"/>Thành Viên </div>
+                       </Link>
                         <div className="sidebarListItem"><CollectionsBookmark  className="sidebarIcon"/> Khóa học</div>
                         
                     </ul>
