@@ -145,6 +145,12 @@ const AddNewCourse = () => {
                         <label>What skills will you teach</label>
                         <Skills control={control} errors={errors} />
                     </div>
+
+                    <div className="a-c-form-description">
+                        <label>Description</label>
+                        <textarea className="description"/>
+                        {/* <Skills control={control} errors={errors} /> */}
+                    </div>
                     
                     <Button htmlType="submit" className="a-c-btn-save"> Save </Button>
                 </form>
