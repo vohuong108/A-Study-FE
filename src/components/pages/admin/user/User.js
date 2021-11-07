@@ -6,8 +6,9 @@ export default function User() {
     return (
         <div className="User">
             <div className="userTitleContainer">
-                <h1 className="userTitle"> Edit user</h1>
-                <Link to="/newUser"><button className="userAddButton">create</button></Link>
+                {/* <h1 className="userTitle"> Edit user</h1> */}
+                <span></span>
+                <Link to="/admin/newUser"><button className="userAddButton">create</button></Link>
             </div>
             <div className="userContainer">
                 <div className="userShow">

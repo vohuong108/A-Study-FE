@@ -37,11 +37,15 @@ export default function NewUser() {
                         <input className="newUserInput" type="email" ></input>
                     </div>
                     <div className="newUserGender newUserItem" >
-                    <lable className="Lable">Gender</lable>
-                        <input className="male" type="radio" name="gender" id="male" value="male"/>
-                        <lable className="Lable GenderLable" for="male"> Male</lable>
-                        <input type="radio" name="gender" id="female" value="female"/>
-                        <lable className="Lable GenderLable" for="male"> Female</lable>
+                        <lable className="Lable">Gender</lable>
+                        <div class="gender ">
+                            
+                            <lable className="Lable genderLable" for="male"><input  type="radio" name="gender" id="male" value="male"/> Male</lable>
+                        </div>
+                        <div class="gender ">
+                            <input  type="radio" name="gender" id="female" value="female"/>
+                            <lable className="Lable genderLable" for="female"> Female</lable>
+                        </div>
                     </div>
                     <div className="newUserItem">
                         <lable className="Lable">Address</lable>

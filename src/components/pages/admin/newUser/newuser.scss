@@ -10,12 +10,14 @@
 
     .newUserItem {
       width: 500px;
+      // height: 80px;
       display: flex;
       flex-direction: column;
       margin-top: 10px;
       margin-right: 20px;
 
       .Lable {
+        align-self: flex-start;
         margin-bottom: 6px;
         font-size: 18px;
         font-weight: 600;
@@ -26,7 +28,7 @@
         border: 2px solid rgb(83, 80, 80);
         border-radius: 10px;
         outline: none;
-        height: 20px;
+        height: 50px;
         font-size: 15px;
         font-weight: 400;
         padding: 10px;
@@ -37,14 +39,19 @@
     .newUserGender {
       display: flex;
       flex-direction: row;
-    }
-    .newUserGender .GenderLable {
-      margin-right: 50px;
-      color: rgb(66, 59, 59);
-    }
+      align-items: center;
 
-    .newUserGender > .male {
-      margin-left: 100px;
+      .gender {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        margin-right: 50px;
+        .genderLable {
+          cursor: pointer;
+        }
+      }
     }
 
     .newUserButton {
