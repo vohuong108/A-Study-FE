@@ -79,7 +79,7 @@ const userApi = {
         //         "Authorization": `Bearer ${requestData.access_token}`,
         //         "Content-Type": "multipart/form-data"
         //     }
-        // });
+        // }); upload file 
 
         const response = await axios.put(url, requestData.data);
         return response.data;
