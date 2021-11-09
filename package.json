@@ -6,7 +6,7 @@
     "@ant-design/charts": "^1.2.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
-    "@mui/icons-material": "^5.0.5",
+    "@mui/icons-material": "^5.1.0",
     "@mui/x-data-grid": "^4.0.2",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^5.14.1",
