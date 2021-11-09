@@ -70,16 +70,16 @@ const AddNewCourse = () => {
     const dispatch = useDispatch();
 
     const onSubmit = async (formData) => {
-        console.log(formData);
+        // console.log(formData);
         let token = getToken();
 
         let requestData = {
             access_token: token, 
             data: {
                 name: formData.course_name,
-                author: user?.userName,
-                whatLearn: formData.whatLearn,
-                skills: formData.skills,
+                author: user?.username,
+                learnInfo: formData.whatLearn,
+                skillInfo: formData.skills,
                 category: formData.category
             }
         }
