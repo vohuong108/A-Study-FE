@@ -5,21 +5,22 @@ const baseUrl = 'https://61108d28c848c900171b3b61.mockapi.io'
 const baseUrl2 = 'https://6113c916cba40600170c1c34.mockapi.io'
 const baseUrl3 = 'https://6118c1939bcfb400171688a9.mockapi.io'
 const baseUrl4 = 'https://611cd13f7d273a0017e2f42e.mockapi.io'
+const final_base = "http://localhost:8888/api"
 
 const userApi = {
     userLogin: async (data) => {
-        const url = `${baseUrl}/login`
+        const url = `${final_base}/login`
         const response = await axios.post(url, data);
         return response.data;
     },
     userRegisting: async (data) => {
         // const url = `${baseUrl}/register`
-        const url = `${baseUrl}/login`
+        const url = `${final_base}/signup`
         const response = await axios.post(url, data);
         return response.data;
     },
     getUser: async (access_token) => {
-        const url = `${baseUrl}/profile`
+        const url = `${final_base}/user/profile`
         const response = await axios.get(url, {
             headers: {
                 "Authorization": `Bearer ${access_token}`
@@ -50,7 +51,7 @@ const userApi = {
         return response.data;
     },
     addCourse: async (requestData) => {
-        const url = `${baseUrl}/courses`
+        const url = `${final_base}/course/createcourse`
         const response = await axios({
             url: url,
             method: 'post',
@@ -183,7 +184,7 @@ const userApi = {
         return response.data;
     },
     changeInformation: async (requestData) => {
-        const url = `${baseUrl3}/changeInfo`;
+        const url = `${final_base}/user/changeinfo`;
         const response = await axios({
             url: url,
             method: 'post',
@@ -193,10 +194,15 @@ const userApi = {
             },
             data: requestData.data
         })
+
+        console.log("res in api change info", response)
         return response.data;
     },
     changePassword: async (requestData) => {
-        const url = `${baseUrl3}/changeInfo`;
+        const url = `${final_base}/user/resetpass`;
+
+        console.log("reset pass data", requestData);
+
         const response = await axios({
             url: url,
             method: 'post',
@@ -206,6 +212,8 @@ const userApi = {
             },
             data: requestData.data
         })
+
+        console.log("res in reset pass", response);
         return response.data;
     },
     getSearchedCourseInfo: async (requestData) => {

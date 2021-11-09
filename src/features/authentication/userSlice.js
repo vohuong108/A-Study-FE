@@ -30,6 +30,7 @@ const userSlice = createSlice({
         },
         [login.rejected]: (state, action) => {
             state.error = action.error;
+            state.loading = false;
         },
         [login.fulfilled]: (state, action) => {
             state.access_token = action.payload.access_token;
@@ -41,9 +42,10 @@ const userSlice = createSlice({
         },
         [getUserByToken.rejected]: (state, action) => {
             state.error = action.error;
+            state.loading = false;
         },
         [getUserByToken.fulfilled]: (state, action) => {
-            state.userObj = action.payload.profile;
+            state.userObj = action.payload;
             state.loading = false;
             state.loggedIn = true;
         },
@@ -79,6 +81,7 @@ const userSlice = createSlice({
         },
         [changeInformation.fulfilled]: (state, action) => {
             state.loadingChangeInfo = false;
+            state.userObj = action.payload;
         },
         [changePassword.pending]: (state) => {
             state.loadingChangePass = true;

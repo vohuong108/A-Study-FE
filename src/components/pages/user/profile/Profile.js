@@ -22,10 +22,10 @@ const Profile = () => {
                                         size={80}
                                     />
                                     <div className="user-content">
-                                        <h3>{`${user?.firstName} ${user?.lastName}`}</h3>
-                                        <p>{`ID: ${user?.userId}`}</p>
+                                        <h3>{`${user?.username}`}</h3>
                                         <p>{`Email: ${user?.email}`}</p>
                                         <p>{`Role: ${user?.permission}`}</p>
+                                        {(user?.firstName && user?.lastName) &&<p>{`Name: ${user.firstName} ${user.lastName}`}</p>}
                                     </div>
                                 </div>
                             </div>

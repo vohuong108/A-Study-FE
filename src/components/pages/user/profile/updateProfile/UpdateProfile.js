@@ -32,7 +32,11 @@ const ChangePass = () => {
                 message: "Confirm password don't match"
             }, { shouldFocus: true });
         } else if(token && user) {
-            let requestData = {access_token: token, data: {userId: user.userId, content: data}}
+            let requestData = {access_token: token, data: {
+                username: user.username, 
+                password: data.oldPass,
+                newPass: data.newPass
+            }}
             message.loading({ content: 'Change Pass Loading...', key: "change-pass-msg" });
             try {
                 const result = await dispatch(changePassword(requestData));
@@ -89,11 +93,16 @@ const ChangeInfo = () => {
     const onSubmitInfo = async (data) => {
         let token = getToken();
 
+        
+
         if(token && user) {
-            let requestData = {access_token: token, data: {userId: user.userId, content: data}}
+            let requestData = {access_token: token, data: {username: user.username, ...data}};
+            console.log("change data: ", requestData);
             message.loading({ content: 'Change Info Loading...', key: "change-info-msg" });
             try {
                 const result = await dispatch(changeInformation(requestData));
+
+                console.log("result in change: ", result);
                 message.success({
                     content: "Change information successfully",
                     style: {marginTop: '72px'},
@@ -118,7 +127,7 @@ const ChangeInfo = () => {
                 <form id="form-personal" onSubmit={handleSubmitInfo(onSubmitInfo)}>
                     <div className="form-item">
                         <label>User Name</label>
-                        <input type="text" disabled value={user?.userName}/>
+                        <input type="text" disabled value={user?.username}/>
                     </div>
                     <div className="form-item">
                         <label>Email</label>
@@ -134,11 +143,11 @@ const ChangeInfo = () => {
                     </div>
                     <div className="form-item">
                         <label>Phone Number</label>
-                        <input type="text" {...registerInfo("phone")} />
+                        <input type="text" defaultValue={user?.phone} {...registerInfo("phone")} />
                     </div>
                     <div className="form-item">
                         <label>Address</label>
-                        <input type="text" {...registerInfo("address")}/>
+                        <input type="text" defaultValue={user?.address} {...registerInfo("address")}/>
                     </div>
                     <input type="submit" value="Save" />
                 </form>

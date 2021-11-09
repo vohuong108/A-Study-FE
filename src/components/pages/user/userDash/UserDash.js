@@ -6,6 +6,7 @@ import { getCourses,addCourse } from '../../../../features/course/coursesAction'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Drawer, Select, message, Skeleton } from 'antd'
 import { useForm, Controller } from "react-hook-form"
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const UserDash = () => {
     const dispatch = useDispatch();
@@ -82,9 +83,13 @@ const AddNewCourse = () => {
                 category: formData.category
             }
         }
+
+        console.log("request create course: ", requestData);
         try {
             message.loading({ content: 'Loading...', key: "add-msg" });
             let result = await dispatch(addCourse(requestData));
+            console.log("response create course: ", unwrapResult(result));
+
             message.success({
                 content: "Add new course successfully",
                 style: {marginTop: '72px'},
