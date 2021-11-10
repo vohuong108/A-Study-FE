@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { changeInformation, changePassword} from '../../../../../features/authentication/userAction'
 import { getToken } from '../../../../../utils/localStorageHandler'
 import { message } from 'antd'
-
+import {Publish, HighlightOff} from '@mui/icons-material';
+import { useState } from "react";
 const UpdateProfile = () => {
     
     return (
@@ -85,10 +86,21 @@ const ChangeInfo = () => {
     const user = useSelector(state => state.user.userObj);
     const {handleSubmit: handleSubmitInfo, register: registerInfo} = useForm();
     const dispatch = useDispatch();
+    //display preview avatả img
+    const [selectedImage, setSelectedImage] = useState();
+    const imageChange = (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+          setSelectedImage(e.target.files[0]);
+        }
+      };
+    const removeSelectedImage = () => {
+        setSelectedImage();
+      };
+      //Upload image 
+      const [selectedFile, setSelectedFile] = useState(null);
 
     const onSubmitInfo = async (data) => {
         let token = getToken();
-
         if(token && user) {
             let requestData = {access_token: token, data: {userId: user.userId, content: data}}
             message.loading({ content: 'Change Info Loading...', key: "change-info-msg" });
@@ -139,7 +151,31 @@ const ChangeInfo = () => {
                     <div className="form-item">
                         <label>Address</label>
                         <input type="text" {...registerInfo("address")}/>
-                    </div>
+                    </div> 
+                    <div className="form-item">
+                        <label htmlFor="avatar" style={{cursor:"pointer"}}>Choose your avatar <Publish/></label>
+                        <input type="file" id="avatar" accept="image/*" style={{display:"none"}} onChange={imageChange, (e) => setSelectedFile(e.target.files[0])} value={selectedFile}  />
+                        {selectedImage && (
+                         <div>
+                             <img
+                                 src={URL.createObjectURL(selectedImage)}
+                                style={
+                                        {width:"200px"},
+                                        {height:"200px"}
+
+                                }
+                                 alt="/"
+                             />
+                             <button id="del" onClick={removeSelectedImage} 
+                                style={
+                                    {display:"none"}
+                                }
+                             />
+                             
+                            <label htmlFor="del"><HighlightOff/></label>
+                            </div>
+                        )}
+                    </div>                            
                     <input type="submit" value="Save" />
                 </form>
             </div>

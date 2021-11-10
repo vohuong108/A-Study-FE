@@ -32,8 +32,8 @@ export default function User() {
     width: 200,
   },
   {
-    field: 'transaction',
-    headerName: 'transaction',
+    field: 'Phone number',
+    headerName: 'phone number',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
     width: 200,
