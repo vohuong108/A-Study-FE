@@ -54,13 +54,13 @@ export default function CourseList() {
         }
       ];
 
-    const [data, setData] = useState({});
-    useEffect(() => {
-      const callApi = () => {
-        result = await axios("url");
-        set(data,result);
-      }
-    }, [])
+    // const [data, setData] = useState({});
+    // useEffect(() => {
+    //   const callApi = () => {
+    //     result = await axios("url");
+    //     set(data,result);
+    //   }
+    // }, [])
 
     return (
         <div className="CourseList">
