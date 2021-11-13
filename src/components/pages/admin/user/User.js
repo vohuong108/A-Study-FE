@@ -46,7 +46,7 @@ export default function User() {
                 </div>
                 <div className="userUpdate">
                     <span className="userUpdateTitle">Edit Profile</span>
-                    <form action="" className="userUpdateForm">
+                    <form className="userUpdateForm">
                         <div className="userUpdateLeft">
                              <div className="userUpdateItem">
                                  <label className="lable" htmlFor="">UserName</label>
