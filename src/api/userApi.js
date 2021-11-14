@@ -40,7 +40,7 @@ const userApi = {
     },
     getCourseByID: async (requestData) => {
         const url = `${final_base}/course/${requestData.courseId}`
-        // const url = "http://localhost:3001/course/1"
+        console.log("res in get course by id: ", requestData);
         const response = await axios({
             url: url,
             method: 'get',

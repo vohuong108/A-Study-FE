@@ -153,7 +153,7 @@ const AddNewCourse = () => {
                     </div>
                     <div className="a-c-form-item">
                         <label>Description</label>
-                        <Descrition control={control} errors={errors} />
+                        <Description control={control} errors={errors} />
                     </div>
                     
                     <Button htmlType="submit" className="a-c-btn-save"> Save </Button>
@@ -163,7 +163,7 @@ const AddNewCourse = () => {
     )
 }
 
-const Descrition = ({ control, errors }) => {
+const Description = ({ control, errors }) => {
     console.log("re-render in description: ", errors)
     return (
         <React.Fragment>
