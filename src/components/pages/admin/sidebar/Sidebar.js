@@ -19,11 +19,12 @@ export default function sidebar() {
                 <div className="sidebarMenu">
                     <h3 className="title">Quản lý</h3>
                     <ul className="sidebarList">
-                       <Link to="/admin/user"> 
+                       <Link to="/admin/userlist"> 
                        <div className="sidebarListItem"><PeopleOutline className="sidebarIcon"/>Thành Viên </div>
                        </Link>
+                       <Link to="/admin/list">
                         <div className="sidebarListItem"><CollectionsBookmark  className="sidebarIcon"/> Khóa học</div>
-                        
+                        </Link>
                     </ul>
                 </div>
 

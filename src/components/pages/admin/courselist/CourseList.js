@@ -1,14 +1,14 @@
 import './courselist.scss'
 import { DataGrid } from '@mui/x-data-grid';
 import {DeleteForever} from '@mui/icons-material';
-// import { courseRows } from '../../data';
+ import { courseRows } from '../data';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 // import { get } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
 // import axios from 'axios';
 
 export default function CourseList() {
-    //const [data,setData] = useState(courseRows);
+    const [data,setData] = useState(courseRows);
     const columns = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'Course', headerName: 'Course', width: 200
@@ -65,7 +65,7 @@ export default function CourseList() {
     return (
         <div className="CourseList">
             <DataGrid
-        // rows={data}
+        rows={data}
         disableSelectionOnClick
         columns={columns}
         pageSize={5}

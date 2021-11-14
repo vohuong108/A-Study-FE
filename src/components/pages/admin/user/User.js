@@ -1,13 +1,13 @@
 import React from 'react'
 import "./user.scss"
 import {PermIdentity,CalendarToday,LocalPhone, AttachEmail,LocationOn} from '@mui/icons-material';
-import {Link} from 'react-router-dom'
 export default function User() {
     return (
         <div className="User">
             <div className="userTitleContainer">
-                <h1 className="userTitle"> Edit user</h1>
-                <Link to="/newUser"><button className="userAddButton">create</button></Link>
+                {/* <h1 className="userTitle"> Edit user</h1> */}
+                <span></span>
+                {/* <Link to="/admin/newUser"><button className="userAddButton">create</button></Link> */}
             </div>
             <div className="userContainer">
                 <div className="userShow">
@@ -46,7 +46,7 @@ export default function User() {
                 </div>
                 <div className="userUpdate">
                     <span className="userUpdateTitle">Edit Profile</span>
-                    <form action="" className="userUpdateForm">
+                    <form className="userUpdateForm">
                         <div className="userUpdateLeft">
                              <div className="userUpdateItem">
                                  <label className="lable" htmlFor="">UserName</label>

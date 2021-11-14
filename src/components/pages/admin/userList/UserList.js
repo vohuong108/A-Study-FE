@@ -2,12 +2,17 @@ import React from 'react'
 import "./userlist.scss"
 import { DataGrid } from '@mui/x-data-grid';
 import {DeleteForever} from '@mui/icons-material';
-// import { userRows } from '../../data';
+ import { userRows } from '../data';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function User() {
-  // const [data,setData] = useState(userRows);
+  const [data,setData] = useState(userRows);
+  
+  const handleDelete = (id) =>{
+    setData(data.filter((item) =>  item.id !== id))
+  }
+
   const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
   { field: 'userName', headerName: 'Username', width: 200
@@ -27,8 +32,8 @@ export default function User() {
     width: 200,
   },
   {
-    field: 'transaction',
-    headerName: 'transaction',
+    field: 'Phone number',
+    headerName: 'phone number',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
     width: 200,
@@ -42,11 +47,11 @@ export default function User() {
       renderCell:(params) => {
           return(
               <>
-              <Link to={"/user/" + params.row.id}>
+              <Link to={"/admin/user/" + params.row.id}>
               <button className="userEdit">Edit</button>
               </Link>
               
-              <DeleteForever className="userDel"/>
+              <DeleteForever className="userDel" onClick={()=>handleDelete(params.row.id)}/>
               </>
           )
       }
@@ -57,7 +62,7 @@ export default function User() {
     return (
         <div className="UserList">
             <DataGrid
-        // rows={data}
+        rows={data}
         disableSelectionOnClick
         columns={columns}
         pageSize={5}
