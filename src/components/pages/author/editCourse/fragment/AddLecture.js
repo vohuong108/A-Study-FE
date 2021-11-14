@@ -6,7 +6,7 @@ import QuizEditor from './QuizEditor'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './AddLecture.scss'
 
-const AddLecture = () => {
+const AddLecture = ({ weekId }) => {
     const [visible, setVisible] = useState(false);
     const [type, setType] = useState('reading');
     console.log('re-render in add-lecture: ', type);
@@ -33,9 +33,9 @@ const AddLecture = () => {
                 forceRender={true}
                 destroyOnClose={true}
             >
-            {type === 'reading' && <TextEditor setVisible={setVisible} />}
-            {type === 'video' && <VideoEditor setVisible={setVisible} />}
-            {type === 'quiz' && <QuizEditor setVisible={setVisible} />}
+            {type === 'reading' && <TextEditor action={{type: 'NEW'}} setVisible={setVisible} weekId={weekId}/>}
+            {type === 'video' && <VideoEditor action={{type: 'NEW'}} setVisible={setVisible} weekId={weekId} />}
+            {type === 'quiz' && <QuizEditor action={{type: 'NEW'}} setVisible={setVisible} weekId={weekId} />}
             </Drawer>
         </div>
     );

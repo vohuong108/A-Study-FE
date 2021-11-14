@@ -4,7 +4,7 @@ import ProgressCourse from '../../course/progressCourse/ProgressCourse'
 import { getToken } from '../../../../utils/localStorageHandler'
 import { getCourses,addCourse } from '../../../../features/course/coursesAction'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Drawer, Select, message, Skeleton } from 'antd'
+import { Button, Drawer, Select, message, Skeleton, Input } from 'antd'
 import { useForm, Controller } from "react-hook-form"
 import { unwrapResult } from '@reduxjs/toolkit'
 
@@ -70,7 +70,7 @@ const AddNewCourse = () => {
     const dispatch = useDispatch();
 
     const onSubmit = async (formData) => {
-        // console.log(formData);
+        console.log(formData);
         let token = getToken();
 
         let requestData = {
@@ -80,7 +80,8 @@ const AddNewCourse = () => {
                 author: user?.username,
                 learnInfo: formData.whatLearn,
                 skillInfo: formData.skills,
-                category: formData.category
+                category: formData.category,
+                description: formData.description,
             }
         }
 
@@ -150,11 +151,41 @@ const AddNewCourse = () => {
                         <label>What skills will you teach</label>
                         <Skills control={control} errors={errors} />
                     </div>
+                    <div className="a-c-form-item">
+                        <label>Description</label>
+                        <Descrition control={control} errors={errors} />
+                    </div>
                     
                     <Button htmlType="submit" className="a-c-btn-save"> Save </Button>
                 </form>
             </Drawer>
         </div>
+    )
+}
+
+const Descrition = ({ control, errors }) => {
+    console.log("re-render in description: ", errors)
+    return (
+        <React.Fragment>
+            <Controller 
+                name="description"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) =>
+                    <Input.TextArea 
+                        className="s-item description"
+                        showCount 
+                        style={{ width: '100%' }}
+                        rows={4}  
+                        allowClear
+                        onChange={(value) => field.onChange(value)}
+                    >
+                        {field.value}
+                    </Input.TextArea>
+                }
+            />
+            {errors.whatLearn && <p className="err-msg">Please type this field</p>}
+        </React.Fragment>
     )
 }
 

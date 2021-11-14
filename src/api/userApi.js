@@ -29,16 +29,17 @@ const userApi = {
         return response.data;
     },
     getCourses: async (access_token) => {
-        const url = `${baseUrl}/courses`
+        const url = `${final_base}/courses`
         const response = await axios.get(url, {
             headers: {
                 "Authorization": `Bearer ${access_token}`
             }
         });
+
         return response.data;
     },
     getCourseByID: async (requestData) => {
-        const url = `${baseUrl}/course/${requestData.idCourse}`
+        const url = `${final_base}/course/${requestData.courseId}`
         // const url = "http://localhost:3001/course/1"
         const response = await axios({
             url: url,
@@ -47,7 +48,7 @@ const userApi = {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
         });
-        
+        console.log("res in get edit course", response);
         return response.data;
     },
     addCourse: async (requestData) => {
@@ -98,7 +99,8 @@ const userApi = {
         return response.data;
     },
     deleteCourseByID: async (requestData) => {
-        const url = `${baseUrl}/courses/${requestData.idCourse}`
+        const url = `${final_base}/course/delete/${requestData.courseId}`
+        console.log("request delete course: ", requestData);
         const response = await axios({
             url: url,
             method: "delete",
@@ -106,7 +108,7 @@ const userApi = {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
         })
-
+        console.log("response delete course: ", response);
         return response.data;
     },
     getLearnCourseByID: async (requestData) => {
@@ -239,6 +241,129 @@ const userApi = {
             },
             data: requestData.data
         })
+        return response.data;
+    },
+    addWeek: async (requestData) => {
+        const url = `${final_base}/week/createweek`;
+        console.log("request in create week: ", requestData);
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        console.log("response in create week: ", response);
+        return response.data;
+    },
+    renameWeek: async (requestData) => {
+        const url = `${final_base}/week/rename`;
+        console.log("request rename week: ", requestData);
+        const response = await axios({
+            url: url,
+            method: 'put',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        console.log("res in rename week", response);
+        return response.data;
+    },
+    addLecture: async (requestData) => {
+        const url = `${final_base}/week/createlecture`;
+        console.log("request create lecture", requestData);
+
+        let formData = new FormData();
+        formData.append("file", requestData.data.content);
+        formData.append("weekId", requestData.data.weekId);
+        formData.append("indexLecture", requestData.data.indexLecture);
+        formData.append("title", requestData.data.title);
+        formData.append("lectureType", requestData.data.lectureType);
+        formData.append("lectureStatus", requestData.data.lectureStatus);
+
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": 'multipart/form-data'
+            },
+            data: formData
+        })
+        console.log("response in create lecture", response);
+        return response.data;
+    },
+    addQuiz: async (requestData) => {
+        const url = `${final_base}/week/createquiz`;
+        console.log("request create quiz", requestData.data);
+
+        const response = await axios({
+            url: url,
+            method: 'post',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        console.log("res in create quiz", response);
+        return response.data;
+    },
+    updateLecture: async (requestData) => {
+        const url = `${final_base}/week/updatelecture`;
+        console.log("request update lecture", requestData.data);
+        let formData = new FormData();
+        formData.append("file", requestData.data.content);
+        formData.append("title", requestData.data.title);
+        formData.append("lectureStatus", requestData.data.lectureStatus);
+        formData.append("lectureId", requestData.data.lectureId);
+        formData.append("weekId", requestData.data.weekId);
+
+        const response = await axios({
+            url: url,
+            method: 'put',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: formData
+        })
+        console.log("response update lecture", response);
+        return response.data;
+    },
+    updateQuiz: async (requestData) => {
+        const url = `${final_base}/week/updatequiz`;
+        console.log("request update quiz", requestData.data);
+
+        const response = await axios({
+            url: url,
+            method: 'put',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            },
+            data: requestData.data
+        })
+        console.log("res in update quiz", response);
+        return response.data;
+    },
+    deleteLecture: async (requestData) => {
+        const url = `${final_base}/week/${requestData.weekId}/lecture/${requestData.lectureType.toLowerCase()}/${requestData.lectureId}`;
+        console.log("request delete lecture", requestData);
+
+        const response = await axios({
+            url: url,
+            method: 'delete',
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        console.log("res in delete lecture", response);
         return response.data;
     },
 }

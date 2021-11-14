@@ -1,44 +1,42 @@
-import React, { useContext } from 'react'
-import './DeleteConfirm.scss'
-import { Modal, Button  } from 'antd'
-import { ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons'
-import { EditWeekContext } from '../editWeek/EditWeek'
+import React from 'react';
+import './DeleteConfirm.scss';
+import { Modal, Button  } from 'antd';
+import { ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLectureByID } from '../../../../../features/course/currentCourse/courseSlice';
+import { deleteLecture } from '../../../../../features/course/currentCourse/courseAction';
+import { getToken } from '../../../../../utils/localStorageHandler';
 
-const confirm = (weekContext, idLecture) => {
-  console.log('in confirm: ', weekContext, idLecture);
+const confirm = (weekId, lectureId, dispatch, lecRedux) => {
+  console.log('in delete confirm: ', weekId, lectureId);
 
   Modal.confirm({
     title: "Do you want delete this lecture",
     icon: <ExclamationCircleOutlined />,
     content: 'Are you sure',
-    onOk: () => {
-      console.log('close: ')
-      let lectures = weekContext.weekData.lectures;
-      let newLectures = [];
-
-      for(let i=0; i<lectures.length; i++) {
-        if(lectures[i].idLecture > idLecture ) {
-          newLectures.push({...lectures[i], idLecture: lectures[i].idLecture - 1});
-        } else if (lectures[i].idLecture < idLecture ) {
-          newLectures.push({...lectures[i]});
-        }
+    onOk: async () => {
+      let token = getToken();
+      let requestData = {
+        access_token: token,
+        lectureId: lectureId,
+        weekId: weekId,
+        lectureType: lecRedux.lectureType
       }
-      console.log('new: ', newLectures);
-      
-      weekContext.setWeekData({
-        ...weekContext.weekData,
-        lectures: [...newLectures]
-      })
+
+      let result = await dispatch(deleteLecture(requestData));
+    
     },
   })
 }
 
 
 
-const DeleteConfirm = ({ idLecture }) => {
-  const weekContext = useContext(EditWeekContext)
+const DeleteConfirm = ({ weekId, lectureId }) => {
+  const dispatch = useDispatch();
+  const lecRedux = useSelector(state => selectLectureByID(state, weekId, lectureId));
+
   return (
-    <Button className="tb-btn del-btn" onClick={() => confirm(weekContext, idLecture)} icon={<DeleteFilled />}>
+    <Button className="tb-btn del-btn" onClick={() => confirm(weekId, lectureId, dispatch, lecRedux)} icon={<DeleteFilled />}>
       Delete 
     </Button>
   );

@@ -1,44 +1,59 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { EditorState, ContentState, convertFromHTML } from 'draft-js'
-import { Editor } from 'react-draft-wysiwyg'
-import { Button, Switch } from 'antd'
-import { useForm, Controller } from "react-hook-form"
-import { convertToRaw } from 'draft-js'
-import draftToHtml from 'draftjs-to-html'
-import { EditWeekContext } from '../editWeek/EditWeek'
-import './TextEditor.scss'
+import React, { useEffect, } from 'react';
+import './TextEditor.scss';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { Editor } from 'react-draft-wysiwyg';
+import { Button, Switch } from 'antd';
+import { useForm, Controller } from "react-hook-form";
+import { convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { getToken } from '../../../../../utils/localStorageHandler';
+import { addLecture, updateLecture } from '../../../../../features/course/currentCourse/courseAction';
+import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 
-const TextEditor = ({ action, setVisible }) => {
+const TextEditor = ({ action, setVisible, weekId }) => {
     const { control, handleSubmit, register, setValue } = useForm();
-    const weekContext = useContext(EditWeekContext);
+    const dispatch = useDispatch();
+    const weekRedux = useSelector(state => selectWeekByID(state,  weekId)); 
 
-    const onSubmit = data => {
+    const onSubmit = async data => {
+        let token = getToken();
         let readingContent = draftToHtml(convertToRaw(data.editor.getCurrentContent()));
-
-        let newRead = {
-            idLecture: action?.type === 'EDIT' ? action.data.idLecture : weekContext.weekData.lectures.length,
-            content: readingContent,
-            type: 'reading',
-            name: data.read_name,
-            status: data.status,
-            
-        }
+        
+        let blob = new Blob([readingContent], { type: 'text/plain' });
+        let file = new File([blob], `${data?.read_name}.txt`, {type: "text/plain"});
 
         if(action && action.type === 'EDIT') {
-            let deepCloneWeekData = JSON.parse(JSON.stringify(weekContext.weekData));
-
-            const index = deepCloneWeekData.lectures.findIndex((item) => action.data.idLecture === item.idLecture)
-
-            if(index > -1) deepCloneWeekData.lectures[index] = newRead;
-
-            weekContext.setWeekData({...deepCloneWeekData});
+            let requestData = {
+                access_token: token,
+                data: {
+                    lectureId: action?.data?.lectureId,
+                    weekId: action?.data?.weekId,
+                    title: data.read_name,
+                    lectureType: 'TEXT',
+                    content: file,
+                    lectureStatus: data.status
+                }
+            }
+    
+            let result_update = await dispatch(updateLecture(requestData));
+            setVisible(false);
 
         } else {
-            weekContext.setWeekData({
-                ...weekContext.weekData, 
-                lectures: [...weekContext.weekData.lectures, newRead]
-        
-            })
+            let requestData = {
+                access_token: token,
+                data: {
+                    weekId: weekRedux.weekId,
+                    indexLecture: action?.type === 'EDIT' ? action.data.indexLecture : weekRedux.lectures.length,
+                    title: data.read_name,
+                    lectureType: 'TEXT',
+                    content: file,
+                    lectureStatus: data.status
+                }
+            }
+    
+            let result_add = await dispatch(addLecture(requestData));
             setVisible(false);
         }
 
@@ -46,16 +61,22 @@ const TextEditor = ({ action, setVisible }) => {
     }
 
     useEffect(() => {
-        if(action?.type === 'EDIT') {
+        const getTextContent = async () => {
+            let result = await axios.get(`http://localhost:8888/api${action.data.url}`);
+            console.log("result in text editor: ", result);
             const editorState = EditorState.createWithContent(
-                ContentState.createFromBlockArray(convertFromHTML(action.data.content))
+                ContentState.createFromBlockArray(convertFromHTML(result.data))
             );
 
-            setValue('read_name', action.data.name);
+            setValue('read_name', action.data.title);
             setValue('editor', editorState);
-            setValue('status', action.data.status);
+            setValue('status', action.data.lectureStatus);
+
         }
-    }, [action])
+        if(action?.type === 'EDIT') {
+            getTextContent();
+        }
+    }, [])
 
     return (
         <form id="form-text-editor" onSubmit={handleSubmit(onSubmit)}>
@@ -87,10 +108,10 @@ const TextEditor = ({ action, setVisible }) => {
                 render={({ field }) => 
                     <Switch 
                         className="status-switch"
-                        checkedChildren="publish" 
-                        unCheckedChildren="private" 
-                        checked={field.value === "publish"}
-                        onChange={(checked) => checked ? field.onChange('publish') : field.onChange('private')}
+                        checkedChildren="PUBLIC" 
+                        unCheckedChildren="PRIVATE" 
+                        checked={field.value === "PUBLIC"}
+                        onChange={(checked) => checked ? field.onChange('PUBLIC') : field.onChange('PRIVATE')}
                     />
                 }
             />

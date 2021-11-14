@@ -17,47 +17,16 @@ import Quiz from './components/pages/quiz/Quiz'
 import EditCourse from './components/pages/author/editCourse/EditCourse'
 import Search from './components/pages/search/Search'
 import PaidCourse from './components/pages/paidCourse/PaidCourse'
-import CodeEditor from './components/pages/codeEditor/CodeEditor'
 import axios from 'axios'
+import Admin from './components/pages/admin/Admin'
 
 function App() {
-
-  const handleSubmit = async (data) => {
-    data.preventDefault();
-     console.log("file: ", data.target[0].files[0]);
-    let formData = new FormData();
-    formData.append("file", data.target[0].files[0]);
-    formData.append("weekId", 1);
-    formData.append("indexLecture", 3);
-    formData.append("title", "lecture 1");
-    formData.append("lectureType", "video");
-    formData.append("lectureStatus", "public");
-
-    let result = await axios({
-      url: 'http://localhost:8888/api/course/createlecture',
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data'},
-      data: formData
-    })
-
-    console.log("res: ", result);
-  
-  }
 
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
-        <form onSubmit={(data) => handleSubmit(data)} enctype="multipart/form-data">
-            <input type="file" name="file" id="file" />
-            <input type="text" name="weekId" id="weekId" />
-            <input type="submit" name="submit" id="submit" />
-
-          </form>
         <Switch>
-          <Route path="/code">
-            <CodeEditor />
-          </Route>
           <PrivateRoute path="/profile" component={Profile} />
           <Route exact path="/search" render={(props) => <Search {...props} />} />
           <Route path="/search/course/:idCourse" render={(props) => <PaidCourse {...props} />} />
@@ -70,6 +39,7 @@ function App() {
           <PublicRoute exact path="/signup" component={SignUp} />
           <PrivateRoute exact path="/dashbroad" component={UserDash} />
           <DisplayFooter exact path="/" component={Home} />
+          <Route path="/admin" component={Admin} />
         </Switch>
 
       </div>

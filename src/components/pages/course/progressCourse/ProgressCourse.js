@@ -10,8 +10,9 @@ const ProgressCourse = ({ data, permission }) => {
 
     useEffect(() => {
         if(data) {
-            let reUrl = data.courseId.split('-').join('');
-            setUrl(reUrl);
+            // let reUrl = data.courseId.split('-').join('');
+            // setUrl(reUrl);
+            setUrl(data.courseId)
         }
     }, [data.name])
     
@@ -38,10 +39,10 @@ const ProgressCourse = ({ data, permission }) => {
                                         <h3 className="p-course-title">{data.name}</h3>
                                         <p className="p-course-author">{data.author}</p>
                                     </Link>
-                                    {permission === 'teacher' ? <Statistic className="course-statistic" value={data.numOfStudent} prefix={<TeamOutlined  />}/> : ''}
+                                    {permission === 'AUTHOR' ? <Statistic className="course-statistic" value={data.numOfStudent} prefix={<TeamOutlined  />}/> : ''}
                                 </div>
                                 <div className="progress-info">
-                                    {permission === 'teacher' ? <p>Teach Progress</p> : <p>Progress</p>}
+                                    {permission === 'AUTHOR' ? <p>Teach Progress</p> : <p>Progress</p>}
                                     <Progress
                                         strokeColor={{
                                             '0%': '#108ee9',
@@ -57,7 +58,7 @@ const ProgressCourse = ({ data, permission }) => {
                         </Col>
                         <Col xs={24} sm={24} md={4} lg={3}>
                             <div className="progress-course-btn">
-                                {permission === 'teacher' &&
+                                {permission === 'AUTHOR' &&
                                     <Link to={`/edit/${url}`}>
                                         <Button className="pc-btn edit-btn" shape="round">EDIT</Button>
                                     </Link>
