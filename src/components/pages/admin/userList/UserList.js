@@ -3,28 +3,35 @@ import "./userlist.scss"
 import { DataGrid } from '@mui/x-data-grid';
 import {DeleteForever} from '@mui/icons-material';
  import { userRows } from '../data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
+const Api = 'https://jsonplaceholder.typicode.com';
+const APIuser='https://6190c079f6bf450017484cb1.mockapi.io/Userlist/userl';
 export default function User() {
-  const [data,setData] = useState(userRows);
+
+
+
   
-  const handleDelete = (id) =>{
-    setData(data.filter((item) =>  item.id !== id))
+    const [data, setData] = useState([]);
+    const getUserList = () =>{
+      fetch(`${APIuser}`)
+        .then(res => res.json())
+        .then(json => setData(json));
+    }
+    useEffect(() => {
+      getUserList();
+  }, []);
+  
+  const handleDelete = async (id) =>{
+     await axios.delete(APIuser + '/' + id);
+     setData(data.filter((item) =>  item.id !== id)); 
   }
 
   const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
-  { field: 'userName', headerName: 'Username', width: 200
-  ,renderCell: (params)=>{
-      return (
-          <div className="userListUser">
-              <img className="userImg" src={params.row.avatar} alt="" />
-              {params.row.userName}
-          </div>
-      )
-  } 
-},
+  { field: 'name', headerName: 'Username', width: 200},
   { field: 'email', headerName: 'email', width: 200 },
   {
     field: 'status',
@@ -32,7 +39,7 @@ export default function User() {
     width: 200,
   },
   {
-    field: 'Phone number',
+    field: 'phone',
     headerName: 'phone number',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
@@ -50,7 +57,6 @@ export default function User() {
               <Link to={"/admin/user/" + params.row.id}>
               <button className="userEdit">Edit</button>
               </Link>
-              
               <DeleteForever className="userDel" onClick={()=>handleDelete(params.row.id)}/>
               </>
           )
