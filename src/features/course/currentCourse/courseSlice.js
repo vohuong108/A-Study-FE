@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getCourseByID, submitCourseChanges, getCourseOverview, getLearnCourseByID } from './courseAction'
+import { getCourseByID, submitCourseChanges, 
+    getCourseOverview, getLearnCourseByID, 
+    renameWeek, addLecture, addQuiz, 
+    addWeek, updateLecture, updateQuiz, deleteLecture } from './courseAction'
 
 const init = {
-    idCourse: 1,
+    courseId: 1,
     name: '',
     weeks: []
 }
@@ -16,18 +19,7 @@ const courseSlice = createSlice({
         error: ''
     },
     reducers: {
-        addNewWeek: (state) => {
-            state.course.weeks.push({
-                idWeek: state.course.weeks.length + 1,
-                weekTitle: 'Please type title of week',
-                lectures: []
-            })
-        },
-        saveWeekChanges: (state, action) => {
-            console.log('data in slice', action.payload)
-            let index = state.course.weeks.findIndex(week => week.idWeek === action.payload.idWeek);
-            if(index > -1) state.course.weeks[index] = action.payload;
-        }
+        
     },
     extraReducers: {
         [getCourseByID.pending]: (state) => {
@@ -77,17 +69,163 @@ const courseSlice = createSlice({
             state.loading = false;
             state.course = action.payload;
         },
-        
+        [addLecture.pending]: (state) => {
+            state.loading = true;
+        },
+        [addLecture.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [addLecture.fulfilled]: (state, action) => {
+            state.loading = false;
+            state?.course?.weeks?.forEach(week => {
+                if(week?.weekId == action.payload?.weekId) {
+                    week?.lectures.push(action.payload);
+                }
+            })
+        },
+        [addQuiz.pending]: (state) => {
+            state.loading = true;
+        },
+        [addQuiz.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [addQuiz.fulfilled]: (state, action) => {
+            state.loading = false;
+            state?.course?.weeks?.forEach(week => {
+                if(week?.weekId == action.payload?.weekId) {
+                    week?.lectures.push(action.payload);
+                }
+            })
+
+        },
+        [addWeek.pending]: (state) => {
+            state.loading = true;
+        },
+        [addWeek.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [addWeek.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.course.weeks.push({
+                weekId: action.payload.weekId,
+                serialWeek: action.payload.serialWeek,
+                name: action.payload.name,
+                lectures: []
+            })
+        },
+        [renameWeek.pending]: (state) => {
+            state.loading = true;
+        },
+        [renameWeek.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [renameWeek.fulfilled]: (state, action) => {
+            state.loading = false;
+            let weekId = action.payload.weekId;
+
+            state?.course?.weeks?.forEach(week => {
+                if(week?.weekId === weekId) {
+                    week.name = action.payload.name;
+                }
+            })
+        },
+        [updateLecture.pending]: (state) => {
+            state.loading = true;
+        },
+        [updateLecture.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [updateLecture.fulfilled]: (state, action) => {
+            let weekId = action.payload.weekId;
+            let lectureId = action.payload.lectureId;
+
+            state?.course?.weeks?.forEach(week => {
+                if(week?.weekId === weekId) {
+                    week?.lectures.forEach(lec => {
+                        if(lec.lectureId === lectureId) {
+                            lec.title = action.payload.title;
+                            lec.lectureStatus = action.payload.lectureStatus;
+                        }
+                    })
+                }
+            })
+
+            state.loading = false;
+        },
+        [updateQuiz.pending]: (state) => {
+            state.loading = true;
+        },
+        [updateQuiz.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [updateQuiz.fulfilled]: (state, action) => {
+            let weekId = action.payload.weekId;
+            let lectureId = action.payload.lectureId;
+
+            state?.course?.weeks?.forEach(week => {
+                if(week?.weekId === weekId) {
+                    week?.lectures.forEach(lec => {
+                        if(lec.lectureId === lectureId) {
+                            lec.title = action.payload.title;
+                            lec.lectureStatus = action.payload.lectureStatus;
+                        }
+                    })
+                }
+            })
+            state.loading = false;
+        },
+        [deleteLecture.pending]: (state) => {
+            state.loading = true;
+        },
+        [deleteLecture.rejected]: (state, action) => {
+            state.error = action.error;
+            state.loading = false;
+        },
+        [deleteLecture.fulfilled]: (state, action) => {
+            let weekId = action.payload.weekId;
+            let lectureId = action.payload.lectureId;
+            let weeks = state?.course?.weeks;
+
+            for(let i = 0; i < weeks.length; i+=1) {
+                if(weeks[i].weekId === weekId) {
+                    console.log("find week in here: ", i);
+                    let lectures = weeks[i].lectures;
+
+                    for(let j = 0; j < lectures.length; j+=1) {
+                        
+                        if(lectures[j].lectureId === lectureId) {
+                            console.log("find lecture in here: ", j);
+                            state.course.weeks[i].lectures.splice(j, 1);
+                            state.course.weeks[i].lectures = [...state.course.weeks[i].lectures];
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+            }
+            
+            state.loading = false;
+        },
     }
 });
 
 
-export const { addNewWeek, saveWeekChanges } = courseSlice.actions;
-export const selectWeekByID = (stateStore, id) => stateStore.currentCourse.course?.weeks.find(week => week.idWeek == id);
-export const selectLectureByID = (stateStore, idWeek, idLecture) => {
-    let week = selectWeekByID(stateStore, idWeek);
+export const { saveWeekChanges } = courseSlice.actions;
+
+export const selectWeekByID = (stateStore, id) => stateStore.currentCourse.course?.weeks.find(week => week.weekId == id);
+
+export const selectLectureByID = (stateStore, weekId, lectureId) => {
+    let week = selectWeekByID(stateStore, weekId);
     if(week) {
-        return week.lectures.find(lecture => lecture.idLecture == idLecture)
+        return week.lectures.find(lecture => lecture.lectureId == lectureId)
     }
 }
+export const selectWeekBySerial = (stateStore, serial) => stateStore.currentCourse.course?.weeks.find(week => week.serialWeek == serial);
 export default courseSlice.reducer;
