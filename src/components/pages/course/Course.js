@@ -59,7 +59,7 @@ const Course = ({ history, location }) => {
                         <Overview />
                     </Route> */}
                     <Route path={`${path}/week/:weekId`} >
-                        <Supplement permission={user?.permission}/>
+                        <Supplement permission={course?.permissionCourse}/>
                     </Route>
                     
                 </Switch>

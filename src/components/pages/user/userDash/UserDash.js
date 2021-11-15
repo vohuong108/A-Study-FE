@@ -48,13 +48,13 @@ const UserDash = () => {
                         avatar={{shape: "square" }}
                     />
                     {courses?.map(course => 
-                        <ProgressCourse key={course.courseId} data={course} permission={user?.permission}/>
+                        <ProgressCourse key={course.courseId} data={course} permission={course?.permissionCourse}/>
                     )}
                     
 
                     {/*get permision from store so don't need author dash*/}
                     {/* <ProgressCourse /> */}
-                    <AddNewCourse />
+                    {((user?.permission === "AUTHOR") || (user?.permission === "ADMIN")) && <AddNewCourse />}
                 </div>
             </div>            
         </div>

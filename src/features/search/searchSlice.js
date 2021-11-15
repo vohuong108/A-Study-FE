@@ -45,8 +45,8 @@ const searchSlice = createSlice({
             state.courseInfo = null;
         },
         [getSearchedCourseInfo.fulfilled]: (state, action) => {
-            state.loading = false;
             state.courseInfo = action.payload;
+            state.loading = false;
         },
     }
 });

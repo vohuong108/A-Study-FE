@@ -10,7 +10,7 @@ import { getSearchedCourseInfo, enrollCourse } from '../../../features/search/se
 
 
 const PaidCourse = ({ history, location }) => {
-    const { idCourse } =  useParams();
+    const { courseId } =  useParams();
     const user = useSelector(state => state.user.userObj);
     const courseInfo = useSelector(state => state.search.courseInfo);
     const dispatch = useDispatch();
@@ -22,14 +22,14 @@ const PaidCourse = ({ history, location }) => {
             history.push('/login', {from: location});
         } else {
             let request = {
-                idCourse,
-                data: { enrolled: true },
+                courseId: parseInt(courseId),
                 access_token: token
             }
     
             try {
                 message.loading({ content: 'Loading...', key: "enroll-msg" });
                 let result = await dispatch(enrollCourse(request));
+
                 message.success({
                     content: "Enrolled course successfully",
                     style: {marginTop: '72px'},
@@ -50,7 +50,7 @@ const PaidCourse = ({ history, location }) => {
         let token = getToken();
         let request = {
             access_token: token,
-            idCourse: idCourse
+            courseId: courseId
         }
 
         const getInfoCourse = async (requestData) => {
@@ -67,7 +67,7 @@ const PaidCourse = ({ history, location }) => {
         }
 
         getInfoCourse(request);
-    }, [idCourse])
+    }, [courseId])
     return (
         <div className="paid-course">
             <section className="paid-course-banner">
@@ -77,13 +77,13 @@ const PaidCourse = ({ history, location }) => {
                         className="course-banner-container"
                     >
                         <Col span={24}>
-                            <h1 className="course-name">{courseInfo?.courseName}</h1>
-                            <p className="course-target">{courseInfo?.courseTarget}</p>
+                            <h1 className="course-name">{courseInfo?.name}</h1>
+                            {/* <p className="course-target">{courseInfo?.courseTarget}</p>
                             <div className="course-rate">
                                 <Rate disabled allowHalf defaultValue={courseInfo?.numRate} className="course-rate-star" style={{fontSize: '14px'}}/>
                                 <span className="course-rate-num">{courseInfo?.numRate}</span>
                                 <span className="course-ratings">{courseInfo?.rating} ratings</span>
-                            </div>
+                            </div> */}
                             <div className="author-wrap">
                                 <Avatar
                                     className="author-avt"
@@ -91,10 +91,10 @@ const PaidCourse = ({ history, location }) => {
                                     style={{ backgroundColor: 'rgb(236 244 233)' }}
                                     src={courseInfo?.authorAvt}
                                 />
-                                <span>{courseInfo?.authorName}</span>
+                                <span>{courseInfo?.author}</span>
                             </div>
-                            {courseInfo?.enrolled 
-                                ? <Link to={`/course/${idCourse}`}>
+                            {courseInfo?.isEnroll 
+                                ? <Link to={`/course/${courseId}`}>
                                     <Button className="btn-enroll" disabled={!courseInfo}>
                                         Go to course
                                     </Button>
@@ -120,7 +120,7 @@ const PaidCourse = ({ history, location }) => {
                                         className="what-learn-row" 
                                         gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 4, sm: 8, md: 16, lg: 24 }]}
                                     >
-                                        {courseInfo?.whatLearn.map((item, index) => 
+                                        {courseInfo?.learnInfo?.map((item, index) => 
                                             <Col key={index} className="what-learn-item" xs={24} sm={12}>
                                                 <CheckOutlined className="icon-checkout" />
                                                 <p>{item}</p>
@@ -132,7 +132,7 @@ const PaidCourse = ({ history, location }) => {
                                 <div className="skill-gain">
                                     <p className="title">SKILLS YOU GAIN</p>
                                     <div className="skill-learn-wrap">
-                                        {courseInfo?.skills.map((item, index) => 
+                                        {courseInfo?.skillInfo.map((item, index) => 
                                             <span key={index} className="skill-item">{item}</span>
                                         )}
                                     </div>
@@ -144,7 +144,7 @@ const PaidCourse = ({ history, location }) => {
                         <Col span={24}>
                             <div className="col-about-wrap">
                                 <h2 className="about-title">About this Specialization</h2>
-                                <p className="content">{courseInfo?.about}</p>
+                                <p className="content">{courseInfo?.description}</p>
                             </div>
                         </Col>
                     </Row>

@@ -236,7 +236,9 @@ const userApi = {
         return response.data;
     },
     getSearchedCourseInfo: async (requestData) => {
-        const url = `${baseUrl4}/searchedCourse/${requestData.idCourse}`;
+        const url = `${final_base}/course/overview/${requestData.courseId}`;
+
+        console.log("request in getSearchedCourseInfo: ", requestData);
         const response = await axios({
             url: url,
             method: 'get',
@@ -245,19 +247,21 @@ const userApi = {
                 "Content-Type": "application/json"
             }
         })
+        console.log("response in getSearchedCourseInfo: ", response);
         return response.data;
     },
     enrollCourse: async (requestData) => {
-        const url = `${baseUrl4}/searchedCourse/${requestData.idCourse}`;
+        const url = `${final_base}/course/enroll/${requestData.courseId}`;
+        console.log("request in enroll: ", requestData);
         const response = await axios({
             url: url,
-            method: 'put',
+            method: 'get',
             headers: {
                 "Authorization": `Bearer ${requestData.access_token}`,
                 "Content-Type": "application/json"
-            },
-            data: requestData.data
+            }
         })
+        console.log("response in enroll: ", response);
         return response.data;
     },
     addWeek: async (requestData) => {
