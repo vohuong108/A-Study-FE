@@ -31,6 +31,8 @@ const SignUp = ({ history }) => {
             const resultAction = await dispatch(registing(requestData))
             const result = unwrapResult(resultAction);
 
+            console.log("result signup: ", result);
+
             message.success({
                 content: 'Register Successfull. Please verify your email!',
                 className: 'custom-class',

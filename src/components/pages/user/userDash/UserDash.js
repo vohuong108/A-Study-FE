@@ -4,8 +4,9 @@ import ProgressCourse from '../../course/progressCourse/ProgressCourse'
 import { getToken } from '../../../../utils/localStorageHandler'
 import { getCourses,addCourse } from '../../../../features/course/coursesAction'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Drawer, Select, message, Skeleton } from 'antd'
+import { Button, Drawer, Select, message, Skeleton, Input } from 'antd'
 import { useForm, Controller } from "react-hook-form"
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const UserDash = () => {
     const dispatch = useDispatch();
@@ -76,15 +77,20 @@ const AddNewCourse = () => {
             access_token: token, 
             data: {
                 name: formData.course_name,
-                author: user?.userName,
-                whatLearn: formData.whatLearn,
-                skills: formData.skills,
-                category: formData.category
+                author: user?.username,
+                learnInfo: formData.whatLearn,
+                skillInfo: formData.skills,
+                category: formData.category,
+                description: formData.description,
             }
         }
+
+        console.log("request create course: ", requestData);
         try {
             message.loading({ content: 'Loading...', key: "add-msg" });
             let result = await dispatch(addCourse(requestData));
+            console.log("response create course: ", unwrapResult(result));
+
             message.success({
                 content: "Add new course successfully",
                 style: {marginTop: '72px'},
@@ -146,16 +152,51 @@ const AddNewCourse = () => {
                         <Skills control={control} errors={errors} />
                     </div>
 
+
                     <div className="a-c-form-description">
                         <label>Description</label>
                         <textarea className="description"/>
                         {/* <Skills control={control} errors={errors} /> */}
+                        </div>
+                    <div className="a-c-form-item">
+                        <label>Description</label>
+                        <Descrition control={control} errors={errors} />
+
                     </div>
                     
                     <Button htmlType="submit" className="a-c-btn-save"> Save </Button>
                 </form>
+               
             </Drawer>
+        
         </div>
+
+    )
+}
+
+const Descrition = ({ control, errors }) => {
+    console.log("re-render in description: ", errors)
+    return (
+        <React.Fragment>
+            <Controller 
+                name="description"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) =>
+                    <Input.TextArea 
+                        className="s-item description"
+                        showCount 
+                        style={{ width: '100%' }}
+                        rows={4}  
+                        allowClear
+                        onChange={(value) => field.onChange(value)}
+                    >
+                        {field.value}
+                    </Input.TextArea>
+                }
+            />
+            {errors.whatLearn && <p className="err-msg">Please type this field</p>}
+        </React.Fragment>
     )
 }
 

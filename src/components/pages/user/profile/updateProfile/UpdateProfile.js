@@ -33,7 +33,11 @@ const ChangePass = () => {
                 message: "Confirm password don't match"
             }, { shouldFocus: true });
         } else if(token && user) {
-            let requestData = {access_token: token, data: {userId: user.userId, content: data}}
+            let requestData = {access_token: token, data: {
+                username: user.username, 
+                password: data.oldPass,
+                newPass: data.newPass
+            }}
             message.loading({ content: 'Change Pass Loading...', key: "change-pass-msg" });
             try {
                 const result = await dispatch(changePassword(requestData));
@@ -86,26 +90,18 @@ const ChangeInfo = () => {
     const user = useSelector(state => state.user.userObj);
     const {handleSubmit: handleSubmitInfo, register: registerInfo} = useForm();
     const dispatch = useDispatch();
-    //display preview avatả img
-    const [selectedImage, setSelectedImage] = useState();
-    const imageChange = (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          setSelectedImage(e.target.files[0]);
-        }
-      };
-    const removeSelectedImage = () => {
-        setSelectedImage();
-      };
-      //Upload image 
-      const [selectedFile, setSelectedFile] = useState(null);
 
     const onSubmitInfo = async (data) => {
         let token = getToken();
+
         if(token && user) {
-            let requestData = {access_token: token, data: {userId: user.userId, content: data}}
+            let requestData = {access_token: token, data: {username: user.username, ...data}};
+            console.log("change data: ", requestData);
             message.loading({ content: 'Change Info Loading...', key: "change-info-msg" });
             try {
                 const result = await dispatch(changeInformation(requestData));
+
+                console.log("result in change: ", result);
                 message.success({
                     content: "Change information successfully",
                     style: {marginTop: '72px'},
@@ -130,7 +126,7 @@ const ChangeInfo = () => {
                 <form id="form-personal" onSubmit={handleSubmitInfo(onSubmitInfo)}>
                     <div className="form-item">
                         <label>User Name</label>
-                        <input type="text" disabled value={user?.userName}/>
+                        <input type="text" disabled value={user?.username}/>
                     </div>
                     <div className="form-item">
                         <label>Email</label>
@@ -146,40 +142,18 @@ const ChangeInfo = () => {
                     </div>
                     <div className="form-item">
                         <label>Phone Number</label>
-                        <input type="text" {...registerInfo("phone")} />
+                        <input type="text" defaultValue={user?.phone} {...registerInfo("phone")} />
                     </div>
                     <div className="form-item">
                         <label>Address</label>
-                        <input type="text" {...registerInfo("address")}/>
+                        <input type="text" defaultValue={user?.address} {...registerInfo("address")}/>
                     </div> 
-                    <div className="form-item">
-                        <label htmlFor="avatar" style={{cursor:"pointer"}}>Choose your avatar <Publish/></label>
-                        <input type="file" id="avatar" accept="image/*" style={{display:"none"}} onChange={imageChange, (e) => setSelectedFile(e.target.files[0])} value={selectedFile}  />
-                        {selectedImage && (
-                         <div>
-                             <img
-                                 src={URL.createObjectURL(selectedImage)}
-                                style={
-                                        {width:"200px"},
-                                        {height:"200px"}
-
-                                }
-                                 alt="/"
-                             />
-                             <button id="del" onClick={removeSelectedImage} 
-                                style={
-                                    {display:"none"}
-                                }
-                             />
-                             
-                            <label htmlFor="del"><HighlightOff/></label>
-                            </div>
-                        )}
-                    </div>                            
+                                           
                     <input type="submit" value="Save" />
                 </form>
+                </div>
             </div>
-        </div>
+    
     )
 }
 

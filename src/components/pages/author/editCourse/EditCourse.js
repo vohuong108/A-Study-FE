@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react'
+import './EditCourse.scss'
+import 'antd/dist/antd.css';
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { unwrapResult } from '@reduxjs/toolkit'
-import './EditCourse.scss'
-import 'antd/dist/antd.css';
 import { Layout, Collapse, Button, Row, Col, Modal, message } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import EditWeek from './editWeek/EditWeek'
-import { getCourseByID, submitCourseChanges, } from '../../../../features/course/currentCourse/courseAction'
-import { deleteCourseByID, } from '../../../../features/course/coursesAction'
-import { addNewWeek } from '../../../../features/course/currentCourse/courseSlice'
+import { getCourseByID, submitCourseChanges, addWeek} from '../../../../features/course/currentCourse/courseAction'
+import { deleteCourseByID } from '../../../../features/course/coursesAction'
 import { getToken } from '../../../../utils/localStorageHandler'
 
 const EditCourse = ({ history }) => {
@@ -22,9 +21,14 @@ const EditCourse = ({ history }) => {
   
   const dispatch = useDispatch();
 
-
   const handleAddNewWeek = async () => {
-    dispatch(addNewWeek());
+    let token = getToken();
+    let requestData = {
+      access_token: token,
+      data: { courseId: parseInt(id), serialWeek: data?.weeks.length + 1, name: "Please type week name"}
+    }
+
+    await dispatch(addWeek(requestData));
   }
 
   const handleSubmitChanges = async () => {
@@ -38,6 +42,8 @@ const EditCourse = ({ history }) => {
         style: {marginTop: '72px'},
         key: "submit-course-msg",
       })
+
+      
 
     } catch(error) {
       message.error({
@@ -53,13 +59,15 @@ const EditCourse = ({ history }) => {
     let token = getToken();
 
     try {
-      let result = await dispatch(deleteCourseByID({ access_token: token, idCourse: id }));
+      let result = await dispatch(deleteCourseByID({ access_token: token, courseId: id }));
       
       message.success({
         content: "Delete this course successfully",
         style: {marginTop: '72px'},
         key: "del-course-msg",
       })
+
+      history.push("/dashbroad");
     } catch (error) {
       message.error({
         content: error?.message,
@@ -90,7 +98,7 @@ const EditCourse = ({ history }) => {
     }
 
     if(user && token) {
-        let requestData = { access_token: token, idCourse: id };
+        let requestData = { access_token: token, courseId: id };
 
         getCourse(requestData);
     }
@@ -98,7 +106,7 @@ const EditCourse = ({ history }) => {
 
   return (
       <div className="edit">
-        {user?.permission === 'teacher' &&
+        {user?.permission === 'AUTHOR' &&
           <Layout className="edit-layout">
               <Layout.Content className="e-layout-content">
                 <Row>
@@ -108,10 +116,11 @@ const EditCourse = ({ history }) => {
                 </Row>
                 <Row>
                   <Col span={24}>
-                    <Collapse defaultActiveKey={['1']} className="collapse-wrap">
+                  {/* defaultActiveKey={['1']} */}
+                    <Collapse className="collapse-wrap" >
                       {data?.weeks?.map(week => (
-                        <Collapse.Panel header={`Week ${week.idWeek}`} key={week.idWeek} className="panel-wrap">
-                          <EditWeek idWeek={week.idWeek} />
+                        <Collapse.Panel header={`Week ${week.serialWeek}`} key={week.serialWeek} className="panel-wrap">
+                          <EditWeek weekId={week.weekId} courseId={id} serialWeek={week.serialWeek}/>
                         </Collapse.Panel>
                       ))}
                     
@@ -131,7 +140,7 @@ const EditCourse = ({ history }) => {
                       Delete this course
                     </Button>
                   </Col>
-                  <Col className="last-row-col" xs={24} sm={8} >
+                  {/* <Col className="last-row-col" xs={24} sm={8} >
                     <Button 
                       shape="round" 
                       className="last-row-btn"
@@ -141,7 +150,7 @@ const EditCourse = ({ history }) => {
                       >
                       Submit Changes
                     </Button>
-                  </Col>
+                  </Col> */}
                   <Col className="last-row-col" xs={24} sm={8} >
                     <Button 
                       shape="round" 

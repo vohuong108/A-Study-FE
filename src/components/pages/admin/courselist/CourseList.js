@@ -1,14 +1,37 @@
 import './courselist.scss'
 import { DataGrid } from '@mui/x-data-grid';
 import {DeleteForever} from '@mui/icons-material';
- import { courseRows } from '../data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { get } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
-// import axios from 'axios';
+import axios from 'axios';
+
+
+const final_base ="http://localhost:8888/api"
+
 
 export default function CourseList() {
-    const [data,setData] = useState(courseRows);
+  
+  const [data, setData] = useState([]);
+  const getCourseList = async () =>{
+    
+    const url = `${final_base}/courselist`
+    const response = await axios.get(url);
+    setData(response.data); 
+
+    }
+
+      useEffect(() => {
+        getCourseList();
+      }, []);
+
+
+  const coursre
+
+const handleDelete = async (id) =>{
+ await axios.delete(APIuser + '/' + id);
+ setData(data.filter((item) =>  item.id !== id)); 
+}
+
     const columns = [
         { field: 'id', headerName: 'ID', width: 100 },
         { field: 'Course', headerName: 'Course', width: 200
@@ -46,21 +69,12 @@ export default function CourseList() {
                     <Link to={"/user/" + params.row.id}>
                     <button className="courseEdit">Edit</button>
                     </Link>
-                    
                     <DeleteForever className="courseDel"/>
                     </>
                 )
             }
         }
       ];
-
-    // const [data, setData] = useState({});
-    // useEffect(() => {
-    //   const callApi = () => {
-    //     result = await axios("url");
-    //     set(data,result);
-    //   }
-    // }, [])
 
     return (
         <div className="CourseList">

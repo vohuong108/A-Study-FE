@@ -2,12 +2,12 @@ import React from 'react'
 import './Login.scss'
 import 'antd/dist/antd.css';
 import loginBanner from '../../../assets/loginBanner.png'
-import { LockFilled, MailFilled} from '@ant-design/icons'
+import { LockFilled, UserOutlined} from '@ant-design/icons'
 import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { setToken } from '../../../utils/localStorageHandler'
+import { getToken, setToken } from '../../../utils/localStorageHandler'
 import { login, getUserByToken } from "../../../features/authentication/userAction"
 import { unwrapResult } from '@reduxjs/toolkit'
 
@@ -15,7 +15,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 
 
 const Login = ({ history, location }) => {
-    console.log("from: ", location);
+    // console.log("from: ", location);
     
     const { register, handleSubmit } = useForm();
     const dispatch = useDispatch();
@@ -24,17 +24,20 @@ const Login = ({ history, location }) => {
     const onSubmit = async (data) => {
 
         const requestData = {
-            email: data.email,
+            username: data.username,
             password: data.password,
-
         }
+
+        console.log("request login data: ", requestData);
             
         try {
             const login_res = await dispatch(login(requestData))
             const un_login_res = unwrapResult(login_res);
-            setToken(un_login_res.access_token);
+
+            console.log("response login data: ", un_login_res);
+            setToken(un_login_res?.access_token);
             
-            const profile = await dispatch(getUserByToken(un_login_res.access_token))
+            const profile = await dispatch(getUserByToken(getToken()));
 
             if(location.state) history.push(location.state.from.pathname)
             else history.push('/dashbroad');
@@ -68,15 +71,14 @@ const Login = ({ history, location }) => {
                                     <div className="inner-right">
                                         <h3>LOG IN</h3>
                                         <form onSubmit={handleSubmit(onSubmit)}>
-                                            <label>Email</label>
+                                            <label>Username</label>
                                             <div className="input-wrap">
-                                                <MailFilled className="input-icon" />
+                                                <UserOutlined className="input-icon" />
                                                 <input
-                                                    id="email"
-                                                    name="email" 
-                                                    type="email"
-                                                    placeholder="name@email.com" 
-                                                    {...register("email")}
+                                                    id="username"
+                                                    name="username" 
+                                                    type="text"
+                                                    {...register("username")}
                                                     required 
                                                 />
                                             </div>

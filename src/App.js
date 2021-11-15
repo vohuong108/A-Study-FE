@@ -17,20 +17,16 @@ import Quiz from './components/pages/quiz/Quiz'
 import EditCourse from './components/pages/author/editCourse/EditCourse'
 import Search from './components/pages/search/Search'
 import PaidCourse from './components/pages/paidCourse/PaidCourse'
-import CodeEditor from './components/pages/codeEditor/CodeEditor'
+import axios from 'axios'
 import Admin from './components/pages/admin/Admin'
+
 function App() {
-
-
 
   return (
     <BrowserRouter>
       <div className="App">
         <Header />
         <Switch>
-          <Route path="/code">
-            <CodeEditor />
-          </Route>
           <PrivateRoute path="/profile" component={Profile} />
           <Route exact path="/search" render={(props) => <Search {...props} />} />
           <Route path="/search/course/:idCourse" render={(props) => <PaidCourse {...props} />} />

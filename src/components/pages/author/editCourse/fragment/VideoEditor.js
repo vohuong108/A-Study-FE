@@ -1,64 +1,69 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import './VideoEditor.scss';
 import { Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, Switch } from 'antd';
-import { useForm, Controller  } from "react-hook-form"
-import './VideoEditor.scss'
-import { EditWeekContext } from '../editWeek/EditWeek'
-import ReactPlayer from 'react-player'
+import { useForm, Controller  } from "react-hook-form";
+import ReactPlayer from 'react-player';
+import { useDispatch, useSelector } from 'react-redux';
+import { getToken } from '../../../../../utils/localStorageHandler';
+import { addLecture, updateLecture } from '../../../../../features/course/currentCourse/courseAction';
+import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
 
-const VideoEditor = ({ action, setVisible }) => {
-    console.log('re-render in video editor')
-    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm();
-    const weekContext = useContext(EditWeekContext);
-    const [videoFile, setVideoFile] = useState(null);
-
-    // const toBase64 = file => new Promise((resolve, reject) => {
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(file);
-    //     reader.onload = () => resolve(reader.result);
-    //     reader.onerror = error => reject(error);
-    // });
+const VideoEditor = ({ action, setVisible, weekId }) => {
+    console.log('re-render in video editor: ', action);
     
-
+    const { register, control, handleSubmit, setValue, formState: { errors } } = useForm();
+    const [videoFile, setVideoFile] = useState(null);
+    const dispatch = useDispatch();
+    const weekRedux = useSelector(state => selectWeekByID(state,  weekId));
+    
     const onSubmit = async (data) => {
         console.log('form: ', data.video)
 
-        // let video64 = await toBase64(data.video);
+        let token = getToken();
 
-        let videoLecture = {
-            idLecture: action?.type === 'EDIT' ? action.data.idLecture : weekContext.weekData.lectures.length,
-            content: data.video,
-            type: 'video',
-            name: data.video_name,
-            status: data.status,
-            
-        }
 
         if(action && action.type === 'EDIT') {
-            let deepCloneWeekData = JSON.parse(JSON.stringify(weekContext.weekData));
+            let requestData = {
+                access_token: token,
+                data: {
+                    lectureId: action?.data?.lectureId,
+                    weekId: action?.data?.weekId,
+                    title: data.video_name,
+                    lectureType: 'VIDEO',
+                    content: data.video,
+                    lectureStatus: data.status
+                }
+            }
 
-            const index = deepCloneWeekData.lectures.findIndex((item) => action.data.idLecture === item.idLecture)
-
-            if(index > -1) deepCloneWeekData.lectures[index] = videoLecture;
-
-            weekContext.setWeekData({...deepCloneWeekData});
+            let result_update = await dispatch(updateLecture(requestData));
+            setVisible(false);
 
         } else {
-            weekContext.setWeekData({
-                ...weekContext.weekData, 
-                lectures: [...weekContext.weekData.lectures, videoLecture]
-        
-            })
+            let requestData = {
+                access_token: token,
+                data: {
+                    weekId: weekRedux.weekId,
+                    indexLecture: weekRedux?.lectures?.length,
+                    title: data.video_name,
+                    lectureType: 'VIDEO',
+                    content: data.video,
+                    lectureStatus: data.status
+                }
+            }
+
+            let result_add = await dispatch(addLecture(requestData));
             setVisible(false);
         }
     }
 
     useEffect(() => {
         if(action?.type === 'EDIT') {
-            setValue('video_name', action.data.name);
-            setValue('status', action.data.status);
-            setValue('video', action.data.content);
+            setValue('video_name', action.data.title);
+            setValue('status', action.data.lectureStatus);
+            setValue('video', `http://localhost:8888/api${action.data.url}`);
+            setVideoFile(`http://localhost:8888/api${action.data.url}`)
         }
     }, [action])
     
@@ -121,14 +126,14 @@ const VideoEditor = ({ action, setVisible }) => {
                 name="status"
                 control={control}
                 rules={{ required: true }}
-                defaultValue="private"
+                defaultValue="PRIVATE"
                 render={({ field }) => 
                     <Switch 
                         className="status-switch"
-                        checkedChildren="publish" 
-                        unCheckedChildren="private" 
-                        checked={field.value === "publish"}
-                        onChange={(checked) => checked ? field.onChange('publish') : field.onChange('private')}
+                        checkedChildren="PUBLIC" 
+                        unCheckedChildren="PRIVATE" 
+                        checked={field.value === "PUBLIC"}
+                        onChange={(checked) => checked ? field.onChange('PUBLIC') : field.onChange('PRIVATE')}
                     />
                 }
             />

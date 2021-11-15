@@ -23,14 +23,17 @@ const Header = () => {
 
     useEffect(() => {
         let token = getToken();
+        console.log("token", token);
 
         const getUser = async (token) => {
             const resultAction = await dispatch(getUserByToken(token))
             const result = unwrapResult(resultAction);
+
+            console.log("response get user in header: ", result);
         }
 
         if(!user && token) {
-            getUser()
+            getUser(token);
         }
         
     }, [])
