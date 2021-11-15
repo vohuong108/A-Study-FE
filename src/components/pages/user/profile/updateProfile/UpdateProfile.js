@@ -94,11 +94,6 @@ const ChangeInfo = () => {
     const onSubmitInfo = async (data) => {
         let token = getToken();
 
-
-
-        
-
-
         if(token && user) {
             let requestData = {access_token: token, data: {username: user.username, ...data}};
             console.log("change data: ", requestData);
@@ -154,9 +149,6 @@ const ChangeInfo = () => {
                         <input type="text" defaultValue={user?.address} {...registerInfo("address")}/>
                     </div> 
                                            
-                        
-                    
-
                     <input type="submit" value="Save" />
                 </form>
                 </div>

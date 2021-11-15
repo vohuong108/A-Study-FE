@@ -7,27 +7,29 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Api = 'https://jsonplaceholder.typicode.com';
-const APIuser='https://6190c079f6bf450017484cb1.mockapi.io/Userlist/userl';
+const final_base ="http://localhost:8888/api"
+
+
 export default function User() {
 
-
-
-  
     const [data, setData] = useState([]);
-    const getUserList = () =>{
-      fetch(`${APIuser}`)
-        .then(res => res.json())
-        .then(json => setData(json));
+    const getUserList = async () =>{
+      const url = `${final_base}/userlist`
+      const response = await axios.get(url);
+      setData(response.data); 
     }
     useEffect(() => {
       getUserList();
-  }, []);
+    }, []);
   
-  const handleDelete = async (id) =>{
+    
+
+    const handleDelete = async (id) =>{
      await axios.delete(APIuser + '/' + id);
      setData(data.filter((item) =>  item.id !== id)); 
-  }
+    }
+
+
 
   const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -46,6 +48,23 @@ export default function User() {
     width: 200,
     
   },
+  {
+    field: "permission",
+    headerName:"Permission",
+    width: 100,
+    renderCell:() => {
+      return(
+          <>
+          <select id="level-select">        
+            <option value="admin">Amin</option>
+            <option value="author">Author</option>
+            <option value="student">Student</option>
+          </select>
+          </>
+      )
+  }
+
+  },
 
   {
       field:"action",
@@ -54,10 +73,10 @@ export default function User() {
       renderCell:(params) => {
           return(
               <>
-              <Link to={"/admin/user/" + params.row.id}>
+              <Link to={"/user" + params.row.id}>
               <button className="userEdit">Edit</button>
               </Link>
-              <DeleteForever className="userDel" onClick={()=>handleDelete(params.row.id)}/>
+              <DeleteForever className="userDel" onClick={this.handleDelete.bind(this, params.row.id)}/>
               </>
           )
       }
@@ -71,8 +90,8 @@ export default function User() {
         rows={data}
         disableSelectionOnClick
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
         checkboxSelection
       /> 
         </div>

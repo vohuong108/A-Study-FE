@@ -1,26 +1,31 @@
 import './courselist.scss'
 import { DataGrid } from '@mui/x-data-grid';
 import {DeleteForever} from '@mui/icons-material';
- import { courseRows } from '../data';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { get } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
- import axios from 'axios';
-const final_base ="http://localhost:8888/api"
-const APIuser='https://6190c079f6bf450017484cb1.mockapi.io/Userlist/userl';
-export default function CourseList() {
+import axios from 'axios';
 
-  
+
+const final_base ="http://localhost:8888/api"
+
+
+export default function CourseList() {
   
   const [data, setData] = useState([]);
-  const getUserList = () =>{
-  fetch(`${APIuser}`)
-    .then(res => res.json())
-    .then(json => setData(json));
-}
-useEffect(() => {
-  getUserList();
-}, []);
+  const getCourseList = async () =>{
+    
+    const url = `${final_base}/courselist`
+    const response = await axios.get(url);
+    setData(response.data); 
+
+    }
+
+      useEffect(() => {
+        getCourseList();
+      }, []);
+
+
+  const coursre
 
 const handleDelete = async (id) =>{
  await axios.delete(APIuser + '/' + id);

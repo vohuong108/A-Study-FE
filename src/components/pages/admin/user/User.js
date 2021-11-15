@@ -3,8 +3,10 @@ import "./user.scss"
 import {PermIdentity,CalendarToday,LocalPhone, AttachEmail,LocationOn} from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
-import { getToken } from '../../../../../utils/localStorageHandler'
+import { getToken } from '../../../../utils/localStorageHandler'
 import { changeInformation } from '../../../../features/authentication/userAction';
+import { message } from 'antd'
+//import { changeInformation } from '../../../../features/authentication/userAction';
 //import { changeInformation} from '../../../../features/authentication/userAction'
 export default function User() {
 
