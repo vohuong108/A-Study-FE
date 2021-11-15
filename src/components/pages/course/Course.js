@@ -43,7 +43,7 @@ const Course = ({ history, location }) => {
         if(user && token) {
             let requestData = {
                 access_token: token,
-                idCourse: id
+                courseId: id
             }
             getCourse(requestData);
         }
@@ -54,11 +54,11 @@ const Course = ({ history, location }) => {
             <Layout className="course-layout">
                 <CourseSlide course={course}/>
                 <Switch>
-                    {location.pathname === url && <Redirect from={url} to={`${url}/welcome`} />}
+                    {/* {location.pathname === url && <Redirect from={url} to={`${url}/welcome`} />}
                     <Route path={`${path}/welcome`}>
                         <Overview />
-                    </Route>
-                    <Route path={`${path}/week/:idWeek`} >
+                    </Route> */}
+                    <Route path={`${path}/week/:weekId`} >
                         <Supplement permission={user?.permission}/>
                     </Route>
                     
@@ -100,14 +100,14 @@ const CourseSlide = ({ course }) => {
                 selectedKeys={[keySlide]}
                 style={{ height: '100%', borderRight: 0, fontSize: '16px', backgroundColor: '#F0F3F5'}}
             >
-                <Menu.Item className="menu_item" key="overview">
+                {/* <Menu.Item className="menu_item" key="overview">
                     <Link to={`${url}/welcome`}>Overview</Link>
-                </Menu.Item>
+                </Menu.Item> */}
 
                 {course && course.weeks.map(week => (
-                    <Menu.Item className="menu_item" key={`week${week.idWeek}`}>
-                        <Link to={`${url}/week/${week.idWeek}`}>
-                            {`Week ${week.idWeek}`}
+                    <Menu.Item className="menu_item" key={`week${week.weekId}`}>
+                        <Link to={`${url}/week/${week.weekId}`}>
+                            {`Week ${week.serialWeek}`}
                         </Link>  
                     </Menu.Item>
                 ))}

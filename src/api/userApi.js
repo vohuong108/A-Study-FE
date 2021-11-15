@@ -48,7 +48,7 @@ const userApi = {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
         });
-        console.log("res in get edit course", response);
+        console.log("res in get course by id: ", response);
         return response.data;
     },
     addCourse: async (requestData) => {
@@ -135,8 +135,9 @@ const userApi = {
 
         return response.data;
     },
-    getQuizByID: async (requestData) => {
-        const url = `${baseUrl2}/quiz/1`;
+    getQuizContent: async (requestData) => {
+        console.log("request in get quiz content: ", requestData);
+        const url = `${final_base}${requestData.url}`;
         const response = await axios({
             url: url,
             method: "get",
@@ -144,10 +145,25 @@ const userApi = {
                 "Authorization": `Bearer ${requestData.access_token}`
             }
         })
+        console.log("response in get quiz content: ", response);
         return response.data;
     }, 
+    getQuizById: async (requestData) => {
+        console.log("request in get quiz by id: ", requestData);
+        const url = `${final_base}/quiz/${requestData.quizId}`;
+        const response = await axios({
+            url: url,
+            method: "get",
+            headers: {
+                "Authorization": `Bearer ${requestData.access_token}`
+            }
+        })
+        console.log("response in get quiz by id: ", response);
+        return response.data;
+    },
     submitExamineResults: async (requestData) => {
-        const url = `${baseUrl3}/examine`;
+        const url = `${final_base}/quiz/grade`;
+        console.log("request in submit examine: ", requestData);
         const response = await axios({
             url: url,
             method: 'post',
@@ -157,6 +173,7 @@ const userApi = {
             },
             data: requestData.data
         })
+        console.log("response in submit examine: ", response);
         return response.data;
     },
     searchCourse: async (requestData) => {

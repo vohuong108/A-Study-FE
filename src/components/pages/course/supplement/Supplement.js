@@ -8,8 +8,8 @@ import { selectWeekByID } from '../../../../features/course/currentCourse/course
 import { useSelector } from 'react-redux'
 
 const Supplement = ({ permission }) => {
-    const { id, idWeek } = useParams();
-    const dataWeek = useSelector(state => selectWeekByID(state, idWeek))
+    const { id, weekId } = useParams();
+    const dataWeek = useSelector(state => selectWeekByID(state, weekId))
     return (
         <>
         {dataWeek && 
@@ -17,39 +17,39 @@ const Supplement = ({ permission }) => {
                 <div className="container supplement-container">
                     <div className="supplement-row">
                         <div className="supplement-header">
-                            <h1>{`Week ${dataWeek.idWeek}`}</h1>
+                            <h1>{`Week ${dataWeek.serialWeek}`}</h1>
                         </div>
                         <div className="supplement-content-wrap">
                             <div className="supplement-subtopic">
-                                <h3>{dataWeek.weekTitle}</h3>
+                                <h3>{dataWeek.name}</h3>
                                 <ul className="subtopic-wrap">
                                     {dataWeek.lectures.map((lecture, index) => {
-                                        return lecture.status === 'publish' &&  
+                                        return lecture.lectureStatus === 'PUBLIC' &&  
                                         <li key={index}>
-                                            {lecture.type === 'reading' && (
-                                                <Link to={`/learn/${id}/week/${dataWeek.idWeek}/r/${lecture.idLecture}`}>
+                                            {lecture.lectureType === 'TEXT' && (
+                                                <Link to={`/learn/${id}/week/${dataWeek.weekId}/r/${lecture.lectureId}`}>
                                                     <ReadOutlined className="subtopic-icon" />
                                                     <p>
-                                                        <strong>{`${lecture.type}:`} </strong>
-                                                        {lecture.name}
+                                                        <strong>{`${lecture.lectureType}:`} </strong>
+                                                        {lecture.title}
                                                     </p>
                                                 </Link>
                                             )}
-                                            {lecture.type === 'video' && (
-                                                <Link to={`/learn/${id}/week/${dataWeek.idWeek}/v/${lecture.idLecture}`}>
+                                            {lecture.lectureType === 'VIDEO' && (
+                                                <Link to={`/learn/${id}/week/${dataWeek.weekId}/v/${lecture.lectureId}`}>
                                                     <PlayCircleOutlined className="subtopic-icon" />
                                                     <p>
-                                                        <strong>{`${lecture.type}:`} </strong>
-                                                        {lecture.name}
+                                                        <strong>{`${lecture.lectureType}:`} </strong>
+                                                        {lecture.title}
                                                     </p>
                                                 </Link>
                                             )}
-                                            {lecture.type === 'quiz' && (
-                                                <Link to={`/learn/${id}/week/${dataWeek.idWeek}/q/${lecture.idLecture}`}>
+                                            {lecture.lectureType === 'QUIZ' && (
+                                                <Link to={`/learn/${id}/week/${dataWeek.weekId}/q/${lecture.lectureId}`}>
                                                     <ContainerOutlined className="subtopic-icon" />
                                                     <p>
-                                                        <strong>{`${lecture.type}:`} </strong>
-                                                        {lecture.name}
+                                                        <strong>{`${lecture.lectureType}:`} </strong>
+                                                        {lecture.title}
                                                     </p>
                                                 </Link>
                                             )}
@@ -59,7 +59,7 @@ const Supplement = ({ permission }) => {
                             </div>
         
                         </div>
-                        {permission === 'teacher' &&
+                        {(permission === 'AUTHOR' || permission === 'ADMIN') &&
                             <Link to={`/edit/${id}`}>
                                 <Button shape="round" className="s-to-edit">Go To Edit</Button>
                             </Link>

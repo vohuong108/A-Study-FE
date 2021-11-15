@@ -7,13 +7,14 @@ const { Countdown } = Statistic
 const QuizNav = ({ review, handleSubmit, dueTime, navData }) => {
     
 
-    const handleDueTime = (str) => {
-        if(str) {
-            let date = new Date(str);
-            let hour = date.getHours();
-            let min = date.getMinutes();
-            let sec = date.getSeconds();
+    const handleDueTime = (time) => {
+        if(time) {
+            
+            let hour = parseInt(time/3600);
+            let min = parseInt((time - hour*3600)/60);
+            let sec = (time - hour*36000 - min*60);
 
+            console.log("h::m::s ", hour, min, sec);
             return hour*1000*60*60*24 + min*1000*60 + 1000*(sec+1);
         } else return 0;
     }

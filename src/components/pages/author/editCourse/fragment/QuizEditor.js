@@ -27,14 +27,18 @@ const QuizEditor = ({ action, setVisible, weekId }) => {
     );
 
     const splitTime = (time) => {
-        let arr = time.split(":");
-        return arr[0] * 3600 + arr[1] * 60 + arr[2];
+        let h = time.hours();
+        let m = time.minutes();
+        let s = time.seconds();
+
+        return h * 3600 + m * 60 + s;
     } 
     
     const onSubmit = async (data) => {
         let token = getToken();
         let maxScore = data?.content.reduce((total, question) => total + question.point, 0);
-        let time = splitTime(data.working_time._d.toLocaleTimeString());
+        
+        let time = splitTime(data.working_time);
 
         if(action && action.type === 'EDIT') {
             let requestData = {

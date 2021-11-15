@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import './Quiz.scss'
-import { Layout, Divider, Row, Col, Button, message } from 'antd'
+import { Layout, Divider, Row, Col, Button, message, Modal } from 'antd'
 import { useForm, useFieldArray } from "react-hook-form"
 import QuizItem from './quizItem/QuizItem'
 import QuizNav from './quizNav/QuizNav'
 import { useDispatch, useSelector } from 'react-redux'
-import { getQuizByID, submitExamineResults } from '../../../features/quiz/quizAction'
+import { getQuizById, submitExamineResults } from '../../../features/quiz/quizAction'
 import { buildNav, buildStartTime } from '../../../features/quiz/quizSlice'
 import { useParams } from 'react-router-dom'
 import { getToken } from '../../../utils/localStorageHandler'
@@ -13,7 +13,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 
 
 const Quiz = ({ history }) => {
-    const { idQuiz } = useParams();
+    const { quizId } = useParams();
     const user = useSelector(state => state.user.userObj);
     const quiz = useSelector(state => state.quiz.quiz);
     const quizNav = useSelector(state => state.quiz.quizNav); 
@@ -22,28 +22,51 @@ const Quiz = ({ history }) => {
     const { control, handleSubmit, setValue } = useForm();
     const { fields } = useFieldArray({ control, name: "content" });
     
-    console.log("his: ", history );
+    console.log("fields: ", fields );
+
     const onSubmit = async (data) => {
         let finishTime = (new Date()).toISOString();
         let token = getToken();
+        let arr = data.content.map((content) => {
+            let temp = content.choices.find((choice) => choice.answer === true);
+            if(temp) {
+                console.log(`question ${content.questionId} - ${temp.choiceId}`);
+                return {questionId: content.questionId, choiceId: temp.choiceId}
+            } else {
+                console.log(`question ${content.questionId} - null`);
+                return {questionId: content.questionId, choiceId: -1}
+            }
+            
+        })
+
+        console.log("date submit: ", data.content);
+        console.log("convert: ", arr);
+        
         let examineData = {
-            idQuiz: idQuiz,
+            quizId: quizId,
+            quizTitle: quiz?.title,
             startTime: startTime,
             finishTime: finishTime,
-            content: data.content
+            answers: arr
         }
         
         if(user && token) {
             try {
                 let result = await dispatch(submitExamineResults({data: examineData, access_token: token}));
-                
+                let un_result = unwrapResult(result);
+
+                console.log("un_result: ", un_result);
                 message.success({
                     content: "Submit examine successfully",
                     style: {marginTop: '72px'}
                 })
 
-                
-                history.goBack()
+                Modal.confirm({
+                    title: un_result?.title,
+                    content: `Grade: ${un_result?.score}`,
+                    onOk: () => { history.goBack(); },
+                    onCancel: () => { history.goBack(); }
+                })
         
             } catch (error) {
                 message.error({
@@ -61,12 +84,12 @@ const Quiz = ({ history }) => {
 
         const getQuiz = async (requestData) => {
             try {
-                let quizResult = await dispatch(getQuizByID(requestData));
+                let quizResult = await dispatch(getQuizById(requestData));
                 let un_quiz = unwrapResult(quizResult);
     
                 if(un_quiz?.isEnroll === false) history.push('/dashbroad');
                 else {
-                    setValue("content", un_quiz.content);
+                    setValue("content", un_quiz.questions);
                     dispatch(buildStartTime());
                     dispatch(buildNav());
     
@@ -84,16 +107,16 @@ const Quiz = ({ history }) => {
         if(user && token) {
             let requestData = {
                 access_token: token,
-                idQuiz: idQuiz
+                quizId: quizId,
             }
             getQuiz(requestData);
         }
-    }, [user, idQuiz]);
-    console.log("re-render in quiz")
+    }, [user, quizId]);
+
     return (
         <Layout className="quiz">
             <Layout.Content className="quiz-layout-content">
-                <h2>{quiz?.name}</h2>
+                <h2>{quiz?.title}</h2>
                 <Divider />
                 <Layout className="quiz-wrap">
                     <Row>

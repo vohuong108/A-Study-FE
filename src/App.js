@@ -30,9 +30,9 @@ function App() {
           <PrivateRoute path="/profile" component={Profile} />
           <Route exact path="/search" render={(props) => <Search {...props} />} />
           <Route path="/search/course/:idCourse" render={(props) => <PaidCourse {...props} />} />
-          <PrivateRoute path="/quiz/:idQuiz" component={Quiz} />
-          <PrivateRoute path="/submit/:idQuiz" component={Submit} />
-          <PrivateRoute path="/learn/:idCourse/week/:idWeek" component={Lecture} />
+          <PrivateRoute path="/quiz/:quizId" component={Quiz} />
+          {/* <PrivateRoute path="/submit/:idQuiz" component={Submit} /> */}
+          <PrivateRoute path="/learn/:courseId/week/:weekId" component={Lecture} />
           <PrivateRoute path="/edit/:id" component={EditCourse} />
           <PrivateRoute path="/course/:id" component={Course} />
           <PublicRoute exact path="/login" component={Login} />

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { getQuizByID, submitExamineResults } from './quizAction'
+import { getQuizContent, getQuizById, submitExamineResults } from './quizAction'
 
 const quizSlice = createSlice({
     name: 'quiz',
@@ -12,12 +12,12 @@ const quizSlice = createSlice({
     },
     reducers: {
         marked: (state, action) => {
-            let idQuestion = action.payload.idQuestion;
-            state.quizNav[idQuestion] = true;
+            let indexQ = action.payload.indexQ;
+            state.quizNav[indexQ] = true;
         },
         buildNav: (state) => {
-            state.quizNav = state?.quiz?.content.reduce((acc, question) => {
-                acc[question.idQuestion] = false;
+            state.quizNav = state?.quiz?.questions.reduce((acc, _, curIndex) => {
+                acc[curIndex] = false;
                 return acc;
             }, {});
             
@@ -27,17 +27,32 @@ const quizSlice = createSlice({
         }
     },
     extraReducers: {
-        [getQuizByID.pending]: (state) => {
+        [getQuizContent.pending]: (state) => {
             state.loading = true;
         },
-        [getQuizByID.rejected]: (state, action) => {
+        [getQuizContent.rejected]: (state, action) => {
             state.error = action.error;
             state.quiz = null;
             state.quizNav = null
             state.loading = false;
             
         },
-        [getQuizByID.fulfilled]: (state, action) => {
+        [getQuizContent.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.quiz = action.payload;
+            
+        },
+        [getQuizById.pending]: (state) => {
+            state.loading = true;
+        },
+        [getQuizById.rejected]: (state, action) => {
+            state.error = action.error;
+            state.quiz = null;
+            state.quizNav = null
+            state.loading = false;
+            
+        },
+        [getQuizById.fulfilled]: (state, action) => {
             state.loading = false;
             state.quiz = action.payload;
             
