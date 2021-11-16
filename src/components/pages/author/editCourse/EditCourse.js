@@ -106,7 +106,7 @@ const EditCourse = ({ history }) => {
 
   return (
       <div className="edit">
-        {user?.permission === 'AUTHOR' &&
+        {(user?.permission === 'AUTHOR' || user?.permission === 'ADMIN') &&
           <Layout className="edit-layout">
               <Layout.Content className="e-layout-content">
                 <Row>
