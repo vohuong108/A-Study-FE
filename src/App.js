@@ -17,7 +17,6 @@ import Quiz from './components/pages/quiz/Quiz'
 import EditCourse from './components/pages/author/editCourse/EditCourse'
 import Search from './components/pages/search/Search'
 import PaidCourse from './components/pages/paidCourse/PaidCourse'
-import axios from 'axios'
 import Admin from './components/pages/admin/Admin'
 
 function App() {
@@ -39,7 +38,7 @@ function App() {
           <PublicRoute exact path="/signup" component={SignUp} />
           <PrivateRoute exact path="/dashbroad" component={UserDash} />
           <DisplayFooter exact path="/" component={Home} />
-          <Route path="/admin" component={Admin} />
+          <PrivateRoute path="/admin" component={Admin} />
         </Switch>
 
       </div>

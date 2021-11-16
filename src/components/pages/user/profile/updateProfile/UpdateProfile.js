@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form'
 import { changeInformation, changePassword} from '../../../../../features/authentication/userAction'
 import { getToken } from '../../../../../utils/localStorageHandler'
 import { message } from 'antd'
-
+import {Publish, HighlightOff} from '@mui/icons-material';
+import { useState } from "react";
 const UpdateProfile = () => {
     
     return (
@@ -93,8 +94,6 @@ const ChangeInfo = () => {
     const onSubmitInfo = async (data) => {
         let token = getToken();
 
-        
-
         if(token && user) {
             let requestData = {access_token: token, data: {username: user.username, ...data}};
             console.log("change data: ", requestData);
@@ -148,11 +147,13 @@ const ChangeInfo = () => {
                     <div className="form-item">
                         <label>Address</label>
                         <input type="text" defaultValue={user?.address} {...registerInfo("address")}/>
-                    </div>
+                    </div> 
+                                           
                     <input type="submit" value="Save" />
                 </form>
+                </div>
             </div>
-        </div>
+    
     )
 }
 

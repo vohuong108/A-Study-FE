@@ -49,6 +49,7 @@ const UserAvatar = () => {
                             </div>
                         </a>
                         <ul className="list-menu">
+                            {user.permission == "ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
                             <li>
                                 <Link to="/dashbroad">My Courses</Link>
                             </li>

@@ -8,7 +8,7 @@ export default function sidebar() {
         <div className="sidebar">
             <div className="sidebarWrapper">
                 <div className="sidebarMenu">
-                    <h3 className="title">Dashboard</h3>
+                    {/* <h3 className="title">Dashboard</h3> */}
                     <ul className="sidebarList">
                         <div className="sidebarListItem"><Home  className="sidebarIcon"/> Trang chủ</div>
                         <div className="sidebarListItem"><Timeline  className="sidebarIcon"/>Phân tích</div>
@@ -17,18 +17,19 @@ export default function sidebar() {
                 </div>
 
                 <div className="sidebarMenu">
-                    <h3 className="title">Quản lý</h3>
+                    {/* <h3 className="title">Quản lý</h3> */}
                     <ul className="sidebarList">
-                       <Link to="/admin/user"> 
+                       <Link to="/admin/userlist"> 
                        <div className="sidebarListItem"><PeopleOutline className="sidebarIcon"/>Thành Viên </div>
                        </Link>
+                       <Link to="/admin/list">
                         <div className="sidebarListItem"><CollectionsBookmark  className="sidebarIcon"/> Khóa học</div>
-                        
+                        </Link>
                     </ul>
                 </div>
 
                 <div className="sidebarMenu">
-                    <h3 className="title">Thông báo</h3>
+                    {/* <h3 className="title">Thông báo</h3> */}
                     <ul className="sidebarList">
                         <div className="sidebarListItem"><MailOutline className="sidebarIcon"/> Mail</div>
                         <div className="sidebarListItem"><Comment className="sidebarIcon"/> Phản hồi</div>

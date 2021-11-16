@@ -92,6 +92,8 @@ const MenuDrawerLeft = () => {
     const dispatch = useDispatch();
     let history = useHistory();
 
+    console.log("permission: ", user?.permission);
+
     const handleLogOut = () => {
         console.log("in here")
         dispatch(logOut());
@@ -144,7 +146,8 @@ const MenuDrawerLeft = () => {
                             </div>
                             <div className="menu-features">
                                 <ul>
-                                    <li><Link to="/dashbroad">My Course</Link></li>
+                                    <li><Link to="/dashbroad">My Courses</Link></li>
+                                    {user.permission == "ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
                                     <li><Link to="/profile">My Profile</Link></li>
                                     <li onClick={handleLogOut}>Log out</li>
                                 </ul>

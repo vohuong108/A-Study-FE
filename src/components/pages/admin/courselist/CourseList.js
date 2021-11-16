@@ -1,77 +1,125 @@
 import './courselist.scss'
-import { DataGrid } from '@mui/x-data-grid';
-import {DeleteForever} from '@mui/icons-material';
-// import { courseRows } from '../../data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { get } from '@reduxjs/toolkit/node_modules/immer/dist/internal';
-// import axios from 'axios';
+import axios from 'axios';
+import { getToken } from '../../../../utils/localStorageHandler';
+import { Table, Popconfirm, Button } from 'antd';
+
+
+const final_base ="http://localhost:8888/api"
+
 
 export default function CourseList() {
-    //const [data,setData] = useState(courseRows);
-    const columns = [
-        { field: 'id', headerName: 'ID', width: 100 },
-        { field: 'Course', headerName: 'Course', width: 200
-        ,renderCell: (params)=>{
-            return (
-                <div className="courseList">
-                    <img className="courseImg" src={params.row.img} alt="" />
-                    {params.row.Course}
-                </div>
-            )
-        } 
-      },
-        { field: 'length', headerName: 'length', width: 200 },
-        {
-          field: 'author',
-          headerName: 'author',
-          width: 200,
-        },
-        {
-          field: 'Price',
-          headerName: 'Price',
-          description: 'This column has a value getter and is not sortable.',
-          sortable: false,
-          width: 200,
-          
-        },
-      
-        {
-            field:"action",
-            headerName:"action",
-            width: 150,
-            renderCell:(params) => {
-                return(
-                    <>
-                    <Link to={"/user/" + params.row.id}>
-                    <button className="courseEdit">Edit</button>
-                    </Link>
-                    
-                    <DeleteForever className="courseDel"/>
-                    </>
-                )
-            }
-        }
-      ];
+    const [data, setData] = useState([]);
 
-    // const [data, setData] = useState({});
-    // useEffect(() => {
-    //   const callApi = () => {
-    //     result = await axios("url");
-    //     set(data,result);
-    //   }
-    // }, [])
+    useEffect(() => {
+        let access_token = getToken();
+
+        let getAllCourse = async () => {
+            let response = await axios({
+                url: `${final_base}/courses/admin`,
+                method: 'get',
+                headers: {
+                    "Authorization": `Bearer ${access_token}`,
+                },
+            });
+
+            console.log("response in get all course admin: ", response.data);
+            setData(response?.data);
+        }
+
+        if(access_token) {
+            getAllCourse();
+        }
+    }, [])
+
+    const columns = [
+        { 
+            title: 'ID',
+            dataIndex: 'courseId',
+            key: 'courseId',
+            defaultSortOrder: 'ascend',
+            sorter: (a, b) => a.courseId - b.courseId
+        },{ 
+            title: 'Course Name',
+            dataIndex: 'name',
+            key: 'name',
+        },{
+            title: 'Category',
+            dataIndex: 'category',
+            key: 'category',
+        },{
+            title: 'Author',
+            dataIndex: 'author',
+            key: 'author',
+        },{
+            title: 'Release',
+            dataIndex: 'releaseDate',
+            key: 'releaseDate',
+        }, {
+            title: 'Action',
+            dataIndex: 'courseId',
+            render: (courseId) => <DeleteCourse courseId={courseId} setData={setData}/>
+        }
+    ];
 
     return (
         <div className="CourseList">
-            <DataGrid
-        // rows={data}
-        disableSelectionOnClick
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        checkboxSelection
-      /> 
+            <Table 
+                columns={columns} 
+                dataSource={data} 
+            />
         </div>
     )
 }
+  
+const DeleteCourse = ({ courseId, setData }) => {
+    const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const handleOk = async () => {
+        let access_token = getToken();
+
+        try {
+            let response = await axios({
+                url: `${final_base}/course/delete/${courseId}`,
+                method: 'delete',
+                headers: {
+                    "Authorization": `Bearer ${access_token}`,
+                },
+            });
+
+            let responseAfter = await axios({
+                url: `${final_base}/courses/admin`,
+                method: 'get',
+                headers: {
+                    "Authorization": `Bearer ${access_token}`,
+                },
+            });
+
+            console.log("response in get all after delete course admin: ", responseAfter.data);
+            setData(responseAfter?.data);
+
+            setLoading(false);
+            setVisible(false);
+        } catch (error) {
+            setLoading(false);
+            setVisible(false);
+        }
+    }
+
+    return (
+        <>
+        <Button className="tb-btn del-btn" onClick={() => {setVisible(true);}}>
+            Delete 
+        </Button>
+        <Popconfirm
+            title="Do you want to delete this course?"
+            visible={visible}
+            onConfirm={handleOk}
+            okButtonProps={{ loading: loading }}
+            onCancel={() => setVisible(false)}
+        />
+        </>
+    );
+};
