@@ -25,8 +25,7 @@ export default function User() {
     
 
     const handleDelete = async (id) =>{
-     await axios.delete(APIuser + '/' + id);
-     setData(data.filter((item) =>  item.id !== id)); 
+     
     }
 
 

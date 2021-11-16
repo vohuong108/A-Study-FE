@@ -24,12 +24,8 @@ export default function CourseList() {
         getCourseList();
       }, []);
 
-
-  const coursre
-
 const handleDelete = async (id) =>{
- await axios.delete(APIuser + '/' + id);
- setData(data.filter((item) =>  item.id !== id)); 
+ 
 }
 
     const columns = [
