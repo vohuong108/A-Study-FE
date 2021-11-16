@@ -77,7 +77,6 @@ const AddNewCourse = () => {
             access_token: token, 
             data: {
                 name: formData.course_name,
-                author: user?.username,
                 learnInfo: formData.whatLearn,
                 skillInfo: formData.skills,
                 category: formData.category,

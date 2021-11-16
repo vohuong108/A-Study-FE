@@ -177,7 +177,9 @@ const userApi = {
         return response.data;
     },
     searchCourse: async (requestData) => {
-        const url = `${baseUrl3}/search`;
+        const url = `${final_base}/course/search`;
+        console.log("request search: ", requestData);
+
         const response = await axios({
             url: url,
             method: 'get',
@@ -189,6 +191,8 @@ const userApi = {
                 return qs.stringify(params)
             }
         })
+
+        console.log("response search: ", response);
         return response.data;
     },
     getCategory: async () => {

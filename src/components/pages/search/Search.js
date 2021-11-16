@@ -32,7 +32,7 @@ const Search = ({ location}) => {
         <Layout className="search-layout">
             <section className="search-header">
                 <Layout.Content className="search-content s-header">
-                    <h1 className="num-result">{`Showing ${searchData?.totalResult} total results for ${searchData?.query}`}</h1>
+                    <h1 className="num-result">{`Showing ${searchData?.length} total results`}</h1>
                     <div className="filter">
                         <Button 
                             className="btn-filter"
@@ -58,7 +58,7 @@ const Search = ({ location}) => {
                     <Layout.Content className="s-body-content">
                     {loading ? <Skeleton active loading={loading} /> : (
                         <>
-                        {searchData && searchData.content.map((course, index) => <SearchedCourse key={index} data={course} />)}
+                        {searchData?.map((course, index) => <SearchedCourse key={index} data={course} />)}
                         </>
                     )}
 
@@ -84,26 +84,26 @@ const SearchedCourse = ({ data }) => {
     <div className="search-course">
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={6} className="col-img">
-                <Link to={`/search/course/${data?.idCourse}`}>
+                <Link to={`/search/course/${data?.courseId}`}>
                     <img src={data?.poster} alt=""/>
                 </Link>
             </Col>
             <Col span={18} className="col-info">
                 <div className="info-wrap">
-                    <Link to={`/search/course/${data?.idCourse}`}>
+                    <Link to={`/search/course/${data?.courseId}`}>
                         {/* <h3 className="s-course-name">Web Design for Everybody: Basics of Web Developer & Coding</h3> */}
                         <h3 className="s-course-name">{data?.name}</h3>
                     </Link>
                     {/* <span className="s-course-author">University of Michigan</span> */}
                     <span className="s-course-author">{data?.author}</span>
-                    <div className="s-course-quality">
+                    {/* <div className="s-course-quality">
                         <div className="quality-left">
                             <Rate disabled allowHalf defaultValue={data?.rate} className="course-rate"/>
                             <span className="rate-ratio">{data?.rate}</span>
                             <span className="num-rate">({data?.numRate})</span>
                         </div>
                         <Statistic className="numStudent" value={data?.numStudent} prefix={<i className="fas fa-user-graduate"/>} />
-                    </div>
+                    </div> */}
                 </div>
             </Col>
         </Row>
