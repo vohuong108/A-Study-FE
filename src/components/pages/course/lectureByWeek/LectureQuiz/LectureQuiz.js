@@ -10,7 +10,7 @@ import './LectureQuiz.scss';
 
 const LectureQuiz = () => {
     const { weekId, lectureId } = useParams();
-    const lecture = useSelector(state => selectLectureByID(state, weekId, lectureId));
+    const lecture = useSelector(state => selectLectureByID(state, weekId, lectureId, "QUIZ"));
     const quizContent = useSelector(state => state.quiz.quiz);
     const dispatch = useDispatch();
 
@@ -25,6 +25,7 @@ const LectureQuiz = () => {
     useEffect(() => {
         let getContent = async () => {
             let token = getToken();
+            console.log("quiz lecture: ", lecture);
     
             if(token && lecture?.url) {
                 let requestData = {

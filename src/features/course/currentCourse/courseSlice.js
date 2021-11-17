@@ -221,10 +221,15 @@ export const { saveWeekChanges } = courseSlice.actions;
 
 export const selectWeekByID = (stateStore, id) => stateStore.currentCourse.course?.weeks.find(week => week.weekId == id);
 
-export const selectLectureByID = (stateStore, weekId, lectureId) => {
+export const selectLectureByID = (stateStore, weekId, lectureId, type) => {
     let week = selectWeekByID(stateStore, weekId);
+    
     if(week) {
-        return week.lectures.find(lecture => lecture.lectureId == lectureId)
+        if(!type) {
+            return week.lectures.find(lecture => lecture.lectureId == lectureId && lecture.lectureType !== 'QUIZ')
+        } else {
+            return week.lectures.find(lecture => lecture.lectureId == lectureId && lecture.lectureType == type)
+        }
     }
 }
 export const selectWeekBySerial = (stateStore, serial) => stateStore.currentCourse.course?.weeks.find(week => week.serialWeek == serial);
