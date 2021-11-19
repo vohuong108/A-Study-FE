@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { getToken } from '../../../utils/localStorageHandler'
 import { getSearchedCourseInfo, enrollCourse } from '../../../features/search/searchAction'
-
+import AvatarLogo from '../../../assets/avatar.png'
 
 const PaidCourse = ({ history, location }) => {
     const { courseId } =  useParams();
@@ -89,7 +89,7 @@ const PaidCourse = ({ history, location }) => {
                                     className="author-avt"
                                     size={40}
                                     style={{ backgroundColor: 'rgb(236 244 233)' }}
-                                    src={courseInfo?.authorAvt}
+                                    src={AvatarLogo}
                                 />
                                 <span>{courseInfo?.author}</span>
                             </div>

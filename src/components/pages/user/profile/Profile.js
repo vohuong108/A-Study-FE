@@ -5,6 +5,7 @@ import { Avatar, Row, Col } from 'antd';
 import Chart from './Chart'
 import UpdateProfile from './updateProfile/UpdateProfile'
 import { useSelector } from 'react-redux'
+import AvatarLogo from '../../../../assets/avatar.png';
 
 const Profile = () => {
     const user = useSelector(state => state.user.userObj);
@@ -18,7 +19,7 @@ const Profile = () => {
                             <div className="user-card-wrap">
                                 <div className="user-card-info">
                                     <Avatar className="user-avt" 
-                                        src={user?.avatar} 
+                                        src={AvatarLogo} 
                                         size={80}
                                     />
                                     <div className="user-content">

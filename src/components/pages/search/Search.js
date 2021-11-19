@@ -8,6 +8,7 @@ import Filter from './filter/Filter'
 import { useSelector, useDispatch } from 'react-redux'
 import { searchCourse } from '../../../features/search/searchAction'
 import qs from 'query-string'
+import CourseLogo from '../../../assets/course-logo.jpg'
 
 const Search = ({ location}) => {
     const [slideVisible, setSlideVisible] = useState(false);
@@ -85,7 +86,7 @@ const SearchedCourse = ({ data }) => {
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={6} className="col-img">
                 <Link to={`/search/course/${data?.courseId}`}>
-                    <img src={data?.poster} alt=""/>
+                    <img src={CourseLogo} alt=""/>
                 </Link>
             </Col>
             <Col span={18} className="col-info">

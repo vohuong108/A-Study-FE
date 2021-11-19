@@ -4,6 +4,7 @@ import 'antd/dist/antd.css';
 import { Progress, Statistic, Row, Col, Button } from 'antd'
 import { TeamOutlined  } from '@ant-design/icons'
 import { Link } from 'react-router-dom'
+import CourseLogo from '../../../../assets/course-logo.jpg'
 
 const ProgressCourse = ({ data, permission }) => {
     const [url, setUrl] = useState('');
@@ -26,7 +27,7 @@ const ProgressCourse = ({ data, permission }) => {
                             <div className="progress-course-poster">
                                 <Link to={`/course/${url}`}>
                                     {/* <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://coursera-course-photos.s3.amazonaws.com/e4/3283d04d0111e5970145eef7ee0b59/gears-818461_1280.jpg?auto=format&dpr=1&w=100&h=100&fit=clamp" alt=""/> */}
-                                    {/* <img src={data.poster} alt="poster"/> */}
+                                    <img src={CourseLogo} alt="poster"/>
                                 </Link>
                             </div>
                         </Col>
@@ -39,7 +40,7 @@ const ProgressCourse = ({ data, permission }) => {
                                         <h3 className="p-course-title">{data.name}</h3>
                                         <p className="p-course-author">{data.author}</p>
                                     </Link>
-                                    {(permission === 'AUTHOR' || permission === 'ADMIN') ? <Statistic className="course-statistic" value={data.numOfStudent} prefix={<TeamOutlined  />}/> : ''}
+                                    {/* {(permission === 'AUTHOR' || permission === 'ADMIN') ? <Statistic className="course-statistic" value={data.numOfStudent} prefix={<TeamOutlined  />}/> : ''} */}
                                 </div>
                                 {/* <div className="progress-info">
                                     {permission === 'AUTHOR' ? <p>Teach Progress</p> : <p>Progress</p>}

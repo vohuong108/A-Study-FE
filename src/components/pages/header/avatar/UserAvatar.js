@@ -6,6 +6,7 @@ import { Avatar } from 'antd'
 import { useHistory, Link } from "react-router-dom"
 import 'antd/dist/antd.css'
 import './UserAvatar.scss'
+import AvatarLogo from '../../../../assets/avatar.png'
 
 const UserAvatar = () => {
     const [isHover, setHover] = useState(false);
@@ -32,7 +33,7 @@ const UserAvatar = () => {
                 style={{
                     backgroundColor: '#87d068',
                 }}
-                src={user?.avatar}
+                src={AvatarLogo}
             />
             <div className={`avt-wrap__pop ${isHover ? 'pop-act' : ''}`}>
                 <div className="avt-pop">
@@ -41,7 +42,7 @@ const UserAvatar = () => {
                             <Avatar 
                                 size={64} 
                                 className="avt-user"
-                                src={user?.avatar}
+                                src={AvatarLogo}
                             />
                             <div className="account-detail">
                                 <p>{user?.userName}</p>

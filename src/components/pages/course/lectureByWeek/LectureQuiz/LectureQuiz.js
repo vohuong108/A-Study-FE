@@ -18,8 +18,13 @@ const LectureQuiz = () => {
         return new Date(str).toLocaleString();
     }
 
-    const handleTime = (str) => {
-        return new Date(str).toLocaleTimeString();
+    const handleTime = (time) => {
+        let hour = parseInt(time/3600).toString().padStart(2, "0");
+        let min = parseInt((time - hour*3600)/60).toString().padStart(2, "0");
+        let sec = (time - hour*36000 - min*60).toString().padStart(2, "0");
+
+        console.log("in lecture quiz: h::m::s ", hour, min, sec);
+        return `${hour}:${min}:${sec}`
     }
 
     useEffect(() => {
