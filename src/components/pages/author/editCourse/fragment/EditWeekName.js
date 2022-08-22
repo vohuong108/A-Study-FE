@@ -1,39 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import './EditWeekName.scss'
-import { Input, Button, Row, Col, message } from 'antd'
-import { renameWeek } from '../../../../../features/course/currentCourse/courseAction'
-import { getToken } from '../../../../../utils/localStorageHandler'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { renameWeek } from '../../../../../features/course/currentCourse/courseAction';
 
-const EditWeekName = ({ title, weekId, }) => {
+import './EditWeekName.scss';
+
+import { Input, Button, Row, Col, message } from 'antd';
+
+
+const EditWeekName = ({ title, weekId, courseId}) => {
     const [focused, setFocused] = useState(false);
     const [content, setContent] = useState('');
     const [change, setChange] = useState(false);
     const dispatch = useDispatch();
 
     const handleSave = async () => {
-        let access_token = getToken();
-        let requestData = {
-            access_token: access_token,
-            data: { weekId: weekId, name: content }
-        }
-    
-        try {
-            const resultRename = await dispatch(renameWeek(requestData));
-            setChange(false);
+        const result = await dispatch(renameWeek({ weekId: weekId, courseId: courseId, name: content }));
+        setChange(false);
 
-        } catch (err) {
-            console.error("error in login: ", err);
+        if(result?.error) {
             message.error({
-                content: err.message,
+                content: result.payload.data,
                 style: {marginTop: '72px'},
                 key: "enroll-msg"
             })
         }
+            
     }
 
     useEffect(() => {
-        setContent(title);
+        if(title) {
+            setContent(title);
+        }
     }, [title])
 
     return (

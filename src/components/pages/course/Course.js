@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import './Course.scss'
-import 'antd/dist/antd.css'
-import Supplement from './supplement/Supplement'
-import { Route, Link, useLocation, useParams, Redirect, useRouteMatch, Switch } from 'react-router-dom'
-import { Layout, Menu, message } from 'antd'
-import { MenuOutlined } from '@ant-design/icons'
-import Overview from './overview/Overview'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCourseByID } from '../../../features/course/currentCourse/courseAction'
-import { unwrapResult } from '@reduxjs/toolkit'
-import { getToken } from '../../../utils/localStorageHandler'
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCourseByID } from '../../../features/course/currentCourse/courseAction';
+import { Route, Link, useLocation, useParams, Redirect, useRouteMatch, Switch } from 'react-router-dom';
+
+import './Course.scss';
+
+import Supplement from './supplement/Supplement';
+// import Overview from './overview/Overview';
+import { Layout, Menu, message } from 'antd';
+import { MenuOutlined } from '@ant-design/icons';
+
+
 
 const Course = ({ history, location }) => {
     let { id } = useParams();
@@ -17,35 +18,25 @@ const Course = ({ history, location }) => {
     const user = useSelector(state => state.user.userObj);
     const course = useSelector(state => state.currentCourse.course)
     const dispatch = useDispatch();
-    
-    console.log("location: ", location);
-    console.log("url: ", url);
 
     useEffect(() => {
-        let token = getToken();
-
-        const getCourse = async (requestData) => {
-            try {
-                let course = await dispatch(getCourseByID(requestData));
-                let un_course = unwrapResult(course);
+        const getCourse = async () => {
+            
+                let response = await dispatch(getCourseByID({courseId: id}));
+            
+                if(response?.error) {
+                    message.error({
+                        content: response.payload.message,
+                        style: {marginTop: '72px'},
+                        key: "enroll-msg"
+                    });
     
-                if(un_course?.isEnroll === false) history.push(`/search/course/${id}`);
-
-            } catch(err) {
-                message.error({
-                    content: err.message,
-                    style: {marginTop: '72px'},
-                    key: "enroll-msg"
-                })
-            }
+                    history.push(`/search/course/${id}`);
+                }
         }
 
-        if(user && token) {
-            let requestData = {
-                access_token: token,
-                courseId: id
-            }
-            getCourse(requestData);
+        if(user) {
+            getCourse();
         }
     }, [user, id]);
 
@@ -54,12 +45,12 @@ const Course = ({ history, location }) => {
             <Layout className="course-layout">
                 <CourseSlide course={course}/>
                 <Switch>
-                    {/* {location.pathname === url && <Redirect from={url} to={`${url}/welcome`} />}
-                    <Route path={`${path}/welcome`}>
+                    {(location.pathname === url && course?.weeks?.length > 0) && <Redirect from={url} to={`${url}/week/${course.weeks[0].id}`} />}
+                    {/* <Route path={`${path}/welcome`}>
                         <Overview />
                     </Route> */}
                     <Route path={`${path}/week/:weekId`} >
-                        <Supplement permission={course?.permissionCourse}/>
+                        <Supplement />
                     </Route>
                     
                 </Switch>
@@ -77,10 +68,7 @@ const CourseSlide = ({ course }) => {
     useEffect(() => {
         let arr = location.pathname.split('/').filter(item => item !== "");
         
-        if(arr[arr.length - 1] === 'welcome') {
-            setKeySlide('overview');
-        }
-        else if(arr[arr.length - 2] === 'week') {
+        if(arr[arr.length - 2] === 'week') {
             setKeySlide(`week${arr[arr.length - 1]}`);
         }
 
@@ -105,9 +93,9 @@ const CourseSlide = ({ course }) => {
                 </Menu.Item> */}
 
                 {course && course.weeks.map(week => (
-                    <Menu.Item className="menu_item" key={`week${week.weekId}`}>
-                        <Link to={`${url}/week/${week.weekId}`}>
-                            {`Week ${week.serialWeek}`}
+                    <Menu.Item className="menu_item" key={`week${week.id}`}>
+                        <Link to={`${url}/week/${week.id}`}>
+                            {`Week ${week.weekOrder}`}
                         </Link>  
                     </Menu.Item>
                 ))}

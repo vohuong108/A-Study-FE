@@ -1,42 +1,42 @@
-import React, { useEffect } from 'react'
-import Sidebar from "./sidebar/Sidebar";
-import "./admin.scss"
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
+import "./admin.scss";
+
 import Home from "./home/Home";
-import { Route, useRouteMatch, Redirect } from "react-router-dom"
-import {Switch} from "react-router-dom"
+import { Switch, Route, useRouteMatch, Redirect } from "react-router-dom";
+import Sidebar from "./sidebar/Sidebar";
 import UserList from "./userList/UserList";
-import User from "./user/User";
 import CourseList from "./courselist/CourseList";
-import { useSelector } from 'react-redux'
 
 
 export default function Admin({ history, location }) {
-    const user  = useSelector(state => state.user.userObj);
+    const user = useSelector(state => state.user.userObj);
     let { url } = useRouteMatch();
-    console.log("location render admin: ", location);
-    console.log("url render admin: ", url);
 
     useEffect(() => {
-        if(user?.permission && user?.permission !== "ADMIN") {
-            console.log("match non admin with current: ", user?.permission);
+        if (user?.userRole && user?.userRole !== "SUPER_ADMIN") {
+            console.log("match non admin with current: ", user?.userRole);
             history.push("/dashbroad");
         }
-    }, [user?.permission])
+    }, [user?.userRole])
     return (
         <div >
-            <div className="Container">
-                <Sidebar/>
+            <div className="Container" style={{ marginTop: '40px' }}>
+                <Sidebar />
                 <Switch>
-                    {location.pathname === url && <Redirect from={url} to={`${url}/userlist`} />}
-                    <Route exact path="/admin"><Home/></Route>
-                    <Route path="/admin/user"><User/></Route>
-                    <Route path="/admin/list"><CourseList/></Route>
-                    <Route path="/admin/userlist"><UserList/></Route>
+                    {location.pathname === url && <Redirect from={url} to={`${url}/users?page=0`} />}
+                    <Route exact path="/admin"><Home location={location} history={history} /></Route>
+                    <Route path="/admin/courses">
+                        {(location.pathname === "/admin/courses" && location.search === "")&& <Redirect from="/admin/courses" to="/admin/courses?page=0" />}
+                        <CourseList location={location} history={history} />
+                    </Route>
+                    <Route path="/admin/users">
+                        {(location.pathname === "/admin/users" && location.search === "")&& <Redirect from="/admin/users" to="/admin/users?page=0" />}
+                        <UserList location={location} history={history} />
+                    </Route>
                 </Switch>
             </div>
         </div>
     );
 }
-  
- 
-

@@ -1,24 +1,33 @@
-import React, { useState, useEffect } from 'react'
-import './Search.scss'
-import 'antd/dist/antd.css';
-import { Layout, Row, Divider, Col, Button, Rate, Statistic, Drawer, Skeleton } from 'antd'
-import { FilterFilled } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
-import Filter from './filter/Filter'
-import { useSelector, useDispatch } from 'react-redux'
-import { searchCourse } from '../../../features/search/searchAction'
-import qs from 'query-string'
-import CourseLogo from '../../../assets/course-logo.jpg'
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { searchCourse } from '../../../features/search/searchAction';
+import qs from 'query-string';
+import { Link } from 'react-router-dom';
+
+import './Search.scss';
+
+import { Layout, Row, Divider, Col, Button, Rate, Statistic, Drawer, Skeleton, message } from 'antd';
+import { FilterFilled } from '@ant-design/icons';
+import Filter from './filter/Filter';
+import CourseLogo from '../../../assets/course-logo.jpg';
 
 const Search = ({ location}) => {
     const [slideVisible, setSlideVisible] = useState(false);
-    const searchData = useSelector(state => state.search.data);
+    const searchData = useSelector(state => state.search.searchData);
     const loading = useSelector(state => state.search.loading);
     const dispatch = useDispatch();
 
     useEffect(() => {
         const search = async (requestData) => {
-            let result = await dispatch(searchCourse(requestData));
+            let response = await dispatch(searchCourse(requestData));
+
+            if(response?.error) {
+                message.error({
+                    content: response.payload.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                });
+            }
         }
 
         if(location.search) {
@@ -33,7 +42,7 @@ const Search = ({ location}) => {
         <Layout className="search-layout">
             <section className="search-header">
                 <Layout.Content className="search-content s-header">
-                    <h1 className="num-result">{`Showing ${searchData?.length} total results`}</h1>
+                    <h1 className="num-result">{`Showing ${searchData?.totalResult} total results`}</h1>
                     <div className="filter">
                         <Button 
                             className="btn-filter"
@@ -59,7 +68,7 @@ const Search = ({ location}) => {
                     <Layout.Content className="s-body-content">
                     {loading ? <Skeleton active loading={loading} /> : (
                         <>
-                        {searchData?.map((course, index) => <SearchedCourse key={index} data={course} />)}
+                        {searchData?.results?.map((course, index) => <SearchedCourse key={index} data={course} />)}
                         </>
                     )}
 
@@ -85,13 +94,13 @@ const SearchedCourse = ({ data }) => {
     <div className="search-course">
         <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col span={6} className="col-img">
-                <Link to={`/search/course/${data?.courseId}`}>
+                <Link to={`/search/course/${data?.id}`}>
                     <img src={CourseLogo} alt=""/>
                 </Link>
             </Col>
             <Col span={18} className="col-info">
                 <div className="info-wrap">
-                    <Link to={`/search/course/${data?.courseId}`}>
+                    <Link to={`/search/course/${data?.id}`}>
                         {/* <h3 className="s-course-name">Web Design for Everybody: Basics of Web Developer & Coding</h3> */}
                         <h3 className="s-course-name">{data?.name}</h3>
                     </Link>

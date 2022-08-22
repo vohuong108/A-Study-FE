@@ -1,12 +1,16 @@
-import React from 'react'
-import './QuizNav.scss'
-import { Card, Statistic } from 'antd'
-const { Countdown } = Statistic
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import './QuizNav.scss';
+
+import { Card, Statistic } from 'antd';
+const { Countdown } = Statistic;
 
 
-const QuizNav = ({ review, handleSubmit, dueTime, navData }) => {
+const QuizNav = ({ review, handleSubmit, dueTime }) => {
+    const quizNav = useSelector(state => review ? state.submit.submitNav : state.quiz.quizNav); 
+    const isSubmit = useSelector(state => state.quiz.isSubmit);
     
-
     const handleDueTime = (time) => {
         if(time) {
             
@@ -15,19 +19,27 @@ const QuizNav = ({ review, handleSubmit, dueTime, navData }) => {
             let sec = (time - hour*36000 - min*60);
 
             console.log("h::m::s ", hour, min, sec);
-            return hour*1000*60*60*24 + min*1000*60 + 1000*(sec+1);
+            return hour*1000*60*60*24 + min*1000*60 + 1000*(sec);
+            
         } else return 0;
     }
+
+    const handleFinishTime = () => {
+        if(isSubmit === false) {
+            handleSubmit();
+        }
+    }
+
     return (
         <div className="quiz-nav-wrapper">
             <Card className="nav-card">
                 <p className="nav-title">Quiz navigation</p>
                 {!review ? (<Countdown className="nav-countdown" title="Time remaining" 
                     value={Date.now() + handleDueTime(dueTime)}
-                    onFinish={() => handleSubmit()}
+                    onFinish={() => handleFinishTime()}
                 />) : ''}
                 <Card className="nav-card-holder" bordered={false}>
-                    {navData ? Object.keys(navData).map(idQuestion => (
+                    {quizNav ? Object.keys(quizNav).map(idQuestion => (
                         <Card.Grid 
                             className="nav-card-grid"
                             style={{ 
@@ -41,7 +53,7 @@ const QuizNav = ({ review, handleSubmit, dueTime, navData }) => {
                         >
                             <a href={`#quiz-item-${idQuestion}`} >
                             <span className="q-holder">{idQuestion}</span>
-                            <span className={`mark ${navData[idQuestion] ? "mark-act" : ""}`}></span>
+                            <span className={`mark ${quizNav[idQuestion] ? "mark-act" : ""}`}></span>
                             </a>
 
                         </Card.Grid>

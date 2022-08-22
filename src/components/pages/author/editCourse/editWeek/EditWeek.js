@@ -14,35 +14,36 @@ import { selectWeekByID, saveWeekChanges } from '../../../../../features/course/
 
 const EditWeekContext = React.createContext();
 
-const EditWeek = ({ weekId, courseId }) => {
+const EditWeek = ({ weekId, courseId, weekOrder }) => {
+  
   const weekStoreData = useSelector(state => selectWeekByID(state, weekId));
-  const [weekData, setWeekData] = useState({ weekId: weekId, name: '', lectures: [] });
+  const [weekData, setWeekData] = useState({ weekId: weekId, name: '', contents: [] });
 
   const columns = [
     {
       title: 'Lecture Name',
-      dataIndex: 'title',
+      dataIndex: 'name',
       className: 'drag-visible',
       width: 150,
       fixed: 'left',
     },
     {
       title: 'Type',
-      dataIndex: 'lectureType',
+      dataIndex: 'contentType',
       render: (type) => <>{type}</> 
     },
     {
       title: 'Status',
-      dataIndex: 'lectureStatus',
+      dataIndex: 'contentStatus',
       render: (status) => status === 'PUBLIC' ? <Tag color='cyan'>{status}</Tag> : <Tag color='#f50'>{status}</Tag>,
     },
     {
       title: 'Edit',
-      render: (text) => <EditLecture data={{...text, weekId: weekId}}/>,
+      render: (text) => <EditLecture data={{...text, courseId, weekId}}/>,
     },
     {
       title: 'Delete',
-      render: (text) => <DeleteConfirm weekId={weekId} lectureId={text.lectureId}/>,
+      render: (text) => <DeleteConfirm courseId={courseId} weekId={weekId} contentId={text.id}/>,
     },
   ];
 
@@ -60,9 +61,9 @@ const EditWeek = ({ weekId, courseId }) => {
           <Table
             className='edit-table'
             pagination={false}
-            dataSource={weekData?.lectures}
+            dataSource={weekData?.contents}
             columns={columns}
-            rowKey="indexLecture"
+            rowKey="id"
             scroll={{ x: 1000}}
             // components={{
             //   body: {

@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { createQuizContent, updateQuizContent } from '../../../../../features/course/currentCourse/courseAction';
+import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
+import courseApi from '../../../../../api/courseApi';
+
+import './QuizEditor.scss';
+
 import { DownCircleFilled, PlusOutlined, RightCircleFilled } from '@ant-design/icons'
 import { Input, InputNumber, Checkbox, Button, DatePicker, TimePicker, Tag, Switch, Select } from 'antd';
 import { useForm, Controller, useFieldArray } from "react-hook-form"
 import { DeleteFilled } from '@ant-design/icons';
-import './QuizEditor.scss'
-import moment from 'moment'
-import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from '../../../../../utils/localStorageHandler';
-import { addQuiz, updateQuiz } from '../../../../../features/course/currentCourse/courseAction';
-import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
-import axios from 'axios';
+
 
 const QuizEditor = ({ action, setVisible, weekId }) => {
     console.log('re-render in quiz editor: ', action);
@@ -17,6 +20,7 @@ const QuizEditor = ({ action, setVisible, weekId }) => {
     const { control, handleSubmit, register, formState: { errors }, setValue } = useForm();
     const dispatch = useDispatch();
     const weekRedux = useSelector(state => selectWeekByID(state,  weekId));
+    let { id } = useParams();
 
     const { fields, append, remove } = useFieldArray(
         {
@@ -35,80 +39,124 @@ const QuizEditor = ({ action, setVisible, weekId }) => {
     } 
     
     const onSubmit = async (data) => {
-        let token = getToken();
+        console.log(data)
         let maxScore = data?.content.reduce((total, question) => total + question.point, 0);
         
         let time = splitTime(data.working_time);
 
-        if(action && action.type === 'EDIT') {
-            let requestData = {
-                access_token: token,
-                data: {
-                    weekId: action?.data?.weekId,
-                    quizId: action?.data?.lectureId,
-                    title: data.quiz_name,
-                    status: data.status,
-                    dueDate: data.due_date.utc(),
-                    releaseDate: data.release_date.utc(),
-                    time: time,
-                    attemptAllow: data.attempt_allow,
-                    degree: data.degree,
-                    questions: data.content,
-                    maxScore: maxScore
+        let questions = data.content.map((q, indexq) => {
+            let countAns = 0
+            let options = q.choices.map((c, indexc) => {
+                countAns = c.answer ? countAns + 1 : countAns;
+                return {
+                    content: c.choice,
+                    isCorrect: c.answer,
+                    optionOrder: indexc
                 }
+            })
+            return {
+                name: q.question, 
+                questionType: countAns >= 2 ? "MULTIPLE_CHOICE" : "ONE_CHOICE", 
+                score: q.point, 
+                questionOrder: indexq,
+                options: options
             }
+        });
 
-            let result_update = await dispatch(updateQuiz(requestData));
-            setVisible(false);
+
+        if(action && action.type === 'EDIT') {
+
+            let requestData = {
+                courseId: id,
+                weekId: action.data.weekId,
+                quizId: action.data.id,
+                data: {
+                    name: data.quiz_name,
+                    contentOrder: action.data.contentOrder,
+                    contentStatus: data.status,
+                    releaseDate: data.release_date.utc().toISOString(),
+                    contentType: "QUIZ",
+                    maxScore: maxScore,
+                    degree: data.degree,
+                    time: time,
+                    closeDate: data.due_date.utc().toISOString(),
+                    attemptAllow: data.attempt_allow,
+                    questions: questions,
+                }
+            };
+
+            console.log(requestData)
+            await dispatch(updateQuizContent(requestData));
+            // setVisible(false);
 
         } else {
+
             let requestData = {
-                access_token: token,
+                courseId: id,
+                weekId: weekId,
                 data: {
-                    weekId: weekRedux.weekId,
-                    indexLecture: action?.type === 'EDIT' ? action.data.indexLecture : weekRedux.lectures.length,
-                    title: data.quiz_name,
-                    status: data.status,
-                    dueDate: data.due_date.utc(),
-                    releaseDate: data.release_date.utc(),
-                    time: time,
-                    attemptAllow: data.attempt_allow,
+                    name: data.quiz_name,
+                    contentOrder: weekRedux?.contents?.length || 0,
+                    contentStatus: data.status,
+                    releaseDate: data.release_date.utc().toISOString(),
+                    contentType: "QUIZ",
+                    maxScore: maxScore,
                     degree: data.degree,
-                    questions: data.content,
-                    maxScore: maxScore
+                    time: time,
+                    closeDate: data.due_date.utc().toISOString(),
+                    attemptAllow: data.attempt_allow,
+                    questions: questions,
                 }
             }
-            let result_add = await dispatch(addQuiz(requestData));
-            setVisible(false);
+
+            console.log(requestData)
+            await dispatch(createQuizContent(requestData));
+            // setVisible(false);
         }
 
     }
 
     useEffect(() => {
         if(action?.type === 'EDIT') {
-            let getQuiz = async () => {
-                let access_token = getToken();
-                let quizRes = await axios({
-                    url: `http://localhost:8888/api${action.data.url}`,
-                    method: 'get',
-                    headers: {
-                        "Authorization": `Bearer ${access_token}`,
-                        "Content-Type": "application/json"
-                    },
+            console.log(action);
+            const getQuizContent = async () => {
+                let result = await courseApi.getQuizContentEdit({
+                    courseId: id, 
+                    weekId: action.data.weekId, 
+                    quizId: action.data.id
                 });
-                console.log("res in get quiz: ", quizRes);
     
-                setValue('quiz_name', quizRes.data.title);
-                setValue('release_date', moment.utc(quizRes.data.releaseDate).local());
-                setValue('working_time', moment.utc(quizRes.data.time * 1000));
-                setValue('due_date', moment.utc(quizRes.data.dueDate).local());
-                setValue('attempt_allow', quizRes.data.attemptAllow);
-                setValue('degree', quizRes.data.degree);
-                setValue('status', quizRes.data.status);
-                setValue('content', quizRes.data.questions);
+                setValue('quiz_name', result.data.name);
+                setValue('release_date', moment.utc(result.data.releaseDate).local());
+                setValue('working_time', moment.utc(result.data.time * 1000));
+                setValue('due_date', moment.utc(result.data.closeDate).local());
+                setValue('attempt_allow', result.data.attemptAllow);
+                setValue('degree', result.data.degree);
+                setValue('status', result.data.contentStatus);
+
+                let questions = [...result.data.questions].sort((a, b) => a.questionOrder - b.questionOrder);
+
+                questions = questions.map((q, indexq) => {
+                    let choices = [...q.options].sort((a, b) => a.optionOrder - b.optionOrder);
+                    choices = choices.map((o, indexo) => ({
+                        choiceId: indexo,
+                        answer: o.isCorrect,
+                        choice: o.content
+                    }));
+
+                    return {
+                        question: q.name,
+                        point: q.score, 
+                        questionId: indexq,
+                        choices: choices
+                    }
+                });
+
+                setValue('content', questions);
+    
             }
 
-            getQuiz();
+            getQuizContent();
         }
     }, [action.type])
 
@@ -228,7 +276,15 @@ const QuizEditor = ({ action, setVisible, weekId }) => {
                 ))}
             </tbody>
         </table>
-        <div className="add-question" onClick={() => append({questionId: fields.length, point: 1, question: '', choices: []})}>
+        <div 
+            className="add-question" 
+            onClick={() => append({
+                questionId: fields[fields.length-1]?.questionId + 1 || 0, 
+                point: 1, 
+                question: '', 
+                choices: []
+            })}
+        >
             <PlusOutlined className="icon-add"/> 
             New Question
         </div>
@@ -334,7 +390,14 @@ const ExpandedChoice = ({ control, errors, indexRow, clicked }) => {
                     
                 </tbody>
             </table>
-            <div className="add-choice" onClick={() =>  append({choiceId: fields.length, choice: '', answer: false})}>New Choice</div>
+            <div 
+                className="add-choice"
+                onClick={() =>  append({
+                    choiceId: fields[fields.length-1]?.choiceId + 1 || 0, 
+                    choice: '', 
+                    answer: false
+                })}
+            >New Choice</div>
             
             </td>
         </>

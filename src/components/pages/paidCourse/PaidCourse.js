@@ -1,13 +1,13 @@
-import React, { useEffect, } from 'react'
-import './PaidCourse.scss'
-import 'antd/dist/antd.css';
-import { Row, Col, Rate, Avatar, Button, Divider, message } from 'antd'
-import { CheckOutlined } from '@ant-design/icons'
-import { useSelector, useDispatch } from 'react-redux'
-import { Link, useParams } from 'react-router-dom'
-import { getToken } from '../../../utils/localStorageHandler'
-import { getSearchedCourseInfo, enrollCourse } from '../../../features/search/searchAction'
-import AvatarLogo from '../../../assets/avatar.png'
+import React, { useEffect, } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useParams } from 'react-router-dom';
+import { getCourseInfo, enrollCourse } from '../../../features/search/searchAction';
+
+import './PaidCourse.scss';
+
+import { Row, Col, Rate, Avatar, Button, Divider, message } from 'antd';
+import { CheckOutlined } from '@ant-design/icons';
+import AvatarLogo from '../../../assets/avatar.png';
 
 const PaidCourse = ({ history, location }) => {
     const { courseId } =  useParams();
@@ -16,57 +16,47 @@ const PaidCourse = ({ history, location }) => {
     const dispatch = useDispatch();
 
     const handleEnroll = async () => {
-        let token = getToken();
 
-        if(!user && !token) {
-            history.push('/login', {from: location});
+        if(!user) {
+            history.push('/login', { from: location });
+
         } else {
-            let request = {
-                courseId: parseInt(courseId),
-                access_token: token
-            }
     
-            try {
-                message.loading({ content: 'Loading...', key: "enroll-msg" });
-                let result = await dispatch(enrollCourse(request));
+            message.loading({ content: 'Loading...', key: "enroll-msg" });
+            let response = await dispatch(enrollCourse({ courseId }));
 
-                message.success({
-                    content: "Enrolled course successfully",
-                    style: {marginTop: '72px'},
-                    key: "enroll-msg"
-                })
-            } catch (err) {
+            if(response?.error) {
                 message.error({
-                    content: err.message,
+                    content: response.payload.message,
                     style: {marginTop: '72px'},
                     key: "enroll-msg"
                 })
+            } else {
+                message.success({
+                    content: response.payload.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                });
             }
-
         }
     }
 
     useEffect(() => {
-        let token = getToken();
-        let request = {
-            access_token: token,
-            courseId: courseId
-        }
 
-        const getInfoCourse = async (requestData) => {
-            try {
-                let result = await dispatch(getSearchedCourseInfo(requestData))
+        const getCourseInfoById = async () => {
 
-            } catch (err) {
+            let response = await dispatch(getCourseInfo({ courseId }));
+
+            if(response?.error) {
                 message.error({
-                    content: err.message,
+                    content: response.payload.message,
                     style: {marginTop: '72px'},
                     key: "enroll-msg"
-                })
-            }
+                });
+            } 
         }
 
-        getInfoCourse(request);
+        getCourseInfoById();
     }, [courseId])
     return (
         <div className="paid-course">
@@ -93,13 +83,13 @@ const PaidCourse = ({ history, location }) => {
                                 />
                                 <span>{courseInfo?.author}</span>
                             </div>
-                            {courseInfo?.isEnroll 
+                            {courseInfo?.isAccess 
                                 ? <Link to={`/course/${courseId}`}>
-                                    <Button className="btn-enroll" disabled={!courseInfo}>
+                                    <Button className="btn-enroll" disabled={!user}>
                                         Go to course
                                     </Button>
                                 </Link>
-                                : <Button className="btn-enroll" disabled={!courseInfo} onClick={handleEnroll}>
+                                : <Button className="btn-enroll" onClick={handleEnroll}>
                                     Enroll Now
                                 </Button>
                             
@@ -120,7 +110,7 @@ const PaidCourse = ({ history, location }) => {
                                         className="what-learn-row" 
                                         gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 4, sm: 8, md: 16, lg: 24 }]}
                                     >
-                                        {courseInfo?.learnInfo?.map((item, index) => 
+                                        {courseInfo?.learns?.map((item, index) => 
                                             <Col key={index} className="what-learn-item" xs={24} sm={12}>
                                                 <CheckOutlined className="icon-checkout" />
                                                 <p>{item}</p>
@@ -132,7 +122,7 @@ const PaidCourse = ({ history, location }) => {
                                 <div className="skill-gain">
                                     <p className="title">SKILLS YOU GAIN</p>
                                     <div className="skill-learn-wrap">
-                                        {courseInfo?.skillInfo.map((item, index) => 
+                                        {courseInfo?.skills?.map((item, index) => 
                                             <span key={index} className="skill-item">{item}</span>
                                         )}
                                     </div>

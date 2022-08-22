@@ -1,26 +1,34 @@
-import userApi from '../../api/userApi'
+import quizApi from "../../api/quizApi";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const submitExamineResults = createAsyncThunk(
-    'quiz/submitExamineResults',
-    async (requestData) => {
-        const result = await userApi.submitExamineResults(requestData);
-        return result;
-    }
-)
+export const doQuiz = createAsyncThunk(
+    'quiz/doQuiz',
+    async (arg, { rejectWithValue }) => {
+        try {
+            const response = await quizApi.doQuiz(arg);
+            console.log("[doQuiz action] ", response);
 
-export const getQuizContent = createAsyncThunk(
-    'quiz/getQuizContent',
-    async (requestData) => {
-        const result = await userApi.getQuizContent(requestData);
-        return result;
-    }
-)
+            return response.data;
 
-export const getQuizById = createAsyncThunk(
-    'quiz/getQuizById',
-    async (requestData) => {
-        const result = await userApi.getQuizById(requestData);
-        return result;
+        } catch (err) {
+            console.log("[Error doQuiz action] ", err.response);
+            return rejectWithValue(err.response.data);
+        }
     }
-)
+);
+
+export const scoringQuiz = createAsyncThunk(
+    'quiz/scoringQuiz',
+    async (arg, { rejectWithValue }) => {
+        try {
+            const response = await quizApi.scoringQuiz(arg);
+            console.log("[scoringQuiz action] ", response);
+
+            return response.data;
+
+        } catch (err) {
+            console.log("[Error scoringQuiz action] ", err.response);
+            return rejectWithValue(err.response.data);
+        }
+    }
+);

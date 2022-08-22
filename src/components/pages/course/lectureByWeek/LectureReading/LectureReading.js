@@ -1,33 +1,50 @@
-import React, { useState, useEffect } from 'react'
-import { Typography } from 'antd'
-import 'antd/dist/antd.css'
-import './LectureReading.scss'
-import { selectLectureByID } from '../../../../../features/course/currentCourse/courseSlice'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import Interweave from 'interweave'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import { selectContentByID } from '../../../../../features/course/currentCourse/courseSlice';
+import { useParams, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import courseApi from '../../../../../api/courseApi';
+
+import './LectureReading.scss';
+
+import Interweave from 'interweave';
+import axios from 'axios';
+import { Typography, message } from 'antd';
+
 
 const LectureReading = () => {
-    const { weekId, lectureId } = useParams();
-    const lecture = useSelector(state => selectLectureByID(state, weekId, lectureId));
+    const { courseId, weekId, contentId } = useParams();
+    const lecture = useSelector(state => selectContentByID(state, weekId, contentId));
     const [content, setContent] = useState();
+    const history = useHistory();
 
     useEffect(() => {
         let getContent = async () => {
-            // console.log("lecture data: ", lecture);
-            let response = await axios.get(`http://localhost:8888/api${lecture?.url}`);
-            // console.log("response get content text: ", response);
-            setContent(response.data);
+            try {
+                let responseUrl = await courseApi.getLectureContentUrl({courseId, weekId, contentId});
+                console.log(responseUrl);
+                let responseContent = await axios.get(responseUrl.data.url);
+                console.log(responseContent);
+                setContent(responseContent.data);
+
+            } catch (err) {
+                console.log(err.response.data);
+                message.error({
+                    content: err.response.data.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                });
+
+                history.push(`/course/${courseId}/week/${weekId}`);
+            }
         }
 
         getContent();
-
-    }, [weekId, lectureId])
+        
+    }, [weekId, contentId])
     return (
         <Typography className="lecture-reading">
             <Typography.Title>
-                {lecture && lecture.title}
+                {lecture && lecture.name}
             </Typography.Title>
             {lecture && <Interweave content={content} />}
 

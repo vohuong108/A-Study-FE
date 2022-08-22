@@ -1,68 +1,62 @@
-import React, { useState, useEffect } from 'react'
-import './Lecture.scss'
-import 'antd/dist/antd.css'
-import { Layout, Menu, message } from 'antd'
-import { MenuUnfoldOutlined, MenuFoldOutlined, PlayCircleOutlined, ReadOutlined, ContainerOutlined } from '@ant-design/icons'
-import { Link, useParams, useRouteMatch, useLocation, Route, Switch } from 'react-router-dom'
-import LectureVideo from './LectureVideo/LectureVideo'
-import LectureReading from './LectureReading/LectureReading'
-import LectureQuiz from './LectureQuiz/LectureQuiz'
-import { selectWeekByID } from '../../../../features/course/currentCourse/courseSlice'
-import { unwrapResult } from '@reduxjs/toolkit'
-import { getToken } from '../../../../utils/localStorageHandler'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCourseByID } from '../../../../features/course/currentCourse/courseAction'
+import React, { useState, useEffect } from 'react';
+import { Link, useParams, useRouteMatch, useLocation, Route, Switch } from 'react-router-dom';
+import { selectWeekByID } from '../../../../features/course/currentCourse/courseSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCourseByID } from '../../../../features/course/currentCourse/courseAction';
+
+import './Lecture.scss';
+
+import { Layout, Menu, message } from 'antd';
+import { MenuUnfoldOutlined, MenuFoldOutlined, PlayCircleOutlined, ReadOutlined, ContainerOutlined } from '@ant-design/icons';
+import LectureVideo from './LectureVideo/LectureVideo';
+import LectureReading from './LectureReading/LectureReading';
+import LectureQuiz from './LectureQuiz/LectureQuiz';
 
 
 const Lecture = ({ history }) => {
-    let { courseId, weekId } = useParams();
+    let { courseId } = useParams();
     let { url, path} = useRouteMatch();
     const user = useSelector(state => state.user.userObj);
-    const week = useSelector(state => selectWeekByID(state, weekId));
+    const courseRedux = useSelector(state => state.currentCourse.course);
+    
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let token = getToken();
+        const getCourse = async () => {
+            
+            let response = await dispatch(getCourseByID({courseId: courseId}));
 
-        const getCourse = async (requestData) => {
-            try {
-                let course = await dispatch(getCourseByID(requestData));
-                let un_course = unwrapResult(course);
-
-                if(un_course?.isEnroll === false) history.push(`/search/course/${courseId}`);
-
-            } catch(err) {
+            if(response?.error) {
                 message.error({
-                    content: err.message,
+                    content: response.payload.message,
                     style: {marginTop: '72px'},
                     key: "enroll-msg"
-                })
+                });
+
+                history.push(`/search/course/${courseId}`);
             }
         }
 
-        if(user && token) {
-            let requestData = {
-                access_token: token,
-                courseId: courseId
-            }
-            getCourse(requestData);
+        if(user && (courseRedux.id != courseId)) {
+            console.log(courseRedux.id, " >< ", courseId);
+            getCourse();
         }
     }, [user, courseId]);
 
     return (
         <div className="lecture">
             <Layout className="lecture-layout">
-                <LectureSlide week={week} url={url} />
+                <LectureSlide url={url} />
                 <Layout className="lecture-layout-wrap-content">
                     <Layout.Content className="lecture-content" >
                         <Switch>
-                            <Route path={`${path}/r/:lectureId`}>
+                            <Route path={`${path}/r/:contentId`}>
                                 <LectureReading />
                             </Route>
-                            <Route path={`${path}/v/:lectureId`}>
+                            <Route path={`${path}/v/:contentId`}>
                                 <LectureVideo />
                             </Route>
-                            <Route path={`${path}/q/:lectureId`}>
+                            <Route path={`${path}/q/:contentId`}>
                                 <LectureQuiz />
                             </Route>
                         </Switch>
@@ -75,18 +69,23 @@ const Lecture = ({ history }) => {
     )
 }
 
-const LectureSlide = ({ week, url }) => {
+const LectureSlide = ({ url }) => {
     const [collapsed, setCollapsed] = useState(false);
     const [keySlide, setKeySlide] = useState(null);
+    let { weekId } = useParams();
+    const weekData = useSelector(state => selectWeekByID(state, weekId));
     const location = useLocation();
 
-    console.log("week data in lecture slide: ", week);
+    // console.log("week data in lecture slide: ", weekData);
+    console.log("location: ", location);
+    console.log("url prop: ", url);
 
     useEffect(() => {
         let arr = location.pathname.split('/').filter(item => item !== "");
-        setKeySlide(`${arr[arr.length - 2]}${arr[arr.length - 1]}`);     
+        console.log(arr)
+        setKeySlide(`${arr[arr.length - 2]}-${arr[arr.length - 1]}`);
 
-    }, [location.pathname])
+    }, [location.pathname]);
     
     return (
         <>
@@ -98,34 +97,34 @@ const LectureSlide = ({ week, url }) => {
                 collapsedWidth={0}
             >
                 <Menu className="lecture-menu" mode="inline" selectedKeys={[keySlide]}>
-                    {week && week.lectures.map(lecture => (
-                        <React.Fragment key={lecture.lectureId}>
-                        {lecture.lectureType === 'TEXT' && 
-                            <Menu.Item className="lecture-menu-item" key={`r-${lecture.lectureId}`} icon={<ReadOutlined className="icon"/>}>
-                                <Link to={`${url}/r/${lecture.lectureId}`}>
+                    {weekData && weekData.contents.map(content => (
+                        <React.Fragment key={content.id}>
+                        {(content.contentStatus === "PUBLIC" && content.contentType === 'TEXT') && 
+                            <Menu.Item className="lecture-menu-item" key={`r-${content.id}`} icon={<ReadOutlined className="icon"/>}>
+                                <Link to={`${url}/r/${content.id}`}>
                                     <p className="item-title">
                                         <strong>Text: </strong> 
-                                        {lecture.title}
+                                        {content.name}
                                     </p>
                                 </Link>
                             </Menu.Item>
                         }
-                        {lecture.lectureType === 'VIDEO' && 
-                            <Menu.Item className="lecture-menu-item" key={`v-${lecture.lectureId}`} icon={<PlayCircleOutlined className="icon"/>}>
-                                <Link to={`${url}/v/${lecture.lectureId}`}>
+                        {(content.contentStatus === "PUBLIC" && content.contentType === 'VIDEO') && 
+                            <Menu.Item className="lecture-menu-item" key={`v-${content.id}`} icon={<PlayCircleOutlined className="icon"/>}>
+                                <Link to={`${url}/v/${content.id}`}>
                                     <p className="item-title">
                                         <strong>Video: </strong> 
-                                        {lecture.title}
+                                        {content.name}
                                     </p>
                                 </Link>
                             </Menu.Item>
                         }
-                        {lecture.lectureType === 'QUIZ' && 
-                            <Menu.Item className="lecture-menu-item" key={`q-${lecture.lectureId}`} icon={<ContainerOutlined className="icon"/>}>
-                                <Link to={`${url}/q/${lecture.lectureId}`}>
+                        {(content.contentStatus === "PUBLIC" && content.contentType === 'QUIZ') && 
+                            <Menu.Item className="lecture-menu-item" key={`q-${content.id}`} icon={<ContainerOutlined className="icon"/>}>
+                                <Link to={`${url}/q/${content.id}`}>
                                     <p className="item-title">
                                         <strong>Quiz: </strong> 
-                                        {lecture.title}
+                                        {content.name}
                                     </p>
                                 </Link>
                             </Menu.Item>

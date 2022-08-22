@@ -1,71 +1,86 @@
 import React, { useState, useEffect } from 'react';
+import { useForm, Controller  } from "react-hook-form";
+import { createLectureContent, updateLectureContent } from '../../../../../features/course/currentCourse/courseAction';
+import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
 import './VideoEditor.scss';
+
 import { Upload } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
 import { Button, Switch } from 'antd';
-import { useForm, Controller  } from "react-hook-form";
 import ReactPlayer from 'react-player';
-import { useDispatch, useSelector } from 'react-redux';
-import { getToken } from '../../../../../utils/localStorageHandler';
-import { addLecture, updateLecture } from '../../../../../features/course/currentCourse/courseAction';
-import { selectWeekByID, } from '../../../../../features/course/currentCourse/courseSlice';
+import courseApi from '../../../../../api/courseApi';
+
+
+
 
 const VideoEditor = ({ action, setVisible, weekId }) => {
     console.log('re-render in video editor: ', action);
     
+    let { id } = useParams();
     const { register, control, handleSubmit, setValue, formState: { errors } } = useForm();
     const [videoFile, setVideoFile] = useState(null);
     const dispatch = useDispatch();
     const weekRedux = useSelector(state => selectWeekByID(state,  weekId));
     
     const onSubmit = async (data) => {
-        console.log('form: ', data.video)
-
-        let token = getToken();
-
+        console.log('form: ', data);
 
         if(action && action.type === 'EDIT') {
             let requestData = {
-                access_token: token,
-                data: {
-                    lectureId: action?.data?.lectureId,
-                    weekId: action?.data?.weekId,
-                    title: data.video_name,
-                    lectureType: 'VIDEO',
-                    content: data.video,
-                    lectureStatus: data.status
-                }
+                courseId: id,
+                weekId: action.data.weekId,
+                contentId: action.data.id,
+                contentOrder: action.data.contentOrder,
+                name: data.video_name,
+                contentType: 'VIDEO',
+                content: data.video,
+                contentStatus: data.status
             }
 
-            let result_update = await dispatch(updateLecture(requestData));
+            console.log(requestData);
+
+            let result_update = await dispatch(updateLectureContent(requestData));
+            setValue('video', null);
             setVisible(false);
 
         } else {
             let requestData = {
-                access_token: token,
-                data: {
-                    weekId: weekRedux.weekId,
-                    indexLecture: weekRedux?.lectures?.length,
-                    title: data.video_name,
-                    lectureType: 'VIDEO',
-                    content: data.video,
-                    lectureStatus: data.status
-                }
+                courseId: id,
+                weekId: weekId,
+                contentOrder: weekRedux?.contents?.length || 0,
+                name: data.video_name,
+                contentType: 'VIDEO',
+                content: data.video,
+                contentStatus: data.status
             }
 
-            let result_add = await dispatch(addLecture(requestData));
+            let result_add = await dispatch(createLectureContent(requestData));
             setVisible(false);
         }
     }
 
     useEffect(() => {
         if(action?.type === 'EDIT') {
-            setValue('video_name', action.data.title);
-            setValue('status', action.data.lectureStatus);
-            setValue('video', `http://localhost:8888/api${action.data.url}`);
-            setVideoFile(`http://localhost:8888/api${action.data.url}`)
+            const fetchVideoUrl = async () => {
+                let response = await courseApi.getLectureContentUrl({ 
+                    courseId: id, 
+                    weekId: action.data.weekId, 
+                    contentId: action.data.id 
+                })
+                console.log(response);
+    
+                setValue('video_name', action.data.name);
+                setValue('status', action.data.contentStatus);
+                setVideoFile(response.data.url);
+            }
+
+            fetchVideoUrl();
+            
         }
-    }, [action])
+    }, [action.type])
     
     return (
         <form id="form-video" className="video-editor" onSubmit={handleSubmit(onSubmit)}>
@@ -83,7 +98,7 @@ const VideoEditor = ({ action, setVisible, weekId }) => {
             <Controller
                 name="video"
                 control={control}
-                rules={{ required: true }}
+                rules={{ required: action.type === "EDIT" ? false : true }}
                 render={({ field }) => 
                     <Upload.Dragger 
                         name='file'

@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { getQuizContent, getQuizById, submitExamineResults } from './quizAction'
+import { createSlice } from "@reduxjs/toolkit";
+import { doQuiz, scoringQuiz } from './quizAction';
 
 const quizSlice = createSlice({
     name: 'quiz',
@@ -8,64 +8,46 @@ const quizSlice = createSlice({
         loading: false,
         error: null,
         quizNav: null,
-        startTime: null,
+        isSubmit: false,
     },
     reducers: {
         marked: (state, action) => {
-            let indexQ = action.payload.indexQ;
-            state.quizNav[indexQ] = true;
+            state.quizNav[action.payload.indexQ] = action.payload.markType;
         },
-        buildNav: (state) => {
+    },
+    extraReducers: {
+        [doQuiz.pending]: (state) => {
+            state.loading = true;
+        },
+        [doQuiz.rejected]: (state, action) => {
+            state.error = action.error;
+            state.quiz = null;
+            state.quizNav = null
+            state.loading = false;
+            
+        },
+        [doQuiz.fulfilled]: (state, action) => {
+            state.loading = false;
+            state.quiz = action.payload;
+            state.isSubmit = false;
+
             state.quizNav = state?.quiz?.questions.reduce((acc, _, curIndex) => {
                 acc[curIndex] = false;
                 return acc;
             }, {});
             
         },
-        buildStartTime: (state) => {
-            state.startTime = (new Date()).toISOString();
-        }
-    },
-    extraReducers: {
-        [getQuizContent.pending]: (state) => {
+        [scoringQuiz.pending]: (state) => {
             state.loading = true;
+            state.isSubmit = true;
         },
-        [getQuizContent.rejected]: (state, action) => {
-            state.error = action.error;
-            state.quiz = null;
-            state.quizNav = null
-            state.loading = false;
-            
-        },
-        [getQuizContent.fulfilled]: (state, action) => {
-            state.loading = false;
-            state.quiz = action.payload;
-            
-        },
-        [getQuizById.pending]: (state) => {
-            state.loading = true;
-        },
-        [getQuizById.rejected]: (state, action) => {
-            state.error = action.error;
-            state.quiz = null;
-            state.quizNav = null
-            state.loading = false;
-            
-        },
-        [getQuizById.fulfilled]: (state, action) => {
-            state.loading = false;
-            state.quiz = action.payload;
-            
-        },
-        [submitExamineResults.pending]: (state) => {
-            state.loading = true;
-        },
-        [submitExamineResults.rejected]: (state, action) => {
+        [scoringQuiz.rejected]: (state, action) => {
             state.error = action.error;
             state.loading = false;
+            
         },
-        [submitExamineResults.fulfilled]: (state, action) => {
-            state.loading = false;
+        [scoringQuiz.fulfilled]: (state, action) => {
+            
         },
     }
 });

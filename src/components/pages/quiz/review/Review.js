@@ -1,28 +1,45 @@
-import React, { useEffect } from 'react'
-import './Review.scss'
-import QuizItem from '../quizItem/QuizItem'
-import QuizNav from '../quizNav/QuizNav'
-import { Layout, Divider, Row, Col, Button, Descriptions } from 'antd'
-import { useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { selectSub } from '../../../../features/submit/submitSlice'
-import { buildSubmitNav } from '../../../../features/submit/submitSlice'
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getQuizSubmit } from '../../../../features/submit/submitAction';
+import moment from 'moment';
+
+import './Review.scss';
+
+import QuizItem from '../quizItem/QuizItem';
+import QuizNav from '../quizNav/QuizNav';
+import { Layout, Divider, Row, Col, Button, Descriptions, message } from 'antd';
+
 
 const Review = ({ name, history }) => {
-    const { idSub } = useParams();
-    const submission = useSelector(state => selectSub(state, idSub))
-    const submitNav = useSelector(state => state.submit.submitNav);
+    const { quizId, submitId } = useParams();
+    const quizSubmit = useSelector(state => state.submit.quizSubmit);
+    const user = useSelector(state => state.user.userObj);
     const dispatch = useDispatch();
 
-    const convertTime = (str) => {
-        let date = new Date(str);
-        let convertedDate = date.toGMTString();
-        return convertedDate;
-    }
+    const convertTime = (str) => moment.utc(str).local().format("HH:mm:ss, DD-MM-yyyy");
+
+    console.log(quizId, submitId)
 
     useEffect(() => {
-        dispatch(buildSubmitNav({ idSub: idSub }));
-    }, [submission])
+        const getSubmit = async () => {
+            let response = await dispatch(getQuizSubmit({ quizId, submitId }));
+
+            if(response?.error) {
+                message.error({
+                    content: response.payload.message,
+                    style: {marginTop: '72px'},
+                    key: "enroll-msg"
+                });
+
+                history.goBack();
+            }
+        }
+
+        if(user) {
+            getSubmit();
+        }
+    }, [user, quizId, submitId])
 
     return (
         <Layout className="review">
@@ -41,18 +58,18 @@ const Review = ({ name, history }) => {
                             column={1} 
                             size={'small'}
                         >
-                            <Descriptions.Item label="Started on">{convertTime(submission?.startTime)}</Descriptions.Item>
-                            <Descriptions.Item label="State" style={{textTransform: 'capitalize'}}>{submission?.state}</Descriptions.Item>
-                            <Descriptions.Item label="Completed On">{convertTime(submission?.finishTime)}</Descriptions.Item>
-                            <Descriptions.Item label="Grade">{submission?.score}</Descriptions.Item>
+                            <Descriptions.Item label="Started on">{convertTime(quizSubmit?.startTime)}</Descriptions.Item>
+                            <Descriptions.Item label="State" style={{textTransform: 'capitalize'}}>{quizSubmit?.state}</Descriptions.Item>
+                            <Descriptions.Item label="Completed On">{convertTime(quizSubmit?.finishTime)}</Descriptions.Item>
+                            <Descriptions.Item label="Grade">{` ${quizSubmit?.grade} `}</Descriptions.Item>
                         </Descriptions>
-                        {submission?.content.map(question => (
-                            <QuizItem key={question.idQuestion} review data={question}/>
+
+                        {quizSubmit?.questions?.map(question => (
+                            <QuizItem key={question.id} review indexQ={question.questionOrder} data={question}/>
                         ))}
-                            
                         </Col>
                         <Col className="review-nav" xs={24} sm={24} xl={6} style={{ padding: '1rem'}}>
-                            <QuizNav review navData={submitNav}/>                            
+                            <QuizNav review/>                            
                         </Col>
                         <Button 
                             className="review-btn" 

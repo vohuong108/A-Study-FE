@@ -1,14 +1,15 @@
-import React from 'react'
-import './SignUp.scss'
-import 'antd/dist/antd.css';
-import loginBanner from '../../../assets/loginBanner.png'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from "react-router-dom"
-import { registing } from "../../../features/authentication/userAction"
-import { unwrapResult } from '@reduxjs/toolkit'
-import { useForm } from "react-hook-form"
-import { LockFilled, MailFilled, UserOutlined} from '@ant-design/icons'
+import React from 'react';
+import { signup } from "../../../features/user/userAction";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { Link } from "react-router-dom";
+import { LockFilled, MailFilled, UserOutlined} from '@ant-design/icons';
 import { Spin, Checkbox, Row, Col, message } from 'antd';
+
+import './SignUp.scss';
+import 'antd/dist/antd.css';
+import loginBanner from '../../../assets/loginBanner.png';
 
 
 
@@ -18,35 +19,31 @@ const SignUp = ({ history }) => {
     const loading = useSelector(state => state.user.loading);
 
     const onSubmit = async (data) => {
-        console.log("signup: ", data);
 
-        const requestData = {
+        const result = await dispatch(signup({
             username: data.username,
             email: data.email,
             password: data.password,
             checkbox: data.checkbox,
-        }
+        }))
 
-        try {
-            const resultAction = await dispatch(registing(requestData))
-            const result = unwrapResult(resultAction);
+        console.log("result signup: ", result);
 
-            console.log("result signup: ", result);
-
+        if(result?.error) {
+            message.error({
+                content: result.payload.message,
+                style: {marginTop: '72px'},
+                key: "signup-msg"
+            })
+        } else {
             message.success({
                 content: 'Register Successfull. Please verify your email!',
                 className: 'custom-class',
                 style: {marginTop: '15vh'},
             })
             history.push('/login');
-
-        } catch (err) {
-            message.error({
-                content: err.message,
-                style: {marginTop: '72px'},
-                key: "signup-msg"
-            })
         }
+
     }
 
     return (

@@ -1,35 +1,33 @@
-import React, { useEffect, useState } from 'react'
-import './Header.scss'
-import 'antd/dist/antd.css'
-import { useSelector, useDispatch } from 'react-redux'
-import { unwrapResult } from '@reduxjs/toolkit'
-import { getUserByToken, getCategory } from '../../../features/authentication/userAction'
-import { getToken, removeToken } from '../../../utils/localStorageHandler'
-import Logo from '../../../assets/logo.png'
-import { Button, Drawer, Input, Avatar, Divider, Menu } from 'antd'
-import { MenuOutlined, SearchOutlined } from '@ant-design/icons'
-import Categories from './category/Categories'
-import Search from './Search/Search'
-import HeaderCart from './headerCart/HeaderCart'
-import UserAvatar from './avatar/UserAvatar'
-import NotifyBell from './notify/NotifyBell'
-import { Link, useHistory } from 'react-router-dom'
-import { logOut } from '../../../features/authentication/userSlice'
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserProfile } from '../../../features/user/userAction';
+import { logOut } from '../../../features/user/userSlice';
+import { getToken } from '../../../utils/localStorageHandler';
+
+import './Header.scss';
+import Logo from '../../../assets/logo.png';
+import { Button, Drawer, Input, Avatar, Divider, Menu } from 'antd';
+import { MenuOutlined, SearchOutlined } from '@ant-design/icons';
+import Categories from './category/Categories';
+import Search from './Search/Search';
+import UserAvatar from './avatar/UserAvatar';
+import NotifyBell from './notify/NotifyBell';
+import { Link, useHistory } from 'react-router-dom';
+
+import AvatarLogo from "../../../assets/avatar.png";
 
 
 const Header = () => {
     const user = useSelector(state => state.user.userObj);
     const dispatch = useDispatch();
 
+    console.log("Re-render in Header Component")
+
     useEffect(() => {
-        let token = getToken();
-        console.log("token", token);
+        let token = getToken("access_token");
 
-        const getUser = async (token) => {
-            const resultAction = await dispatch(getUserByToken(token))
-            const result = unwrapResult(resultAction);
-
-            console.log("response get user in header: ", result);
+        const getUser = async () => {
+            await dispatch(getUserProfile());
         }
 
         if(!user && token) {
@@ -61,7 +59,7 @@ const Header = () => {
                     </div>
                     <div className="header-right">
                         {/* <HeaderCart /> */}
-                        {!user 
+                        {!user
                             ? <div className="header-right__btn">
                                 <Link to="/login">
                                     <Button className="header-btn" danger shape="round" >Login</Button>
@@ -88,16 +86,14 @@ const Header = () => {
 const MenuDrawerLeft = () => {
     const [visible, setVisible] = useState(false);
     const user = useSelector(state => state.user.userObj);
-    const categories = useSelector(state => state.user.category);
+    const categories = useSelector(state => state.common.category);
+
     const dispatch = useDispatch();
     let history = useHistory();
 
-    console.log("permission: ", user?.permission);
-
     const handleLogOut = () => {
-        console.log("in here")
+        console.log("Logout action dispatched");
         dispatch(logOut());
-        removeToken();
         
         history.push('/')
         //TODO: RELOAD PAGE
@@ -128,18 +124,18 @@ const MenuDrawerLeft = () => {
                 headerStyle={{display: 'none'}}
             >
                 <div className="menu-drawer-wrap">
-                    {user 
+                    {user
                         ? <React.Fragment>
                             <div className="user-info">
                                 <Link to="/" className="account-info">
                                     <Avatar 
                                         size={64} 
                                         className="avt-user"
-                                        src={user?.avatar}
+                                        src={AvatarLogo}
                                     />
                                     <div className="account-detail">
-                                        <p>{user?.userName}</p>
-                                        <p>{user?.email}</p>
+                                        <p>{user.username}</p>
+                                        <p>{user.email}</p>
                                     </div>
                                 </Link>
     
@@ -147,7 +143,7 @@ const MenuDrawerLeft = () => {
                             <div className="menu-features">
                                 <ul>
                                     <li><Link to="/dashbroad">My Courses</Link></li>
-                                    {user.permission == "ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
+                                    {user.userRole === "SUPER_ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
                                     <li><Link to="/profile">My Profile</Link></li>
                                     <li onClick={handleLogOut}>Log out</li>
                                 </ul>

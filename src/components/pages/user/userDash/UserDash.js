@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import './UserDash.scss'
-import ProgressCourse from '../../course/progressCourse/ProgressCourse'
-import { getToken } from '../../../../utils/localStorageHandler'
-import { getCourses,addCourse } from '../../../../features/course/coursesAction'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Drawer, Select, message, Skeleton, Input } from 'antd'
-import { useForm, Controller } from "react-hook-form"
-import { unwrapResult } from '@reduxjs/toolkit'
+import React, { useEffect, useState } from 'react';
+import { getAllCourseOfUser, saveCourse } from '../../../../features/course/coursesAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm, Controller } from "react-hook-form";
+
+import './UserDash.scss';
+
+import ProgressCourse from '../../course/progressCourse/ProgressCourse';
+import { Button, Drawer, Select, message, Skeleton, Input } from 'antd';
+
 
 const UserDash = () => {
     const dispatch = useDispatch();
@@ -15,11 +16,10 @@ const UserDash = () => {
     const user = useSelector(state => state.user.userObj);
     
     useEffect(() => {
-        let access_token = getToken();
 
         const getUserCourses = async () => {
             try {
-                const courses = await dispatch(getCourses(access_token));
+                await dispatch(getAllCourseOfUser());
                 
             } catch (err) {
                 console.error("error in login: ", err);
@@ -33,7 +33,7 @@ const UserDash = () => {
         }
 
         getUserCourses();
-
+        
     }, [])
 
     return (
@@ -48,13 +48,17 @@ const UserDash = () => {
                         avatar={{shape: "square" }}
                     />
                     {courses?.map(course => 
-                        <ProgressCourse key={course.courseId} data={course} permission={course?.permissionCourse}/>
+                        <ProgressCourse 
+                            key={course.id} 
+                            data={course} 
+                            permission={ user?.username === course?.author ? "AUTHOR" : "STUDENT"}
+                        />
                     )}
                     
 
                     {/*get permision from store so don't need author dash*/}
                     {/* <ProgressCourse /> */}
-                    {((user?.permission === "AUTHOR") || (user?.permission === "ADMIN")) && <AddNewCourse />}
+                    {((user?.userRole === "AUTHOR") || (user?.userRole === "SUPER_ADMIN")) && <AddNewCourse />}
                 </div>
             </div>            
         </div>
@@ -64,43 +68,38 @@ const UserDash = () => {
 
 const AddNewCourse = () => {
     const [visible, setVisible] = useState(false);
-    const { control, handleSubmit, register, formState: { errors }} = useForm();
-    const category = useSelector(state => state.user.category);
-    const user = useSelector(state => state.user.userObj);
+    const { control, handleSubmit, register, formState: { errors }, reset } = useForm();
+    const category = useSelector(state => state.common.category);
     const dispatch = useDispatch();
 
     const onSubmit = async (formData) => {
         console.log(formData);
-        let token = getToken();
+        
+        message.loading({ content: 'Loading...', key: "add-msg" });
 
-        let requestData = {
-            access_token: token, 
-            data: {
-                name: formData.course_name,
-                learnInfo: formData.whatLearn,
-                skillInfo: formData.skills,
-                category: formData.category,
-                description: formData.description,
-            }
-        }
+        let result = await dispatch(saveCourse({
+            name: formData.course_name,
+            learns: formData.whatLearn,
+            skills: formData.skills,
+            category: formData.category,
+            description: formData.description,
+        }));
 
-        console.log("request create course: ", requestData);
-        try {
-            message.loading({ content: 'Loading...', key: "add-msg" });
-            let result = await dispatch(addCourse(requestData));
-            console.log("response create course: ", unwrapResult(result));
-
+        console.log("result: ", result);
+        
+        if(result?.error) {
+            message.error({
+                content: result.payload.message,
+                style: {marginTop: '72px'},
+                key: "add-msg"
+            })
+        } else {
             message.success({
                 content: "Add new course successfully",
                 style: {marginTop: '72px'},
                 key: "add-msg"
             })
-        } catch (err) {
-            message.error({
-                content: err.message,
-                style: {marginTop: '72px'},
-                key: "add-msg"
-            })
+            // reset({category: null});
         }
     }
 
@@ -121,7 +120,8 @@ const AddNewCourse = () => {
                     <div className="a-c-form-item">
                         <label>Course Name</label>
                         <input 
-                            className="course-name" 
+                            className="course-name"
+                            name="course_name" 
                             {...register("course_name")} 
                             required type="text" 
                             placeholder="Please type course name"

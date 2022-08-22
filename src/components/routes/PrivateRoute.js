@@ -4,7 +4,7 @@ import { getToken } from '../../utils/localStorageHandler'
 
 const PrivateRoute = ({ component: Component,  ...rest }) => {
     // const user = useSelector(state => state.user.userObj);
-    const token = getToken()
+    const token = getToken("access_token")
     return (
         <Route {...rest} render={(props) => {
             if(!token) return <Redirect to={{ pathname: '/login', state: { from: props.location } }} />

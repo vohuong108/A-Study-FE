@@ -1,10 +1,10 @@
 import React from 'react'
-import './Profile.scss'
-import 'antd/dist/antd.css';
+import { useSelector } from 'react-redux';
+
+import './Profile.scss';
 import { Avatar, Row, Col } from 'antd';
-import Chart from './Chart'
-import UpdateProfile from './updateProfile/UpdateProfile'
-import { useSelector } from 'react-redux'
+import Chart from './Chart';
+import UpdateProfile from './updateProfile/UpdateProfile';
 import AvatarLogo from '../../../../assets/avatar.png';
 
 const Profile = () => {
@@ -25,8 +25,9 @@ const Profile = () => {
                                     <div className="user-content">
                                         <h3>{`${user?.username}`}</h3>
                                         <p>{`Email: ${user?.email}`}</p>
-                                        <p>{`Role: ${user?.permission}`}</p>
-                                        {(user?.firstName && user?.lastName) &&<p>{`Name: ${user.firstName} ${user.lastName}`}</p>}
+                                        <p>{`Role: ${user?.userRole}`}</p>
+                                        {(user?.profile?.firstName && user?.profile?.lastName) &&
+                                        <p>{`Name: ${user?.profile?.firstName} ${user?.profile?.lastName}`}</p>}
                                     </div>
                                 </div>
                             </div>

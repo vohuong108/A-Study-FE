@@ -1,12 +1,12 @@
-import React from 'react'
-import './UpdateProfile.scss'
-import { useSelector, useDispatch } from 'react-redux'
-import { useForm } from 'react-hook-form'
-import { changeInformation, changePassword} from '../../../../../features/authentication/userAction'
-import { getToken } from '../../../../../utils/localStorageHandler'
-import { message } from 'antd'
-import {Publish, HighlightOff} from '@mui/icons-material';
-import { useState } from "react";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { changeInformation, changePassword} from '../../../../../features/user/userAction';
+import { getToken } from '../../../../../utils/localStorageHandler';
+
+import './UpdateProfile.scss';
+import { message } from 'antd';
+
 const UpdateProfile = () => {
     
     return (
@@ -20,35 +20,44 @@ const UpdateProfile = () => {
 const ChangePass = () => {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.userObj);
-    const {handleSubmit: handleSubmitPass, register : registerPass, setError, formState: { errors }} = useForm();
+    const {
+        handleSubmit: handleSubmitPass, 
+        register : registerPass, 
+        setError,
+        formState: { errors }
+    } = useForm();
     
 
     const onSubmitPass = async (data) => {
-        let token = getToken();
+        let token = getToken("access_token");
 
         if(data.confirmPass !== data.newPass) {
-            console.log("inhere")
+            console.log("Confirm pass don't match new pass !!!!");
+
             setError("confirmPass", {
                 type: "manual",
                 message: "Confirm password don't match"
             }, { shouldFocus: true });
+
         } else if(token && user) {
-            let requestData = {access_token: token, data: {
-                username: user.username, 
+            message.loading({ content: 'Change Password Loading...', key: "change-pass-msg" });
+
+            const result = await dispatch(changePassword({
                 password: data.oldPass,
                 newPass: data.newPass
-            }}
-            message.loading({ content: 'Change Pass Loading...', key: "change-pass-msg" });
-            try {
-                const result = await dispatch(changePassword(requestData));
-                message.success({
-                    content: "Change password successfully",
+            }));
+
+            console.log(result)
+
+            if(result?.error) {
+                message.error({
+                    content: result.payload.message,
                     style: {marginTop: '72px'},
                     key: "change-pass-msg"
                 })
-            } catch (err) {
-                message.error({
-                    content: err.message,
+            } else {
+                message.success({
+                    content: "Change password successfully",
                     style: {marginTop: '72px'},
                     key: "change-pass-msg"
                 })
@@ -88,28 +97,38 @@ const ChangePass = () => {
 
 const ChangeInfo = () => {
     const user = useSelector(state => state.user.userObj);
-    const {handleSubmit: handleSubmitInfo, register: registerInfo} = useForm();
+
+    const {handleSubmit: handleSubmitInfo, register: registerInfo, setValue} = useForm();
     const dispatch = useDispatch();
 
+    console.log("[ChangeInfo] Re-render");
+
+    useEffect(() => {
+        if(user) {
+            setValue("firstName", user?.profile?.firstName || "");
+            setValue("lastName", user?.profile?.lastName || "");
+            setValue("phone", user?.profile?.phone || "");
+            setValue("address", user?.profile?.address || "");
+        }
+    }, [user])
+
     const onSubmitInfo = async (data) => {
-        let token = getToken();
 
-        if(token && user) {
-            let requestData = {access_token: token, data: {username: user.username, ...data}};
-            console.log("change data: ", requestData);
+        if(user) {
+            console.log("change data: ", {...user.profile, ...data});
             message.loading({ content: 'Change Info Loading...', key: "change-info-msg" });
-            try {
-                const result = await dispatch(changeInformation(requestData));
+            
+            const result = await dispatch(changeInformation({...user.profile, ...data}));
 
-                console.log("result in change: ", result);
-                message.success({
-                    content: "Change information successfully",
+            if(result?.error) {
+                message.error({
+                    content: result.error.message,
                     style: {marginTop: '72px'},
                     key: "change-info-msg"
                 })
-            } catch (err) {
-                message.error({
-                    content: err.message,
+            } else {
+                message.success({
+                    content: "Change information successfully",
                     style: {marginTop: '72px'},
                     key: "change-info-msg"
                 })
@@ -126,27 +145,27 @@ const ChangeInfo = () => {
                 <form id="form-personal" onSubmit={handleSubmitInfo(onSubmitInfo)}>
                     <div className="form-item">
                         <label>User Name</label>
-                        <input type="text" disabled value={user?.username}/>
+                        <input type="text" disabled value={user?.username || ""} />
                     </div>
                     <div className="form-item">
                         <label>Email</label>
-                        <input type="email" disabled value={user?.email}/>
+                        <input type="email" disabled value={user?.email || ""} />
                     </div>
                     <div className="form-item">
                         <label>First Name</label>
-                        <input type="text" defaultValue={user?.firstName} {...registerInfo("firstName")}/>
+                        <input type="text" {...registerInfo("firstName")}/>
                     </div>
                     <div className="form-item">
                         <label>Last Name</label>
-                        <input type="text" defaultValue={user?.lastName} {...registerInfo("lastName")}/>
+                        <input type="text" {...registerInfo("lastName")}/>
                     </div>
                     <div className="form-item">
                         <label>Phone Number</label>
-                        <input type="text" defaultValue={user?.phone} {...registerInfo("phone")} />
+                        <input type="text" {...registerInfo("phone")} />
                     </div>
                     <div className="form-item">
                         <label>Address</label>
-                        <input type="text" defaultValue={user?.address} {...registerInfo("address")}/>
+                        <input type="text" {...registerInfo("address")}/>
                     </div> 
                                            
                     <input type="submit" value="Save" />

@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { logOut } from '../../../../features/authentication/userSlice'
-import { removeToken } from '../../../../utils/localStorageHandler'
-import { Avatar } from 'antd'
-import { useHistory, Link } from "react-router-dom"
-import 'antd/dist/antd.css'
-import './UserAvatar.scss'
-import AvatarLogo from '../../../../assets/avatar.png'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../../../../features/user/userSlice';
+
+import { Avatar } from 'antd';
+import { useHistory, Link } from "react-router-dom";
+import './UserAvatar.scss';
+import AvatarLogo from '../../../../assets/avatar.png';
 
 const UserAvatar = () => {
     const [isHover, setHover] = useState(false);
@@ -16,8 +15,6 @@ const UserAvatar = () => {
     
     const handleLogOut = () => {
         dispatch(logOut());
-        removeToken();
-        
         history.push('/')
         //TODO: RELOAD PAGE
     }
@@ -45,12 +42,12 @@ const UserAvatar = () => {
                                 src={AvatarLogo}
                             />
                             <div className="account-detail">
-                                <p>{user?.userName}</p>
+                                <p>{user?.username}</p>
                                 <p>{user?.email}</p>
                             </div>
                         </a>
                         <ul className="list-menu">
-                            {user.permission == "ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
+                            {user?.userRole === "SUPER_ADMIN" && <li><Link to="/admin">Admin page</Link></li>}
                             <li>
                                 <Link to="/dashbroad">My Courses</Link>
                             </li>

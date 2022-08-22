@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { searchCourse, enrollCourse, getSearchedCourseInfo } from './searchAction'
+import { searchCourse, enrollCourse, getCourseInfo } from './searchAction'
 
 const searchSlice = createSlice({
     name: 'search',
     initialState: {
-        data: null,
+        searchData: null,
         loading: false,
         error: null,
         courseInfo: null,
@@ -18,12 +18,12 @@ const searchSlice = createSlice({
         },
         [searchCourse.rejected]: (state, action) => {
             state.error = action.error;
-            state.data = null;
+            state.searchData = null;
             state.loading = false;
         },
         [searchCourse.fulfilled]: (state, action) => {
             state.loading = false;
-            state.data = action.payload;
+            state.searchData = action.payload;
         },
         [enrollCourse.pending]: (state) => {
             state.loading = true;
@@ -31,22 +31,23 @@ const searchSlice = createSlice({
         [enrollCourse.rejected]: (state, action) => {
             state.error = action.error;
             state.loading = false;
+            state.courseInfo.isAccess = false;
         },
         [enrollCourse.fulfilled]: (state, action) => {
             state.loading = false;
-            state.courseInfo = action.payload;
+            state.courseInfo.isAccess = true;
         },
-        [getSearchedCourseInfo.pending]: (state) => {
+        [getCourseInfo.pending]: (state) => {
             state.loading = true;
         },
-        [getSearchedCourseInfo.rejected]: (state, action) => {
+        [getCourseInfo.rejected]: (state, action) => {
             state.error = action.error;
             state.loading = false;
             state.courseInfo = null;
         },
-        [getSearchedCourseInfo.fulfilled]: (state, action) => {
-            state.courseInfo = action.payload;
+        [getCourseInfo.fulfilled]: (state, action) => {
             state.loading = false;
+            state.courseInfo = action.payload;
         },
     }
 });

@@ -9,12 +9,14 @@ import './AddLecture.scss'
 const AddLecture = ({ weekId }) => {
     const [visible, setVisible] = useState(false);
     const [type, setType] = useState('reading');
-    console.log('re-render in add-lecture: ', type);
-
 
     return (
         <div className="add-lecture">
-            <Button className="edit-btn-save btn-add-content" shape="round" onClick={() => setVisible(true)}>
+            <Button 
+                className="edit-btn-save btn-add-content" 
+                shape="round" 
+                onClick={() => setVisible(true)}
+            >
                 New Content
             </Button>
             <Drawer

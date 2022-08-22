@@ -4,7 +4,7 @@ import { getToken } from '../../utils/localStorageHandler'
 import Footer from '../pages/footer/Footer'
 
 const PublicRoute = ({ component: Component, ...rest}) => {
-    let token = getToken();
+    let token = getToken("access_token");
     return (
         <Route
             {...rest}

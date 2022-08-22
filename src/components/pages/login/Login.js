@@ -1,15 +1,14 @@
 import React from 'react'
+import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from 'react-redux'
+import { login, getUserProfile } from "../../../features/user/userAction";
+
 import './Login.scss'
-import 'antd/dist/antd.css';
 import loginBanner from '../../../assets/loginBanner.png'
 import { LockFilled, UserOutlined} from '@ant-design/icons'
 import { Spin, message, Row, Col } from 'antd';
 import { Link } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import { useDispatch, useSelector } from 'react-redux'
-import { getToken, setToken } from '../../../utils/localStorageHandler'
-import { login, getUserByToken } from "../../../features/authentication/userAction"
-import { unwrapResult } from '@reduxjs/toolkit'
+
 
 
 
@@ -17,7 +16,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 const Login = ({ history, location }) => {
     // console.log("from: ", location);
     
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const dispatch = useDispatch();
     const loading = useSelector(state => state.user.loading);
 
@@ -27,17 +26,10 @@ const Login = ({ history, location }) => {
             username: data.username,
             password: data.password,
         }
-
-        console.log("request login data: ", requestData);
             
         try {
-            const login_res = await dispatch(login(requestData))
-            const un_login_res = unwrapResult(login_res);
-
-            console.log("response login data: ", un_login_res);
-            setToken(un_login_res?.access_token);
-            
-            const profile = await dispatch(getUserByToken(getToken()));
+            await dispatch(login(requestData))
+            await dispatch(getUserProfile());
 
             if(location.state) history.push(location.state.from.pathname)
             else history.push('/dashbroad');
@@ -78,10 +70,14 @@ const Login = ({ history, location }) => {
                                                     id="username"
                                                     name="username" 
                                                     type="text"
-                                                    {...register("username")}
+                                                    {...register("username", { pattern: /^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$/i })}
                                                     required 
                                                 />
                                             </div>
+                                            {errors.username && <p style={{
+                                                textAlign: 'left',
+                                                color: 'red'
+                                            }}>Vui lòng nhập đúng định dạng</p>}
                                             <label>Password</label>
                                             <div className="input-wrap">
                                                 <LockFilled className="input-icon" />

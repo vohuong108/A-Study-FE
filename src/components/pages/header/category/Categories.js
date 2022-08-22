@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { Menu, Skeleton } from 'antd'
 import './Categories.scss'
 import { useSelector, useDispatch } from 'react-redux'
-import { getCategory } from '../../../../features/authentication/userAction'
+import { getCategory } from '../../../../features/common/commonAction'
 import { useHistory } from 'react-router-dom'
 
 
 const Categories = () => {
     const [isHover, setHover] = useState(false);
-    const categories = useSelector(state => state.user.category);
-    const loadingCategory = useSelector(state => state.user.loadingCategory);
+    const categories = useSelector(state => state.common.category);
+    const loadingCategory = useSelector(state => state.common.loadingCategory);
     const dispatch = useDispatch();
     const history = useHistory();
 

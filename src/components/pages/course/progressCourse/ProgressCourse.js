@@ -13,7 +13,7 @@ const ProgressCourse = ({ data, permission }) => {
         if(data) {
             // let reUrl = data.courseId.split('-').join('');
             // setUrl(reUrl);
-            setUrl(data.courseId)
+            setUrl(data.id);
         }
     }, [data.name])
     
@@ -42,8 +42,8 @@ const ProgressCourse = ({ data, permission }) => {
                                     </Link>
                                     {/* {(permission === 'AUTHOR' || permission === 'ADMIN') ? <Statistic className="course-statistic" value={data.numOfStudent} prefix={<TeamOutlined  />}/> : ''} */}
                                 </div>
-                                {/* <div className="progress-info">
-                                    {permission === 'AUTHOR' ? <p>Teach Progress</p> : <p>Progress</p>}
+                                <div className="progress-info">
+                                    <p>Progress</p>
                                     <Progress
                                         strokeColor={{
                                             '0%': '#108ee9',
@@ -51,15 +51,14 @@ const ProgressCourse = ({ data, permission }) => {
                                         }}
                                         strokeWidth={10}
                                         percent={30}
-                                        percent={data.progress}
                                     />
                                     
-                                </div> */}
+                                </div>
                             </div>
                         </Col>
                         <Col xs={24} sm={24} md={4} lg={3}>
                             <div className="progress-course-btn">
-                                {(permission === 'AUTHOR' || permission === 'ADMIN') &&
+                                {(permission === 'AUTHOR') &&
                                     <Link to={`/edit/${url}`}>
                                         <Button className="pc-btn edit-btn" shape="round">EDIT</Button>
                                     </Link>
